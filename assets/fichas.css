@@ -428,14 +428,27 @@
 
   .sheets, .wrap{ max-width: none; margin: 0; padding: 0; }
 
+  /* Con cinco ejercicios una ficha ya no cabe siempre en una hoja.
+     `break-inside: avoid` la obligaria a caber y cortaria el contenido, asi
+     que se deja fluir: si necesita dos paginas, las ocupa. Lo que no se
+     rompe nunca es un ejercicio suelto (ver la lista de mas abajo).
+     Tampoco se fuerza ya el alto minimo: llenaba la hoja cuando las fichas
+     tenian un solo ejercicio, y ahora solo dejaria huecos. */
   .ficha{
     box-shadow: none; border-radius: 0;
     padding: 0; margin: 0;
-    min-height: 250mm;
+    min-height: 0;
     break-after: page;
-    break-inside: avoid;
+    break-inside: auto;
   }
   .ficha:last-child{ break-after: auto; }
+
+  /* El encabezado no debe quedarse solo al final de una hoja */
+  .ficha-head{ break-after: avoid; }
+  .bloque{ break-inside: avoid; }
+  .bloque-enunciado{ break-after: avoid; }
+  .ficha-foot{ break-before: avoid; }
+  p, li{ orphans: 3; widows: 3; }
 
   .ficha-head{ border-radius: 12px; padding: 5mm 7mm; }
   .ficha-objetivo{ display: none; }

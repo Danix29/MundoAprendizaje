@@ -19,6 +19,16 @@ window.MA = (() => {
    * @param {number|string} curso
    * @returns {Promise<Array>} fichas de ese tema y curso
    */
+  /**
+   * Carpeta de datos. Por defecto `data/`, que solo lleva las fichas
+   * gratuitas. Con `?fuente=dist` se lee de `dist/`, que tiene el contenido
+   * completo y sirve para generar en local los PDF que se venden. `dist/` no
+   * se publica (está en .gitignore), así que este parámetro no expone nada
+   * en el sitio en producción: allí simplemente da un 404.
+   */
+  const carpetaDatos = () =>
+    new URLSearchParams(location.search).get('fuente') === 'dist' ? 'dist' : 'data';
+
   function cargarFichas(tema, curso){
     const clave = `${tema}-${curso}`;
     if(cache.has(clave)) return cache.get(clave);
@@ -28,7 +38,7 @@ window.MA = (() => {
       if(yaCargado) return resolve(yaCargado);
 
       const script = document.createElement('script');
-      script.src = `data/fichas/${clave}.js`;
+      script.src = `${carpetaDatos()}/fichas/${clave}.js`;
       script.onload = () => {
         const datos = window.MA_FICHAS && window.MA_FICHAS[clave];
         datos ? resolve(datos) : reject(new Error(`Sin datos para ${clave}`));

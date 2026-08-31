@@ -6,7 +6,8 @@ RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(RAIZ, "tools"))
 import generar_fichas as G
 
-MIN = 20
+MIN = 20      # fichas por celda
+MIN_EJ = 5    # ejercicios por ficha
 
 def cargar(ruta):
     t = io.open(ruta, encoding="utf-8").read()
@@ -23,12 +24,15 @@ def main(carpeta="dist/fichas"):
     temas = list(G.TEMAS)
     ancho = 14
 
-    print("INFORME DE COMPLETITUD  (minimo exigido: %d fichas por celda)" % MIN)
+    print("INFORME DE COMPLETITUD")
+    print("Minimos exigidos: %d fichas por celda, %d ejercicios por ficha" % (MIN, MIN_EJ))
     print("Fuente: %s/\n" % carpeta)
-    print("%-14s" % "TEMA" + "".join("%9s" % ("%d anos" % c) for c in cursos) + "%9s" % "TOTAL")
-    print("-" * (14 + 9 * (len(cursos) + 1)))
+    print("Cada celda: FICHAS (ejercicios minimos-maximos por ficha)\n")
+    print("%-14s" % "TEMA" + "".join("%14s" % ("%d anos" % c) for c in cursos) + "%9s" % "TOTAL")
+    print("-" * (14 + 14 * len(cursos) + 9))
 
     faltan = []
+    pobres = []
     total_global = 0
     for tema in temas:
         fila = "%-14s" % G.TEMAS[tema]["nombre"]
@@ -37,18 +41,30 @@ def main(carpeta="dist/fichas"):
             fichas = datos.get((tema, curso), [])
             n = len(fichas)
             total_tema += n
-            marca = "" if n >= MIN else " !"
-            fila += "%9s" % ("%d%s" % (n, marca))
+            ejercicios = [len(f["bloques"]) for f in fichas] or [0]
+            lo, hi = min(ejercicios), max(ejercicios)
+            marca = "" if n >= MIN and lo >= MIN_EJ else " !"
+            fila += "%14s" % ("%d (%d-%d)%s" % (n, lo, hi, marca))
             if n < MIN:
                 faltan.append((tema, curso, n, MIN - n))
+            if lo < MIN_EJ:
+                pobres.append((tema, curso, lo))
         fila += "%9d" % total_tema
         total_global += total_tema
         print(fila)
 
-    print("-" * (14 + 9 * (len(cursos) + 1)))
+    print("-" * (14 + 14 * len(cursos) + 9))
     print("%-14s" % "TOTAL" + "".join(
-        "%9d" % sum(len(datos.get((t, c), [])) for t in temas) for c in cursos)
+        "%14d" % sum(len(datos.get((t, c), [])) for t in temas) for c in cursos)
         + "%9d" % total_global)
+
+    todos_ej = [len(f["bloques"]) for fs in datos.values() for f in fs]
+    if todos_ej:
+        print()
+        print("Ejercicios por ficha: minimo %d, media %.2f, maximo %d"
+              % (min(todos_ej), sum(todos_ej) / float(len(todos_ej)), max(todos_ej)))
+        print("Ejercicios totales  : %d" % sum(todos_ej))
+        print("Fichas por debajo de %d ejercicios: %d" % (MIN_EJ, sum(1 for e in todos_ej if e < MIN_EJ)))
 
     objetivo = len(temas) * len(cursos) * MIN
     print("\nObjetivo: %d fichas (%d temas x %d cursos x %d)" % (objetivo, len(temas), len(cursos), MIN))

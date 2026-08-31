@@ -27,6 +27,7 @@ import curriculo_matematicas         # noqa: E402
 import curriculo_lenguaje            # noqa: E402
 import curriculo_historia            # noqa: E402
 import curriculo_idiomas             # noqa: E402
+import complementos                  # noqa: E402
 
 # Para anadir un tema basta con crear su modulo de curriculo e incluirlo aqui:
 # el resto del sitio (catalogo, tienda, visor) se adapta solo.
@@ -41,6 +42,9 @@ CURRICULOS = {
 def construir_ficha(tema, curso, orden, titulo, objetivo, constructor):
     fid = "%s-c%d-%02d" % (tema[:3], curso, orden)
     r = G.rng(fid)
+    # El curriculo declara el nucleo; `completar` lo rodea de calentamiento y
+    # consolidacion hasta llegar al minimo de ejercicios por ficha.
+    bloques = complementos.completar(r, tema, curso, constructor(r))
     return {
         "id": fid,
         "tema": tema,
@@ -51,7 +55,7 @@ def construir_ficha(tema, curso, orden, titulo, objetivo, constructor):
         # La primera ficha de cada curso es la muestra gratuita: asi una familia
         # ve el nivel exacto del curso de su hija o hijo, no el de otro.
         "gratis": orden == 1,
-        "bloques": constructor(r),
+        "bloques": bloques,
     }
 
 

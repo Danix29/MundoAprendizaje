@@ -131,6 +131,9 @@ document.documentElement.dataset.theme=g||(matchMedia('(prefers-color-scheme: da
 (() => {
   'use strict';
   const { el, icono, catalogo, filtrar } = window.MA;
+  // En modo dist se ocultan los adornos de pantalla para que el PDF
+  // salga limpio (sin avisos ni botones que no se imprimen).
+  const modoImpresion = new URLSearchParams(location.search).get('fuente') === 'dist';
   const salida = document.getElementById('salida');
   const estado = document.getElementById('estado');
 
@@ -200,21 +203,24 @@ document.documentElement.dataset.theme=g||(matchMedia('(prefers-color-scheme: da
     salida.append(cabecera);
 
     const gratis = lista.filter(f => !f.bloqueado);
-    if(gratis.length){
+    if(gratis.length && !modoImpresion){
       salida.append(el('div', { className: 'aviso-muestra no-print' },
         icono('🎁'),
         el('span', {}, el('strong', { text: 'Muestra gratuita. ' }),
           'Puedes imprimir esta ficha completa para ver el nivel exacto del curso antes de comprar nada.')));
     }
 
+    // Con ?fuente=dist ninguna ficha viene bloqueada, así que se renderizan
+    // las 20: es el modo que se usa en local para generar los PDF de venta.
     lista.forEach(f => {
       const m = porId[f.id] || f;
       salida.append(f.bloqueado
         ? tarjetaBloqueada({ ...m, tema, curso })
-        : window.MA_RENDER.renderFicha({ ...f, tema, curso }));
+        : window.MA_RENDER.renderFicha({ ...f, tema, curso },
+            { conBotonImprimir: !modoImpresion }));
     });
 
-    if(lista.some(f => f.bloqueado)){
+    if(lista.some(f => f.bloqueado) && !modoImpresion){
       salida.append(el('div', { className: 'cta-pack no-print' },
         el('h2', { text: `Pack ${infoTema.nombre} · ${infoCurso.etiqueta}` }),
         el('p', { text: `Las 20 fichas en PDF, listas para imprimir cuando quieras. Incluye la muestra que ya has visto.` }),
