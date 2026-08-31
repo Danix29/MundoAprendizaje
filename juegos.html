@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Juegos interactivos — Mundo Aprendizaje</title>
+<meta name="description" content="Cuatro minijuegos con voz para aprender números, letras, historia e inglés jugando.">
+<meta name="theme-color" content="#FFFBF3">
+<script>
+/* Tema antes de pintar: evita el fogonazo blanco al abrir en modo oscuro. */
+(()=>{try{const g=localStorage.getItem('ma-tema');
+document.documentElement.dataset.theme=g||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+}catch(e){document.documentElement.dataset.theme='light';}})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+<link rel="stylesheet" href="assets/base.css">
+<style>
+  .controles{
+    display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;
+    max-width: 1180px; margin: 0 auto 14px; padding: 0 24px;
+  }
+  .controles-etiqueta{ width: 100%; text-align: center; font-size: 0.85rem; color: var(--ink-soft); }
+  .chip{
+    font-family: 'Fredoka', sans-serif; font-size: 0.98rem;
+    background: var(--white); border: none; padding: 12px 22px;
+    border-radius: 999px; box-shadow: 0 5px 0 rgba(62,52,39,0.08);
+    color: var(--ink-soft); min-height: 48px;
+  }
+  .chip[aria-pressed="true"], .chip[aria-selected="true"]{ background: var(--yellow-deep); color: var(--on-activo); }
+  /* La menta es una superficie pastel, no un estado -deep: el texto
+     encima debe ser --on-pastel y no el oscuro de los activos. */
+  .chip-voz[aria-pressed="true"]{ background: var(--mint); color: var(--on-pastel); }
+
+  .juego-panel{
+    background: linear-gradient(180deg, var(--panel-juego), var(--cream) 72%);
+    border-radius: 46px; max-width: 1080px; margin: 30px auto 0;
+    padding: 40px 30px 48px;
+  }
+  @media (max-width: 620px){ .juego-panel{ border-radius: 30px; padding: 30px 16px 36px; } }
+  .juego-titulo{ text-align: center; margin-bottom: 8px; font-size: 1.7rem; }
+  .juego-desc{ text-align: center; color: var(--ink-soft); margin: 0 auto 26px; max-width: 48ch; }
+
+  /* --- piezas compartidas por los juegos --- */
+  .marcador{
+    background: var(--white); border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-bubble); padding: 20px 24px;
+    max-width: 660px; margin: 0 auto 24px; min-height: 74px;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; font-size: 1.05rem;
+  }
+  .escena{
+    background: var(--white); border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-bubble); padding: 24px;
+    max-width: 700px; margin: 0 auto 24px;
+    display: flex; align-items: center; gap: 20px; min-height: 106px;
+  }
+  .escena-emoji{ font-size: 3.4rem; line-height: 1; flex-shrink: 0; }
+  .escena-nombre{ font-family: 'Fredoka', sans-serif; font-size: 1.35rem; }
+  .escena-pista{ color: var(--ink-soft); font-size: 0.94rem; }
+  .estrellas{ display: flex; gap: 5px; flex-wrap: wrap; max-width: 250px; font-size: 1.5rem; }
+  .estrella{ display: inline-block; animation: pop .35s ease backwards; }
+  @keyframes pop{ 0%{ transform: scale(0); opacity: 0; } 70%{ transform: scale(1.25); opacity: 1; } 100%{ transform: scale(1); } }
+
+  .tabs{ display: flex; justify-content: center; gap: 12px; margin-bottom: 22px; flex-wrap: wrap; }
+  .tab-btn{
+    font-family: 'Fredoka', sans-serif; font-size: 1rem;
+    background: var(--white); border: none; padding: 14px 24px;
+    border-radius: 999px; box-shadow: 0 4px 0 rgba(62,52,39,0.10);
+    color: var(--ink-soft); min-height: 48px;
+  }
+  .tab-btn[aria-selected="true"]{ background: var(--yellow-deep); color: var(--on-activo); }
+
+  .tablero{
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px;
+    max-width: 860px; margin: 0 auto;
+  }
+  @media (max-width: 760px){ .tablero{ grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 420px){ .tablero{ grid-template-columns: repeat(2, 1fr); } }
+
+  .casilla{
+    aspect-ratio: 1 / 1; border: none; border-radius: var(--radius-md);
+    font-size: 2.4rem; font-family: 'Fredoka', sans-serif; color: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: var(--shadow-bubble); transition: transform .12s ease;
+  }
+  .casilla:hover{ transform: scale(1.06); }
+  .casilla:nth-child(6n+1){ background: var(--peach); }
+  .casilla:nth-child(6n+2){ background: var(--sky); }
+  .casilla:nth-child(6n+3){ background: var(--mint); }
+  .casilla:nth-child(6n+4){ background: var(--lavender); }
+  .casilla:nth-child(6n+5){ background: var(--yellow); }
+  .casilla:nth-child(6n+6){ background: var(--peach); }
+  .casilla.acierto{ outline: 5px solid #2E9E6B; outline-offset: 2px; }
+  .casilla.fallo{ outline: 5px solid #D95F5F; outline-offset: 2px; }
+  .rebota{ animation: rebote .5s ease; }
+  @keyframes rebote{
+    0%{ transform: scale(1); } 35%{ transform: scale(1.2) rotate(-6deg); }
+    65%{ transform: scale(.95) rotate(4deg); } 100%{ transform: scale(1); }
+  }
+
+  /* --- La letra perdida --- */
+  .letra-grande{
+    font-family: 'Fredoka', sans-serif; font-size: clamp(4rem, 14vw, 7rem);
+    text-align: center; color: var(--ink); line-height: 1;
+    background: var(--white); border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-bubble); max-width: 240px; margin: 0 auto 26px; padding: 16px;
+  }
+  .opciones{
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 160px));
+    gap: 18px; justify-content: center;
+  }
+  .casilla-grande{ font-size: 3.2rem; }
+  .juego-acciones{ display: flex; justify-content: center; gap: 12px; margin-top: 26px; flex-wrap: wrap; }
+
+  /* --- Línea del tiempo --- */
+  .linea-pista{
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    color: var(--ink-soft); font-size: 0.92rem; margin-bottom: 16px;
+  }
+  .linea-flecha{ flex: 0 0 60px; height: 3px; border-radius: 3px; background: rgba(62,52,39,0.2); }
+  .linea-tiempo{
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 14px; max-width: 900px; margin: 0 auto;
+  }
+  .suceso{
+    background: var(--white); border-radius: var(--radius-md);
+    box-shadow: var(--shadow-bubble); padding: 18px 12px 12px;
+    text-align: center; display: flex; flex-direction: column; gap: 8px;
+  }
+  .suceso-emoji{ font-size: 2.6rem; }
+  .suceso-nombre{ font-family: 'Fredoka', sans-serif; font-size: 0.98rem; flex-grow: 1; }
+  .suceso-controles{ display: flex; gap: 8px; justify-content: center; }
+  .mover{
+    border: none; background: var(--cream); border-radius: 999px;
+    width: 46px; height: 46px; font-size: 1rem; color: var(--ink);
+    box-shadow: 0 4px 0 rgba(62,52,39,0.1);
+  }
+  .mover:disabled{ opacity: .35; cursor: not-allowed; box-shadow: none; }
+  .linea-tiempo.resuelta .suceso{ outline: 4px solid var(--mint-deep); outline-offset: -2px; }
+
+  /* --- Memory --- */
+  .tablero-memory{ grid-template-columns: repeat(4, 1fr); max-width: 620px; }
+  @media (max-width: 520px){ .tablero-memory{ grid-template-columns: repeat(3, 1fr); } }
+  .carta{
+    aspect-ratio: 3 / 4; border: none; border-radius: var(--radius-md);
+    background: var(--lavender); box-shadow: var(--shadow-bubble);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fredoka', sans-serif; font-size: 1.6rem; color: var(--ink);
+    transition: transform .18s ease, background .18s ease;
+    position: relative; padding: 6px;
+  }
+  .carta .carta-frente{ display: none; word-break: break-word; text-align: center; }
+  .carta .carta-dorso{ font-size: 1.9rem; }
+  .carta.descubierta{ background: var(--white); transform: scale(1.03); }
+  .carta.descubierta .carta-dorso{ display: none; }
+  .carta.descubierta .carta-frente{ display: block; }
+  .carta.emparejada{ background: var(--mint); opacity: 1; cursor: default; }
+
+  .nota-voz{
+    max-width: 660px; margin: 26px auto 0; font-size: 0.88rem;
+    color: var(--ink-soft); text-align: center;
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html"><span class="brand-badge" aria-hidden="true">🦉</span> Mundo Aprendizaje</a>
+    <nav aria-label="Navegación principal">
+      <ul class="topnav">
+        <li><a href="index.html#rincones">Rincones</a></li>
+        <li><a href="juegos.html" aria-current="page">Juegos</a></li>
+        <li><a href="videos.html">Vídeos</a></li>
+        <li><a href="descargas.html">Fichas</a></li>
+        <li><a href="tienda.html" class="nav-premium">Tienda</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="contenido">
+  <div class="page-head">
+    <h1>🎮 Juegos para aprender</h1>
+    <p>Cuatro juegos, uno por rincón. Elige el juego y el curso: el tablero se adapta, con menos elementos para los más peques y más para los mayores.</p>
+  </div>
+
+  <section class="section" style="padding-top: 36px">
+    <div class="controles" id="selectorJuego" role="tablist" aria-label="Elegir juego">
+      <span class="controles-etiqueta">Juego</span>
+    </div>
+    <div class="controles" id="selectorCurso" role="group" aria-label="Elegir curso">
+      <span class="controles-etiqueta">Curso</span>
+    </div>
+    <div class="controles">
+      <button class="chip chip-voz" type="button" id="btnVoz" aria-pressed="true">🔊 Voz activada</button>
+    </div>
+
+    <div class="juego-panel">
+      <h2 class="juego-titulo" id="juegoTitulo"></h2>
+      <p class="juego-desc" id="juegoDesc"></p>
+      <div id="juegoRaiz"></div>
+    </div>
+
+    <p class="nota-voz">
+      Los juegos hablan con la voz del navegador. Si no oyes nada, comprueba que el volumen
+      está activado o desactiva la voz con el botón de arriba para jugar en silencio.
+    </p>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">
+        <span class="brand-badge" aria-hidden="true">🦉</span>
+        <strong style="font-family:'Fredoka',sans-serif; font-size:1.1rem;">Mundo Aprendizaje</strong>
+      </div>
+      <p class="footer-note">Fichas y juegos para acompañar los primeros pasos lectores, matemáticos y creativos.</p>
+    </div>
+    <div><h3>Aprender</h3><ul>
+      <li><a href="index.html#rincones">Rincones</a></li>
+      <li><a href="juegos.html">Juegos</a></li>
+      <li><a href="videos.html">Vídeos</a></li>
+    </ul></div>
+    <div><h3>Fichas</h3><ul>
+      <li><a href="descargas.html">Catálogo completo</a></li>
+      <li><a href="descargas.html?gratis=1">Muestras gratuitas</a></li>
+      <li><a href="tienda.html">Packs premium</a></li>
+    </ul></div>
+    <div><h3>Legal</h3><ul>
+      <li><a href="tienda.html#legal">Condiciones de compra</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">Mundo Aprendizaje — hecho con cariño para los primeros años de descubrimiento.</div>
+</footer>
+
+<script src="data/catalogo.js"></script>
+<script src="assets/site.js"></script>
+<script src="assets/juegos.js"></script>
+<script>
+(() => {
+  'use strict';
+  const { el, catalogo, alternarVoz, vozDisponible } = window.MA;
+  const cat = catalogo();
+  const juegos = window.MA_JUEGOS.catalogo;
+
+  const raiz = document.getElementById('juegoRaiz');
+  const titulo = document.getElementById('juegoTitulo');
+  const desc = document.getElementById('juegoDesc');
+  const selJuego = document.getElementById('selectorJuego');
+  const selCurso = document.getElementById('selectorCurso');
+
+  let juegoActivo = juegos[0].id;
+  let cursoActivo = '5';
+
+  function montar(){
+    const j = juegos.find(x => x.id === juegoActivo);
+    titulo.textContent = `${j.icono} ${j.titulo}`;
+    desc.textContent = j.descripcion;
+    raiz.replaceChildren();
+    j.montar(raiz, Number(cursoActivo));
+
+    Array.from(selJuego.querySelectorAll('.chip')).forEach(b =>
+      b.setAttribute('aria-selected', String(b.dataset.id === juegoActivo)));
+    Array.from(selCurso.querySelectorAll('.chip')).forEach(b =>
+      b.setAttribute('aria-pressed', String(b.dataset.curso === cursoActivo)));
+
+    if(location.hash.slice(1) !== juegoActivo) history.replaceState(null, '', '#' + juegoActivo);
+  }
+
+  juegos.forEach(j => {
+    const b = el('button', { className: 'chip', text: `${j.icono} ${j.titulo}`,
+                             attrs: { type: 'button', role: 'tab', 'aria-selected': 'false' } });
+    b.dataset.id = j.id;
+    b.addEventListener('click', () => { juegoActivo = j.id; montar(); });
+    selJuego.append(b);
+  });
+
+  Object.entries(cat.cursos).forEach(([clave, c]) => {
+    const b = el('button', { className: 'chip', text: c.etiqueta,
+                             attrs: { type: 'button', 'aria-pressed': 'false',
+                                      'aria-label': `${c.etiqueta}, ${c.etapa}` } });
+    b.dataset.curso = clave;
+    b.addEventListener('click', () => { cursoActivo = clave; montar(); });
+    selCurso.append(b);
+  });
+
+  const btnVoz = document.getElementById('btnVoz');
+  if(!vozDisponible){
+    btnVoz.disabled = true;
+    btnVoz.textContent = '🔇 Voz no disponible';
+    btnVoz.setAttribute('aria-pressed', 'false');
+  }else{
+    btnVoz.addEventListener('click', () => {
+      const activa = alternarVoz();
+      btnVoz.setAttribute('aria-pressed', String(activa));
+      btnVoz.textContent = activa ? '🔊 Voz activada' : '🔇 Voz apagada';
+    });
+  }
+
+  // Enlace directo a un juego: juegos.html#letra
+  // Cambiar solo el hash no recarga la página, así que hay que escucharlo:
+  // sin esto, un enlace de #letra a #tiempo no cambiaría de juego.
+  function desdeHash(){
+    const id = location.hash.slice(1);
+    if(juegos.some(j => j.id === id) && id !== juegoActivo){
+      juegoActivo = id;
+      montar();
+    }
+  }
+  window.addEventListener('hashchange', desdeHash);
+
+  const inicial = location.hash.slice(1);
+  if(juegos.some(j => j.id === inicial)) juegoActivo = inicial;
+  montar();
+})();
+</script>
+</body>
+</html>

@@ -2,328 +2,184 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mundo Aprendizaje — ¡Jugar y aprender juntos!</title>
-<meta name="description" content="Página educativa para niños y niñas de 3 a 7 años: letras, números, animales y cuentos.">
+<meta name="description" content="Página educativa para niñas y niños de 2 a 7 años: matemáticas, lenguaje, historia e idiomas, con juegos de voz y fichas para imprimir.">
+<meta name="theme-color" content="#FFFBF3">
+<script>
+/* Tema antes de pintar: evita el fogonazo blanco al abrir en modo oscuro. */
+(()=>{try{const g=localStorage.getItem('ma-tema');
+document.documentElement.dataset.theme=g||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+}catch(e){document.documentElement.dataset.theme='light';}})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦉</text></svg>">
+<link rel="stylesheet" href="assets/base.css">
 <style>
-  :root{
-    --yellow: #FFE9A8;
-    --yellow-deep: #FFD966;
-    --sky: #BEE7F7;
-    --sky-deep: #8FD2EF;
-    --mint: #BCF0D6;
-    --mint-deep: #8FE0B6;
-    --lavender: #DCCEF5;
-    --lavender-deep: #C1A9EA;
-    --peach: #FFD4B8;
-    --peach-deep: #FFB88C;
-    --cream: #FFFBF3;
-    --ink: #3E3427;
-    --ink-soft: #6B6151;
-    --white: #FFFFFF;
-    --radius-lg: 32px;
-    --radius-md: 22px;
-    --shadow-bubble: 0 10px 0 rgba(62,52,39,0.08), 0 18px 30px rgba(62,52,39,0.10);
-  }
-
-  *{ box-sizing: border-box; }
-  html{ scroll-behavior: smooth; }
-  body{
-    margin:0;
-    background: var(--cream);
-    color: var(--ink);
-    font-family: 'Nunito', sans-serif;
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 1.5;
-    overflow-x: hidden;
-  }
-  h1, h2, h3, .display{
-    font-family: 'Fredoka', sans-serif;
-    font-weight: 600;
-    margin: 0;
-    color: var(--ink);
-  }
-  img, svg{ display:block; max-width:100%; }
-  a{ color: inherit; }
-  button{ font-family: inherit; cursor: pointer; }
-
-  .skip-link{
-    position:absolute; left:-999px; top:0; background:var(--ink); color:var(--white);
-    padding: 10px 16px; border-radius: 0 0 12px 0; z-index: 200;
-  }
-  .skip-link:focus{ left:0; }
-
-  :focus-visible{
-    outline: 4px solid #4A90D9;
-    outline-offset: 3px;
-    border-radius: 10px;
-  }
-
-  .wrap{
-    max-width: 1180px;
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-
-  /* ---------- NAV ---------- */
-  .topbar{
-    position: sticky; top:0; z-index: 100;
-    background: rgba(255,251,243,0.9);
-    backdrop-filter: blur(6px);
-    border-bottom: 3px solid rgba(62,52,39,0.06);
-  }
-  .topbar-inner{
-    display:flex; align-items:center; justify-content:space-between;
-    padding: 14px 24px;
-    max-width: 1180px; margin:0 auto;
-  }
-  .brand{
-    display:flex; align-items:center; gap:10px;
-    font-family:'Fredoka', sans-serif; font-size: 1.3rem; color: var(--ink);
-    text-decoration:none;
-  }
-  .brand-badge{
-    width:44px; height:44px; border-radius: 16px;
-    background: linear-gradient(160deg, var(--yellow), var(--peach));
-    display:flex; align-items:center; justify-content:center;
-    font-size: 1.4rem;
-    box-shadow: var(--shadow-bubble);
-  }
-  .topnav{ display:flex; gap: 8px; list-style:none; margin:0; padding:0; }
-  .topnav a{
-    text-decoration:none; font-size: 0.95rem; padding: 10px 16px;
-    border-radius: 999px; color: var(--ink-soft);
-  }
-  .topnav a:hover{ background: var(--sky); color: var(--ink); }
-  @media (max-width: 720px){ .topnav{ display:none; } }
-
   /* ---------- HERO ---------- */
-  .hero{
-    position: relative;
-    padding: 72px 24px 60px;
-    overflow:hidden;
-  }
+  .hero{ position: relative; padding: 68px 24px 56px; overflow: hidden; }
   .hero-inner{
     max-width: 1180px; margin: 0 auto;
-    display:grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items:center;
+    display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items: center;
   }
-  @media (max-width: 900px){ .hero-inner{ grid-template-columns: 1fr; text-align:center; } }
+  @media (max-width: 900px){ .hero-inner{ grid-template-columns: 1fr; text-align: center; } }
 
   .eyebrow-pill{
-    display:inline-flex; align-items:center; gap:8px;
+    display: inline-flex; align-items: center; gap: 8px;
     background: var(--white); padding: 8px 18px; border-radius: 999px;
     box-shadow: var(--shadow-bubble); font-size: 0.95rem; color: var(--ink-soft);
     margin-bottom: 18px;
   }
-  .hero h1{
-    font-size: clamp(2.4rem, 5vw, 3.6rem);
-    line-height: 1.08;
-  }
-  .hero h1 .accent-yellow{ color: #C98A00; }
-  .hero h1 .accent-mint{ color: #1E9A6C; }
+  .hero h1{ font-size: clamp(2.4rem, 5vw, 3.6rem); line-height: 1.08; }
+  .hero h1 .acento-amarillo{ color: var(--acento-calido); }
+  .hero h1 .acento-menta{ color: var(--acento-verde); }
   .hero p.lede{
-    font-family:'Nunito',sans-serif; font-weight:700; color: var(--ink-soft);
-    font-size: 1.15rem; margin-top: 18px; max-width: 46ch;
+    color: var(--ink-soft); font-size: 1.15rem; margin-top: 18px; max-width: 46ch;
   }
-  @media (max-width:900px){ .hero p.lede{ margin-inline:auto; } }
+  @media (max-width: 900px){ .hero p.lede{ margin-inline: auto; } }
+  .cta-row{ display: flex; gap: 14px; margin-top: 30px; flex-wrap: wrap; }
+  @media (max-width: 900px){ .cta-row{ justify-content: center; } }
+  .btn-grande{ font-size: 1.12rem; padding: 18px 32px; min-height: 60px; }
 
-  .cta-row{ display:flex; gap:16px; margin-top: 30px; flex-wrap:wrap; }
-  @media (max-width:900px){ .cta-row{ justify-content:center; } }
-
-  .btn-jugar{
-    font-family:'Fredoka', sans-serif; font-size: 1.15rem;
-    background: linear-gradient(160deg, #FF9F6B, #FF7A45);
-    color: var(--white); border:none;
-    padding: 18px 34px; border-radius: 999px;
-    box-shadow: 0 8px 0 #D95F2B, 0 16px 24px rgba(217,95,43,0.28);
-    display:inline-flex; align-items:center; gap:10px;
-    transition: transform .15s ease;
-  }
-  .btn-jugar:hover{ transform: translateY(-3px); }
-  .btn-jugar:active{ transform: translateY(3px); box-shadow: 0 4px 0 #D95F2B, 0 8px 14px rgba(217,95,43,0.28); }
-
-  .btn-ghost{
-    font-family:'Fredoka', sans-serif; font-size: 1.1rem;
-    background: var(--white); color: var(--ink);
-    border: none; padding: 17px 30px; border-radius: 999px;
-    box-shadow: var(--shadow-bubble);
-    transition: transform .15s ease;
-  }
-  .btn-ghost:hover{ transform: translateY(-3px); }
-
-  .hero-art{
-    position: relative; height: 360px;
-  }
-  .blob{
-    position:absolute; border-radius: 50%;
-    animation: float 6s ease-in-out infinite;
-  }
-  @media (prefers-reduced-motion: reduce){ .blob, .bounce-in, .wiggle-hover, .pulse{ animation: none !important; } }
-  .blob-1{ width:210px; height:210px; background: var(--sky); top:10px; left:40px; animation-delay: 0s;}
-  .blob-2{ width:150px; height:150px; background: var(--mint); bottom:20px; left:0; animation-delay: 1.2s;}
-  .blob-3{ width:170px; height:170px; background: var(--lavender); bottom:40px; right:20px; animation-delay: .6s;}
+  .hero-art{ position: relative; height: 360px; }
+  @media (max-width: 900px){ .hero-art{ height: 260px; } }
+  .blob{ position: absolute; border-radius: 50%; animation: flotar 6s ease-in-out infinite; }
+  .blob-1{ width: 210px; height: 210px; background: var(--sky); top: 10px; left: 40px; }
+  .blob-2{ width: 150px; height: 150px; background: var(--mint); bottom: 20px; left: 0; animation-delay: 1.2s; }
+  .blob-3{ width: 170px; height: 170px; background: var(--lavender); bottom: 40px; right: 20px; animation-delay: .6s; }
   .blob-emoji{
-    position:absolute; font-size: 3.2rem;
+    position: absolute; font-size: 3.2rem;
     filter: drop-shadow(0 6px 6px rgba(0,0,0,0.08));
-    animation: float 5s ease-in-out infinite;
+    animation: flotar 5s ease-in-out infinite;
   }
   .e1{ top: 0; right: 60px; animation-delay: .2s; }
-  .e2{ top: 130px; left: 70px; animation-delay: 1s; font-size: 2.6rem;}
-  .e3{ bottom: 10px; right: 90px; animation-delay: .5s; font-size: 2.8rem;}
-  .e4{ bottom: 90px; left: 140px; animation-delay: 1.6s; font-size: 2.2rem;}
-
-  @keyframes float{
+  .e2{ top: 130px; left: 70px; animation-delay: 1s; font-size: 2.6rem; }
+  .e3{ bottom: 10px; right: 90px; animation-delay: .5s; font-size: 2.8rem; }
+  .e4{ bottom: 90px; left: 140px; animation-delay: 1.6s; font-size: 2.2rem; }
+  @keyframes flotar{
     0%, 100%{ transform: translateY(0) rotate(0deg); }
     50%{ transform: translateY(-16px) rotate(4deg); }
   }
 
-  /* ---------- SECTION HEADERS ---------- */
-  .section{ padding: 64px 24px; }
-  .section-head{ max-width: 640px; margin: 0 auto 40px; text-align:center; }
-  .section-head h2{ font-size: clamp(1.8rem, 3.4vw, 2.4rem); }
-  .section-head p{ color: var(--ink-soft); font-family:'Nunito'; margin-top:10px; }
-
-  /* ---------- MODULE CARDS ---------- */
-  .modules-grid{
-    display:grid; grid-template-columns: repeat(4, 1fr); gap: 26px;
+  /* ---------- RINCONES ---------- */
+  .rincones-grid{
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
     max-width: 1180px; margin: 0 auto;
   }
-  @media (max-width: 980px){ .modules-grid{ grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 560px){ .modules-grid{ grid-template-columns: 1fr; } }
+  @media (max-width: 980px){ .rincones-grid{ grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px){ .rincones-grid{ grid-template-columns: 1fr; } }
+  .rincon{
+    border-radius: var(--radius-lg); padding: 28px 22px 24px;
+    box-shadow: var(--shadow-bubble); text-align: center; color: var(--ink);
+    display: flex; flex-direction: column; align-items: center; gap: 11px;
+    transition: transform .2s ease; background: var(--tema);
+  }
+  .rincon:hover{ transform: translateY(-6px) rotate(-1deg); }
+  .rincon-icono{
+    width: 80px; height: 80px; border-radius: 26px;
+    background: var(--sobre-tema);
+    display: flex; align-items: center; justify-content: center; font-size: 2.5rem;
+  }
+  .rincon h3{ font-size: 1.25rem; }
+  .rincon p{ font-size: 0.95rem; color: var(--on-pastel); margin: 0; flex-grow: 1; }
+  .rincon .ir{
+    margin-top: 4px; font-family: 'Fredoka', sans-serif; font-size: 0.92rem;
+    background: var(--white); padding: 11px 22px; border-radius: 999px;
+    box-shadow: 0 5px 0 rgba(62,52,39,0.12);
+  }
+  .rincon:active .ir{ transform: translateY(3px); box-shadow: none; }
 
-  .module-card{
-    border-radius: var(--radius-lg);
-    padding: 30px 24px 26px;
-    box-shadow: var(--shadow-bubble);
-    text-align:center;
-    display:flex; flex-direction:column; align-items:center; gap: 12px;
-    transition: transform .2s ease;
-    border: none;
+  /* ---------- QUÉ HAY AQUÍ ---------- */
+  .secciones-grid{
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    max-width: 1180px; margin: 0 auto;
   }
-  .module-card:hover{ transform: translateY(-6px) rotate(-1deg); }
-  .module-card:nth-child(1){ background: var(--peach); }
-  .module-card:nth-child(2){ background: var(--sky); }
-  .module-card:nth-child(3){ background: var(--mint); }
-  .module-card:nth-child(4){ background: var(--lavender); }
+  @media (max-width: 900px){ .secciones-grid{ grid-template-columns: 1fr; } }
+  .tarjeta-seccion{
+    background: var(--white); border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-bubble); padding: 30px 26px;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .tarjeta-seccion .emoji{ font-size: 2.4rem; }
+  .tarjeta-seccion h3{ font-size: 1.25rem; }
+  .tarjeta-seccion p{ color: var(--ink-soft); font-size: 0.95rem; margin: 0; flex-grow: 1; }
 
-  .module-icon{
-    width: 84px; height:84px; border-radius: 26px;
-    background: rgba(255,255,255,0.65);
-    display:flex; align-items:center; justify-content:center;
-    font-size: 2.6rem;
+  /* ---------- JUEGO DESTACADO ---------- */
+  .panel-juego{
+    background: linear-gradient(180deg, var(--panel-juego), var(--cream) 72%);
+    border-radius: 46px; max-width: 1080px; margin: 0 auto; padding: 44px 30px 48px;
   }
-  .module-card h3{ font-size: 1.3rem; }
-  .module-card p{ font-family:'Nunito'; font-size: 0.98rem; color: #4B4030; margin:0; }
-  .module-go{
-    margin-top: 6px;
-    font-family:'Fredoka'; font-size: 0.95rem;
-    background: var(--white); border:none; padding: 10px 22px;
-    border-radius: 999px; box-shadow: 0 5px 0 rgba(62,52,39,0.12);
-  }
-  .module-go:active{ transform: translateY(3px); box-shadow:none; }
+  @media (max-width: 620px){ .panel-juego{ border-radius: 30px; padding: 32px 16px 38px; } }
 
-  /* ---------- GAME SECTION ---------- */
-  .game-section{
-    background: linear-gradient(180deg, #FFF6E4, var(--cream) 70%);
-    border-radius: 46px;
-    max-width: 1180px; margin: 0 24px; padding: 50px 30px 56px;
+  .escena{
+    background: var(--white); border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-bubble); padding: 24px;
+    max-width: 700px; margin: 0 auto 24px;
+    display: flex; align-items: center; gap: 20px; min-height: 106px;
   }
-  @media (min-width: 1230px){ .game-section{ margin: 0 auto; } }
+  .escena-emoji{ font-size: 3.4rem; line-height: 1; flex-shrink: 0; }
+  .escena-nombre{ font-family: 'Fredoka', sans-serif; font-size: 1.35rem; }
+  .escena-pista{ color: var(--ink-soft); font-size: 0.94rem; }
+  .estrellas{ display: flex; gap: 5px; flex-wrap: wrap; max-width: 250px; font-size: 1.5rem; }
+  .estrella{ display: inline-block; animation: pop .35s ease backwards; }
+  @keyframes pop{ 0%{ transform: scale(0); opacity: 0; } 70%{ transform: scale(1.25); opacity: 1; } 100%{ transform: scale(1); } }
 
-  .stage{
-    background: var(--white);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-bubble);
-    padding: 26px;
-    max-width: 720px; margin: 0 auto 34px;
-    display:flex; align-items:center; gap: 20px;
-    min-height: 110px;
-  }
-  .stage-emoji{ font-size: 3.6rem; }
-  .stage-text .stage-name{ font-family:'Fredoka'; font-size: 1.4rem; }
-  .stage-text .stage-hint{ font-family:'Nunito'; color: var(--ink-soft); font-size: 0.95rem; }
-
-  .tabs{
-    display:flex; justify-content:center; gap: 12px; margin-bottom: 26px; flex-wrap:wrap;
-  }
+  .tabs{ display: flex; justify-content: center; gap: 12px; margin-bottom: 22px; flex-wrap: wrap; }
   .tab-btn{
-    font-family:'Fredoka'; font-size: 1rem;
-    background: var(--white); border: none; padding: 12px 24px; border-radius: 999px;
-    box-shadow: 0 4px 0 rgba(62,52,39,0.10);
-    color: var(--ink-soft);
+    font-family: 'Fredoka', sans-serif; font-size: 1rem;
+    background: var(--white); border: none; padding: 14px 24px;
+    border-radius: 999px; box-shadow: 0 4px 0 rgba(62,52,39,0.10);
+    color: var(--ink-soft); min-height: 48px;
   }
-  .tab-btn[aria-selected="true"]{
-    background: var(--yellow-deep); color: var(--ink);
-  }
+  .tab-btn[aria-selected="true"]{ background: var(--yellow-deep); color: var(--on-activo); }
 
-  .board{
-    display:grid; grid-template-columns: repeat(6, 1fr); gap: 16px;
-    max-width: 900px; margin: 0 auto;
+  .tablero{
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px;
+    max-width: 860px; margin: 0 auto;
   }
-  @media (max-width: 760px){ .board{ grid-template-columns: repeat(3, 1fr); } }
-  @media (max-width: 420px){ .board{ grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 760px){ .tablero{ grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 420px){ .tablero{ grid-template-columns: repeat(2, 1fr); } }
+  .casilla{
+    aspect-ratio: 1 / 1; border: none; border-radius: var(--radius-md);
+    font-size: 2.4rem; font-family: 'Fredoka', sans-serif; color: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: var(--shadow-bubble); transition: transform .12s ease;
+  }
+  .casilla:hover{ transform: scale(1.06); }
+  .casilla:nth-child(6n+1){ background: var(--peach); }
+  .casilla:nth-child(6n+2){ background: var(--sky); }
+  .casilla:nth-child(6n+3){ background: var(--mint); }
+  .casilla:nth-child(6n+4){ background: var(--lavender); }
+  .casilla:nth-child(6n+5){ background: var(--yellow); }
+  .casilla:nth-child(6n+6){ background: var(--peach); }
+  .rebota{ animation: rebote .5s ease; }
+  @keyframes rebote{
+    0%{ transform: scale(1); } 35%{ transform: scale(1.2) rotate(-6deg); }
+    65%{ transform: scale(.95) rotate(4deg); } 100%{ transform: scale(1); }
+  }
+  .juego-pie{ display: flex; justify-content: center; gap: 12px; margin-top: 30px; flex-wrap: wrap; }
+  .chip{
+    font-family: 'Fredoka', sans-serif; font-size: 0.98rem;
+    background: var(--white); border: none; padding: 12px 22px;
+    border-radius: 999px; box-shadow: 0 5px 0 rgba(62,52,39,0.08);
+    color: var(--ink-soft); min-height: 48px;
+  }
+  .chip[aria-pressed="true"]{ background: var(--mint); color: var(--ink); }
 
-  .board-tile{
-    aspect-ratio: 1 / 1;
-    border-radius: var(--radius-md);
-    border: none;
-    font-size: 2.6rem;
-    display:flex; align-items:center; justify-content:center;
-    box-shadow: var(--shadow-bubble);
-    transition: transform .12s ease;
+  /* ---------- FRANJA PREMIUM ---------- */
+  .franja-premium{ max-width: 1180px; margin: 70px auto 0; padding: 0 24px; }
+  .franja-caja{
+    background: var(--lavender); border-radius: 46px; padding: 44px 34px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 28px; box-shadow: var(--shadow-bubble); flex-wrap: wrap;
   }
-  .board-tile:hover{ transform: scale(1.06); }
-  .board-tile.bounce{ animation: bounceTap .5s ease; }
-  @keyframes bounceTap{
-    0%{ transform: scale(1); }
-    35%{ transform: scale(1.22) rotate(-6deg); }
-    65%{ transform: scale(0.94) rotate(4deg); }
-    100%{ transform: scale(1); }
-  }
-  .board-tile:nth-child(6n+1){ background: var(--peach); }
-  .board-tile:nth-child(6n+2){ background: var(--sky); }
-  .board-tile:nth-child(6n+3){ background: var(--mint); }
-  .board-tile:nth-child(6n+4){ background: var(--lavender); }
-  .board-tile:nth-child(6n+5){ background: var(--yellow); }
-  .board-tile:nth-child(6n+6){ background: var(--peach); }
-
-  .stars-row{ display:flex; gap: 6px; }
-  .star-pop{ display:inline-block; animation: pop .35s ease backwards; }
-  @keyframes pop{
-    0%{ transform: scale(0); opacity:0; }
-    70%{ transform: scale(1.25); opacity:1; }
-    100%{ transform: scale(1); }
-  }
-
-  [hidden]{ display:none !important; }
-
-  /* ---------- FOOTER ---------- */
-  footer{
-    margin-top: 70px;
-    background: #FFF2DC;
-    padding: 50px 24px 30px;
-    border-top: 3px solid rgba(62,52,39,0.06);
-  }
-  .footer-grid{
-    max-width: 1180px; margin: 0 auto;
-    display:grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 36px;
-  }
-  @media (max-width: 780px){ .footer-grid{ grid-template-columns: 1fr; text-align:center; } }
-  footer h3{ font-size: 1.1rem; margin-bottom: 12px; }
-  footer ul{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px; }
-  footer a{ text-decoration:none; color: var(--ink-soft); font-family:'Nunito'; font-weight:700; }
-  footer a:hover{ color: var(--ink); text-decoration: underline; }
-  .footer-brand{ display:flex; align-items:center; gap:10px; margin-bottom:10px; }
-  .footer-note{ font-family:'Nunito'; color: var(--ink-soft); font-size: 0.92rem; max-width: 38ch; }
-  @media (max-width:780px){ .footer-note{ margin-inline:auto; } }
-  .footer-bottom{
-    max-width:1180px; margin: 34px auto 0; padding-top: 20px;
-    border-top: 2px dashed rgba(62,52,39,0.15);
-    font-family:'Nunito'; font-size: 0.85rem; color: var(--ink-soft); text-align:center;
+  .franja-caja h2{ font-size: clamp(1.5rem, 3vw, 2rem); }
+  .franja-caja p{ color: var(--on-pastel); margin: 10px 0 0; max-width: 48ch; }
+  .franja-caja .gratis-primero{
+    font-size: 0.9rem; color: var(--on-pastel); margin-top: 12px;
+    display: flex; align-items: center; gap: 8px;
   }
 </style>
 </head>
@@ -332,15 +188,16 @@
 
 <header class="topbar">
   <div class="topbar-inner">
-    <a class="brand" href="#top">
-      <span class="brand-badge" aria-hidden="true">🦉</span>
-      Mundo Aprendizaje
-    </a>
-    <ul class="topnav">
-      <li><a href="#modulos">Aprender</a></li>
-      <li><a href="#juego">Jugar</a></li>
-      <li><a href="#familias">Familias y Docentes</a></li>
-    </ul>
+    <a class="brand" href="#top"><span class="brand-badge" aria-hidden="true">🦉</span> Mundo Aprendizaje</a>
+    <nav aria-label="Navegación principal">
+      <ul class="topnav">
+        <li><a href="#rincones">Rincones</a></li>
+        <li><a href="juegos.html">Juegos</a></li>
+        <li><a href="videos.html">Vídeos</a></li>
+        <li><a href="descargas.html">Fichas</a></li>
+        <li><a href="tienda.html" class="nav-premium">Tienda</a></li>
+      </ul>
+    </nav>
   </div>
 </header>
 
@@ -349,15 +206,13 @@
   <!-- HERO -->
   <section class="hero" id="top">
     <div class="hero-inner">
-      <div>
-        <span class="eyebrow-pill">🌟 Para peques de 3 a 7 años</span>
-        <h1>Aprender es una <span class="accent-yellow">aventura</span> llena de <span class="accent-mint">sonrisas</span></h1>
-        <p class="lede">Letras, números, animales y cuentos en un rincón pensado para que cada peque descubra, toque y aprenda jugando.</p>
+      <div class="anim-hero">
+        <span class="eyebrow-pill">🌟 Para peques de 2 a 7 años</span>
+        <h1>Aprender es una <span class="acento-amarillo">aventura</span> llena de <span class="acento-menta">sonrisas</span></h1>
+        <p class="lede">Matemáticas, lenguaje, historia e idiomas en un rincón pensado para que cada peque descubra, toque y aprenda jugando.</p>
         <div class="cta-row">
-          <a class="btn-jugar" href="#juego">
-            <span aria-hidden="true">🎈</span> ¡A Jugar y Aprender!
-          </a>
-          <a class="btn-ghost" href="#modulos">Ver los rincones</a>
+          <a class="btn btn-primary btn-grande" href="#juego"><span aria-hidden="true">🎈</span> ¡A Jugar y Aprender!</a>
+          <a class="btn btn-secondary btn-grande" href="descargas.html"><span aria-hidden="true">🖨️</span> Fichas para imprimir</a>
         </div>
       </div>
       <div class="hero-art" aria-hidden="true">
@@ -372,213 +227,241 @@
     </div>
   </section>
 
-  <!-- MODULES -->
-  <section class="section" id="modulos">
+  <!-- RINCONES -->
+  <section class="section" id="rincones">
     <div class="section-head">
       <h2>Cuatro rincones para descubrir</h2>
       <p>Cada tarjeta es una puerta a un mundo distinto. ¡Elige la que más te guste!</p>
     </div>
-    <div class="modules-grid">
-      <article class="module-card">
-        <div class="module-icon" aria-hidden="true">🔤</div>
-        <h3>Letras y Palabras</h3>
-        <p>Descubre las letras y forma tus primeras palabras.</p>
-        <button class="module-go" type="button">Entrar</button>
+    <div class="rincones-grid">
+      <a class="rincon t-peach" href="descargas.html?tema=matematicas">
+        <span class="rincon-icono" aria-hidden="true">🔢</span>
+        <h3>Matemáticas</h3>
+        <p>Sumas, formas y números para contar el mundo entero.</p>
+        <span class="ir">Ver fichas →</span>
+      </a>
+      <a class="rincon t-sky" href="descargas.html?tema=lenguaje">
+        <span class="rincon-icono" aria-hidden="true">🔤</span>
+        <h3>Lenguaje</h3>
+        <p>Abecedario, vocales y tus primeras palabras escritas.</p>
+        <span class="ir">Ver fichas →</span>
+      </a>
+      <a class="rincon t-mint" href="descargas.html?tema=historia">
+        <span class="rincon-icono" aria-hidden="true">🦕</span>
+        <h3>Historia</h3>
+        <p>Dinosaurios gigantes y los misterios del Antiguo Egipto.</p>
+        <span class="ir">Ver fichas →</span>
+      </a>
+      <a class="rincon t-lavender" href="descargas.html?tema=idiomas">
+        <span class="rincon-icono" aria-hidden="true">🌍</span>
+        <h3>Idiomas</h3>
+        <p>Tus primeros colores y animales en inglés.</p>
+        <span class="ir">Ver fichas →</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- QUÉ HAY AQUÍ -->
+  <section class="section" style="padding-top: 20px">
+    <div class="section-head">
+      <h2>Todo lo que puedes hacer aquí</h2>
+      <p>Los juegos y las muestras son gratis. Los cuadernos completos son de pago, y siempre puedes probar antes.</p>
+    </div>
+    <div class="secciones-grid">
+      <article class="tarjeta-seccion">
+        <span class="emoji" aria-hidden="true">🎮</span>
+        <h3>Juegos con voz</h3>
+        <p>Cuatro minijuegos que hablan en voz alta: animales y números, la letra perdida, la línea del tiempo y un memory en inglés. Se adaptan al curso.</p>
+        <span class="pill pill-gratis">Gratis, sin registro</span>
+        <a class="btn btn-secondary" href="juegos.html">Ir a los juegos</a>
       </article>
-      <article class="module-card">
-        <div class="module-icon" aria-hidden="true">🔢</div>
-        <h3>Números y Formas</h3>
-        <p>Cuenta, compara y juega con formas divertidas.</p>
-        <button class="module-go" type="button">Entrar</button>
+      <article class="tarjeta-seccion">
+        <span class="emoji" aria-hidden="true">🎬</span>
+        <h3>Vídeos explicativos</h3>
+        <p>Vídeos cortos por tema y curso para saber cómo acompañar cada bloque de fichas en casa. Los estamos grabando.</p>
+        <span class="pill">Próximamente</span>
+        <a class="btn btn-secondary" href="videos.html">Ver el catálogo</a>
       </article>
-      <article class="module-card">
-        <div class="module-icon" aria-hidden="true">🌿</div>
-        <h3>Naturaleza y Animales</h3>
-        <p>Conoce animales y descubre la naturaleza.</p>
-        <button class="module-go" type="button">Entrar</button>
-      </article>
-      <article class="module-card">
-        <div class="module-icon" aria-hidden="true">🎨</div>
-        <h3>Cuentos y Creatividad</h3>
-        <p>Escucha cuentos y deja volar tu imaginación.</p>
-        <button class="module-go" type="button">Entrar</button>
+      <article class="tarjeta-seccion">
+        <span class="emoji" aria-hidden="true">🖨️</span>
+        <h3>Fichas imprimibles</h3>
+        <p>Cuadernos de 20 fichas por tema y curso, con dificultad progresiva de la 1 a la 20. Una ficha de muestra gratis en cada curso.</p>
+        <span class="pill pill-premium">Muestra gratis + packs</span>
+        <a class="btn btn-secondary" href="descargas.html">Ver el catálogo</a>
       </article>
     </div>
   </section>
 
-  <!-- GAME -->
+  <!-- JUEGO DESTACADO -->
   <section class="section" id="juego">
-    <div class="game-section">
+    <div class="panel-juego">
       <div class="section-head">
         <h2>Toca y Descubre</h2>
         <p>Pulsa un animal o un número: ¡se moverá y te dirá su nombre!</p>
       </div>
-
-      <div class="stage" aria-live="polite">
-        <span class="stage-emoji" id="stageEmoji">👋</span>
-        <div class="stage-text">
-          <div class="stage-name" id="stageName">¡Elige algo para empezar!</div>
-          <div class="stage-hint" id="stageHint">Toca cualquier casilla del tablero.</div>
-        </div>
+      <div id="juegoRaiz"></div>
+      <div class="juego-pie">
+        <button class="chip" type="button" id="btnVoz" aria-pressed="true">🔊 Voz activada</button>
+        <a class="btn btn-secondary" href="juegos.html"><span aria-hidden="true">🎮</span> Ver los otros 3 juegos</a>
       </div>
+    </div>
+  </section>
 
-      <div class="tabs" role="tablist" aria-label="Elegir actividad">
-        <button class="tab-btn" id="tabAnimals" role="tab" aria-selected="true" aria-controls="boardAnimals">🐾 Animales</button>
-        <button class="tab-btn" id="tabNumbers" role="tab" aria-selected="false" aria-controls="boardNumbers">🔢 Números</button>
+
+  <!-- CARRUSEL DE PACKS -->
+  <section class="section" id="packs" style="padding-top: 10px">
+    <div class="section-head">
+      <h2>Cuadernos por curso</h2>
+      <p>Desliza para ver los cuadernos de cada rincón. Cada uno trae 20 fichas y una muestra gratuita.</p>
+    </div>
+    <div class="wrap">
+      <div class="carrusel" data-carrusel="Cuadernos de fichas por tema y curso">
+        <div class="carrusel-pista" id="pistaPacks"></div>
       </div>
+    </div>
+  </section>
 
-      <div class="board" id="boardAnimals" role="tabpanel" aria-labelledby="tabAnimals"></div>
-      <div class="board" id="boardNumbers" role="tabpanel" aria-labelledby="tabNumbers" hidden></div>
+  <!-- TESTIMONIOS -->
+  <section class="testimonios" id="testimonios">
+    <div class="section-head">
+      <h2>Lo que cuentan las familias</h2>
+      <p>Familias y docentes que ya usan los cuadernos en casa y en el aula.</p>
+    </div>
+    <div class="wrap">
+      <p class="aviso-simulado" id="avisoTestimonios" hidden></p>
+      <div class="carrusel" data-carrusel="Testimonios">
+        <div class="carrusel-pista" id="pistaTestimonios"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FRANJA PREMIUM -->
+  <section class="franja-premium">
+    <div class="franja-caja">
+      <div>
+        <h2>🖨️ ¿Y si lo hacemos en papel?</h2>
+        <p>Cuadernos de 20 fichas por tema y curso, de 2 a 7 años: contar, trazar, colorear y repasar en casa o en clase.</p>
+        <p class="gratis-primero"><span aria-hidden="true">🎁</span> Cada curso tiene una ficha de muestra gratuita, para ver el nivel antes de comprar.</p>
+      </div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap">
+        <a class="btn btn-secondary btn-grande" href="descargas.html?gratis=1">Probar gratis</a>
+        <a class="btn btn-primary btn-grande" href="tienda.html"><span aria-hidden="true">⬇️</span> Ver los packs</a>
+      </div>
     </div>
   </section>
 
 </main>
 
-<!-- FOOTER -->
 <footer id="familias">
   <div class="footer-grid">
     <div>
       <div class="footer-brand">
         <span class="brand-badge" aria-hidden="true">🦉</span>
-        <strong style="font-family:'Fredoka'; font-size:1.1rem;">Mundo Aprendizaje</strong>
+        <strong style="font-family:'Fredoka',sans-serif; font-size:1.1rem;">Mundo Aprendizaje</strong>
       </div>
       <p class="footer-note">Un rincón pensado junto a maestras de Infantil para acompañar los primeros pasos lectores, matemáticos y creativos.</p>
     </div>
-    <div>
-      <h3>Para familias</h3>
-      <ul>
-        <li><a href="#">Fichas para imprimir en casa</a></li>
-        <li><a href="#">Consejos de lectura en familia</a></li>
-        <li><a href="#">Preguntas frecuentes</a></li>
-      </ul>
-    </div>
-    <div>
-      <h3>Para docentes</h3>
-      <ul>
-        <li><a href="#">Guía didáctica (PDF)</a></li>
-        <li><a href="#">Programación por rincones</a></li>
-        <li><a href="#">Contacto del equipo pedagógico</a></li>
-      </ul>
-    </div>
+    <div><h3>Aprender</h3><ul>
+      <li><a href="#rincones">Rincones</a></li>
+      <li><a href="juegos.html">Juegos</a></li>
+      <li><a href="videos.html">Vídeos</a></li>
+    </ul></div>
+    <div><h3>Fichas</h3><ul>
+      <li><a href="descargas.html">Catálogo completo</a></li>
+      <li><a href="descargas.html?gratis=1">Muestras gratuitas</a></li>
+      <li><a href="tienda.html">Packs premium</a></li>
+    </ul></div>
+    <div><h3>Legal</h3><ul>
+      <li><a href="tienda.html#legal">Condiciones de compra</a></li>
+      <li><a href="#" id="verPresentacion">Ver la presentación</a></li>
+    </ul></div>
   </div>
   <div class="footer-bottom">Mundo Aprendizaje — hecho con cariño para los primeros años de descubrimiento.</div>
 </footer>
 
+<script src="data/catalogo.js"></script>
+<script src="assets/site.js"></script>
+<script src="data/packs.js"></script>
+<script src="data/testimonios.js"></script>
+<script src="assets/juegos.js"></script>
+<script src="assets/carrusel.js"></script>
+<script src="assets/onboarding.js"></script>
 <script>
-(function(){
-  "use strict";
+(() => {
+  'use strict';
+  const { el, icono, catalogo, precio } = window.MA;
 
-  var ANIMALS = [
-    { emoji:"🐶", name:"Perro",     sound:"Perro. ¡Guau, guau!" },
-    { emoji:"🐱", name:"Gato",      sound:"Gato. ¡Miau, miau!" },
-    { emoji:"🐮", name:"Vaca",      sound:"Vaca. ¡Muu!" },
-    { emoji:"🦁", name:"León",      sound:"León. ¡Grrr!" },
-    { emoji:"🐘", name:"Elefante",  sound:"Elefante." },
-    { emoji:"🐥", name:"Pollito",   sound:"Pollito. ¡Pío, pío!" },
-    { emoji:"🐸", name:"Rana",      sound:"Rana. ¡Croac, croac!" },
-    { emoji:"🐴", name:"Caballo",   sound:"Caballo." },
-    { emoji:"🐷", name:"Cerdito",   sound:"Cerdito. ¡Oink, oink!" },
-    { emoji:"🦆", name:"Pato",      sound:"Pato. ¡Cuac, cuac!" },
-    { emoji:"🐰", name:"Conejo",    sound:"Conejo." },
-    { emoji:"🐢", name:"Tortuga",   sound:"Tortuga." }
-  ];
+  // El juego destacado es el mismo motor de juegos.html, no una copia.
+  const toca = window.MA_JUEGOS.catalogo.find(j => j.id === 'toca');
+  toca.montar(document.getElementById('juegoRaiz'), 5);
 
-  var NUMBERS = [1,2,3,4,5,6,7,8,9,10,11,12];
-  var NUM_WORDS = ["cero","uno","dos","tres","cuatro","cinco","seis","siete","ocho","nueve","diez","once","doce"];
+  /* ---------------------------------------------------- carrusel de packs */
+  const cat = catalogo();
+  const pistaPacks = document.getElementById('pistaPacks');
+  const disponibles = window.MA_PACKS.packs.filter(p => p.tipo === 'tema-curso' && p.disponible);
+  // Un cuaderno de cada tema y curso, ordenado por curso para que la tira
+  // avance de los más pequeños a los mayores.
+  disponibles.sort((a, b) => a.curso - b.curso || a.tema.localeCompare(b.tema));
 
-  var stageEmoji = document.getElementById("stageEmoji");
-  var stageName  = document.getElementById("stageName");
-  var stageHint  = document.getElementById("stageHint");
-  var boardAnimals = document.getElementById("boardAnimals");
-  var boardNumbers = document.getElementById("boardNumbers");
+  pistaPacks.append(...disponibles.map(p => {
+    const tema = cat.temas[p.tema];
+    const curso = cat.cursos[String(p.curso)];
+    const art = el('article', { className: 'rincon' });
+    art.style.setProperty('--tema', `var(--${tema.color})`);
+    art.append(
+      el('span', { className: 'rincon-icono', text: tema.icono, attrs: { 'aria-hidden': 'true' } }),
+      el('h3', { text: `${tema.nombre} · ${curso.etiqueta}` }),
+      el('p', { text: `${curso.etapa}. 20 fichas de dificultad progresiva.` }),
+      el('span', { className: 'pill pill-gratis', text: '1 ficha de muestra gratis' }),
+      el('a', { className: 'ir', attrs: { href: `fichas.html#/${p.tema}/${p.curso}` } },
+        `Ver por ${precio(p.precio)} →`));
+    return art;
+  }));
 
-  function speak(text){
-    if(!("speechSynthesis" in window)) return;
-    try{
-      window.speechSynthesis.cancel();
-      var u = new SpeechSynthesisUtterance(text);
-      u.lang = "es-ES";
-      u.rate = 0.95;
-      u.pitch = 1.15;
-      window.speechSynthesis.speak(u);
-    }catch(e){ /* silencioso si el navegador no lo soporta */ }
+  /* --------------------------------------------------------- testimonios */
+  const t = window.MA_TESTIMONIOS;
+  const pistaT = document.getElementById('pistaTestimonios');
+  if(t.simulados){
+    const aviso = document.getElementById('avisoTestimonios');
+    aviso.hidden = false;
+    aviso.append(icono('⚠️'), el('span', {}, el('strong', { text: 'Aviso: ' }), t.aviso));
   }
+  pistaT.append(...t.items.map(x => {
+    const art = el('article', { className: 'testimonio' });
+    art.style.setProperty('--tema', `var(--${x.tema})`);
+    art.append(
+      el('div', { className: 'testimonio-estrellas',
+                  attrs: { role: 'img', 'aria-label': `${x.estrellas} de 5 estrellas` },
+                  text: '★'.repeat(x.estrellas) + '☆'.repeat(5 - x.estrellas) }),
+      el('p', { className: 'testimonio-texto', text: x.texto }),
+      el('div', { className: 'testimonio-pie' },
+        el('span', { className: 'testimonio-avatar', text: x.avatar, attrs: { 'aria-hidden': 'true' } }),
+        el('div', {}, el('div', { className: 'testimonio-nombre', text: x.nombre }),
+          el('div', { className: 'testimonio-rol', text: x.rol }))));
+    return art;
+  }));
 
-  function bounceTile(tile){
-    tile.classList.remove("bounce");
-    void tile.offsetWidth; // reinicia la animación
-    tile.classList.add("bounce");
-  }
+  window.MA_CARRUSEL.montarTodos();
 
-  // --- Tablero de animales ---
-  ANIMALS.forEach(function(animal){
-    var btn = document.createElement("button");
-    btn.className = "board-tile";
-    btn.type = "button";
-    btn.textContent = animal.emoji;
-    btn.setAttribute("aria-label", animal.name);
-    btn.addEventListener("click", function(){
-      bounceTile(btn);
-      stageEmoji.textContent = animal.emoji;
-      stageName.textContent = animal.name;
-      stageHint.textContent = "¡Muy bien! Sigue explorando el tablero.";
-      speak(animal.sound);
-    });
-    boardAnimals.appendChild(btn);
+  /* -------------------------------------------------------- presentación */
+  window.MA_ONBOARDING.montar();
+  document.getElementById('verPresentacion').addEventListener('click', ev => {
+    ev.preventDefault();
+    window.MA_ONBOARDING.reiniciar();
   });
 
-  // --- Tablero de números ---
-  NUMBERS.forEach(function(n){
-    var btn = document.createElement("button");
-    btn.className = "board-tile";
-    btn.type = "button";
-    btn.textContent = n;
-    btn.setAttribute("aria-label", "Número " + n);
-    btn.addEventListener("click", function(){
-      bounceTile(btn);
-      var starsToShow = Math.min(n, 12);
-      var starsHTML = "";
-      for(var i=0;i<starsToShow;i++){
-        starsHTML += '<span class="star-pop" style="animation-delay:' + (i*0.05) + 's">⭐</span>';
-      }
-      stageEmoji.innerHTML = '<span class="stars-row">' + starsHTML + '</span>';
-      stageName.textContent = "Número " + n;
-      stageHint.textContent = "¡Cuenta las estrellitas conmigo!";
-      speak("Número " + NUM_WORDS[n]);
+  const btnVoz = document.getElementById('btnVoz');
+  if(!window.MA.vozDisponible){
+    btnVoz.disabled = true;
+    btnVoz.textContent = '🔇 Voz no disponible';
+    btnVoz.setAttribute('aria-pressed', 'false');
+  }else{
+    btnVoz.addEventListener('click', () => {
+      const activa = window.MA.alternarVoz();
+      btnVoz.setAttribute('aria-pressed', String(activa));
+      btnVoz.textContent = activa ? '🔊 Voz activada' : '🔇 Voz apagada';
     });
-    boardNumbers.appendChild(btn);
-  });
-
-  // --- Pestañas ---
-  var tabAnimals = document.getElementById("tabAnimals");
-  var tabNumbers = document.getElementById("tabNumbers");
-
-  function showAnimals(){
-    boardAnimals.hidden = false;
-    boardNumbers.hidden = true;
-    tabAnimals.setAttribute("aria-selected","true");
-    tabNumbers.setAttribute("aria-selected","false");
   }
-  function showNumbers(){
-    boardAnimals.hidden = true;
-    boardNumbers.hidden = false;
-    tabAnimals.setAttribute("aria-selected","false");
-    tabNumbers.setAttribute("aria-selected","true");
-  }
-  tabAnimals.addEventListener("click", showAnimals);
-  tabNumbers.addEventListener("click", showNumbers);
-
-  // --- Rincones: pequeño feedback visual al pulsar "Entrar" ---
-  document.querySelectorAll(".module-go").forEach(function(btn){
-    btn.addEventListener("click", function(){
-      var card = btn.closest(".module-card");
-      card.animate(
-        [{ transform:"scale(1)" }, { transform:"scale(1.04)" }, { transform:"scale(1)" }],
-        { duration: 320, easing: "ease-out" }
-      );
-      document.getElementById("juego").scrollIntoView({ behavior:"smooth" });
-    });
-  });
 })();
 </script>
 </body>

@@ -1,0 +1,471 @@
+/* ============================================================================
+   Mundo Aprendizaje — sistema visual compartido
+   Tokens, tipografía, navegación, botones y pie. Lo cargan todas las páginas.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------- TEMA CLARO
+   Los pasteles son el fondo de las tarjetas; --on-pastel es el color de texto
+   que va encima de ellos. Nunca escribir un color a pelo sobre un pastel: si
+   se hace, el modo oscuro se rompe. */
+:root{
+  color-scheme: light;
+
+  --yellow: #FFE9A8;  --yellow-deep: #FFD966;
+  --sky: #BEE7F7;     --sky-deep: #8FD2EF;
+  --mint: #BCF0D6;    --mint-deep: #8FE0B6;
+  --lavender: #DCCEF5;--lavender-deep: #C1A9EA;
+  --peach: #FFD4B8;   --peach-deep: #FFB88C;
+
+  --cream: #FFFBF3;        /* fondo de página y superficies hundidas */
+  --white: #FFFFFF;        /* superficie elevada: tarjetas */
+  --ink: #3E3427;
+  --ink-soft: #6B6151;
+  --on-pastel: #4B4030;    /* texto sobre cualquier pastel */
+  --borde: rgba(62,52,39,0.10);
+
+  --focus: #1F5FA8;
+  --naranja: #F26A31;
+  --naranja-claro: #FF9F6B;
+  --naranja-sombra: #C4521F;
+  --exito: #16603F;
+  --exito-fondo: var(--mint);
+  --acento-calido: #A66F00;   /* titulares destacados */
+  --acento-verde: #157A54;
+  --aviso-fondo: #FFE3E3;
+  --aviso-texto: #7A2E2E;
+  --panel-juego: #FFF6E4;     /* degradado superior del panel de juego */
+  --pie-fondo: #FFF2DC;
+  --on-activo: #3E3427;    /* texto sobre los tonos -deep (estados activos) */
+  --tienda-hero: #F6F0FF;  /* degradado superior de la tienda */
+  --boton-inerte: #EDE7DC; /* botón desactivado */
+  --sobre-tema: rgba(255,255,255,0.70); /* pastilla clara sobre un pastel */
+
+  --radius-lg: 32px;
+  --radius-md: 22px;
+  --shadow-bubble: 0 10px 0 rgba(62,52,39,0.08), 0 18px 30px rgba(62,52,39,0.10);
+  --shadow-plana: 0 5px 0 rgba(62,52,39,0.10);
+}
+
+/* -------------------------------------------------------------- TEMA OSCURO
+   No es una inversión: es una paleta propia de "cuento antes de dormir".
+   El fondo es marrón carbón cálido (no azul tecnológico) y cada pastel tiene
+   su versión nocturna, más profunda y desaturada, conservando el mismo tono.
+   El texto sobre ellos es crema, lo que da AA holgado en todos los casos. */
+[data-theme="dark"]{
+  color-scheme: dark;
+
+  --yellow: #5E4B22;  --yellow-deep: #D6B45C;
+  --sky: #2B4859;     --sky-deep: #7CB9D6;
+  --mint: #26503F;    --mint-deep: #79C7A3;
+  --lavender: #423761;--lavender-deep: #B39FE0;
+  --peach: #64402F;   --peach-deep: #E5A177;
+
+  --cream: #211B17;        /* marrón carbón: el "papel" de noche */
+  --white: #2E2721;        /* tarjetas, un punto más claras que el fondo */
+  --ink: #F6EFE3;
+  --ink-soft: #BEB2A1;
+  --on-pastel: #F6EFE3;
+  --borde: rgba(255,246,232,0.14);
+
+  --focus: #8CC2FF;
+  --naranja: #E2703C;
+  --naranja-claro: #F0925F;
+  --naranja-sombra: #9C4423;
+  --exito: #8FE0B6;
+  --exito-fondo: #26503F;
+  --acento-calido: #F0C46B;
+  --acento-verde: #7ED9AE;
+  --aviso-fondo: #4A2523;
+  --aviso-texto: #FFC9C9;
+  --panel-juego: #2C2419;
+  --pie-fondo: #1A1512;
+  /* En oscuro los -deep son CLAROS: el texto encima debe ser oscuro. */
+  --on-activo: #241C14;
+  --tienda-hero: #2A2333;
+  --boton-inerte: #3A322B;
+  --sobre-tema: rgba(255,255,255,0.12);
+
+  --shadow-bubble: 0 10px 0 rgba(0,0,0,0.28), 0 18px 30px rgba(0,0,0,0.32);
+  --shadow-plana: 0 5px 0 rgba(0,0,0,0.30);
+}
+
+/* Superficies y bordes que estaban fijados a un color claro */
+[data-theme="dark"] .topbar{ border-bottom-color: var(--borde); }
+[data-theme="dark"] footer{ border-top-color: var(--borde); }
+[data-theme="dark"] .btn-secondary,
+[data-theme="dark"] .topnav a{ box-shadow: var(--shadow-plana); }
+[data-theme="dark"] .btn-ghost{ box-shadow: inset 0 0 0 3px var(--borde); }
+
+[data-theme="dark"] .footer-bottom{ border-top-color: var(--borde); }
+
+/* El cambio de tema no debe ser un parpadeo seco, pero tampoco una animación
+   larga que se note al navegar: 260 ms sobre color y fondo, y nada más. */
+body, .topbar, .ficha, .card, footer,
+.rincon, .cuaderno, .pack, .video-card, .testimonio,
+.chip, .filtro-btn, .tab-btn, .casilla, .carta{
+  transition: background-color .26s ease, color .26s ease, border-color .26s ease;
+}
+
+*{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; }
+body{
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+h1, h2, h3, h4{
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  margin: 0;
+  color: var(--ink);
+}
+img, svg{ display: block; max-width: 100%; }
+a{ color: inherit; text-decoration: none; }
+button{ font-family: inherit; cursor: pointer; }
+
+.skip-link{
+  position: absolute; left: -999px; top: 0;
+  background: var(--ink); color: var(--white);
+  padding: 10px 16px; border-radius: 0 0 12px 0; z-index: 200;
+}
+.skip-link:focus{ left: 0; }
+
+:focus-visible{ outline: 4px solid var(--focus); outline-offset: 3px; border-radius: 10px; }
+
+.visually-hidden{
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* Un solo bloque cubre toda la animación del sitio, presente y futura. */
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior: auto; }
+  *, *::before, *::after{
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}
+
+/* ---------------------------------------------------------------- cabecera */
+.topbar{
+  position: sticky; top: 0; z-index: 100;
+  background: color-mix(in srgb, var(--cream) 92%, transparent);
+  backdrop-filter: blur(6px);
+  border-bottom: 3px solid rgba(62,52,39,0.06);
+}
+.topbar-inner{
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 14px 24px; max-width: 1180px; margin: 0 auto;
+}
+.brand{
+  display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+  font-family: 'Fredoka', sans-serif; font-size: 1.3rem; color: var(--ink);
+}
+.brand-badge{
+  width: 44px; height: 44px; border-radius: 16px; flex-shrink: 0;
+  background: linear-gradient(160deg, var(--yellow), var(--peach));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; box-shadow: var(--shadow-bubble);
+}
+.topnav{ display: flex; gap: 6px; list-style: none; margin: 0; padding: 0; }
+.topnav a{
+  display: block; font-size: 0.95rem; padding: 12px 15px;
+  border-radius: 999px; color: var(--ink-soft); white-space: nowrap;
+}
+.topnav a:hover{ background: var(--sky); color: var(--ink); }
+.topnav a[aria-current="page"]{ background: var(--yellow-deep); color: var(--on-activo); }
+/* La tienda se distingue del resto del menú sin gritar. */
+.topnav a.nav-premium{
+  background: var(--lavender); color: var(--on-pastel);
+}
+.topnav a.nav-premium:hover{ background: var(--lavender-deep); color: var(--on-activo); }
+
+/* Interruptor de tema: lo inyecta site.js en todas las páginas. */
+.tema-btn{
+  flex-shrink: 0; width: 48px; height: 48px;
+  border: none; border-radius: 50%;
+  background: var(--white); color: var(--ink);
+  box-shadow: var(--shadow-plana);
+  font-size: 1.25rem; line-height: 1;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: transform .2s ease, background-color .26s ease;
+}
+.tema-btn:hover{ transform: rotate(-12deg) scale(1.08); }
+.tema-btn:active{ transform: scale(0.94); }
+
+/* En móvil la navegación no se esconde: se vuelve una fila deslizable. */
+@media (max-width: 860px){
+  /* El interruptor sube junto a la marca, no al final de la fila deslizable */
+  .topbar-inner{ position: relative; }
+  .tema-btn{ position: absolute; top: 12px; right: 16px; }
+}
+@media (max-width: 860px){
+  .topbar-inner{ flex-direction: column; align-items: stretch; gap: 10px; padding: 12px 16px; }
+  .topnav{ overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+  .topnav::-webkit-scrollbar{ display: none; }
+  .topnav a{ background: var(--white); box-shadow: 0 4px 0 rgba(62,52,39,0.08); }
+  .topnav a.nav-premium{ background: var(--lavender); }
+}
+
+/* ----------------------------------------------------------------- botones */
+.btn{
+  font-family: 'Fredoka', sans-serif; font-size: 1.05rem;
+  border: none; padding: 14px 26px; border-radius: 999px;
+  min-height: 52px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  transition: transform .15s ease;
+}
+.btn:hover{ transform: translateY(-3px); }
+.btn:active{ transform: translateY(2px); }
+
+.btn-primary{
+  background: linear-gradient(160deg, var(--naranja-claro), var(--naranja));
+  color: var(--white); box-shadow: 0 6px 0 var(--naranja-sombra);
+}
+.btn-primary:active{ box-shadow: 0 3px 0 var(--naranja-sombra); }
+
+.btn-secondary{
+  background: var(--white); color: var(--ink);
+  box-shadow: 0 5px 0 rgba(62,52,39,0.12);
+}
+.btn-secondary:active{ box-shadow: none; }
+
+.btn-ghost{
+  background: transparent; color: var(--ink-soft);
+  box-shadow: inset 0 0 0 3px rgba(62,52,39,0.12);
+}
+
+/* ---------------------------------------------------------------- secciones */
+.wrap{ max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+@media (max-width: 560px){ .wrap{ padding: 0 16px; } }
+
+.section{ padding: 64px 24px; }
+.section-head{ max-width: 680px; margin: 0 auto 40px; text-align: center; }
+.section-head h1, .section-head h2{ font-size: clamp(1.9rem, 3.6vw, 2.5rem); }
+.section-head p{ color: var(--ink-soft); margin-top: 10px; }
+
+.page-head{ text-align: center; padding: 56px 24px 0; max-width: 760px; margin: 0 auto; }
+.page-head h1{ font-size: clamp(2.2rem, 5vw, 3.1rem); }
+.page-head p{ color: var(--ink-soft); font-size: 1.12rem; margin-top: 14px; }
+
+.tip{
+  background: var(--yellow); border-radius: var(--radius-md);
+  padding: 18px 24px; font-size: 0.96rem; color: var(--on-pastel);
+  display: flex; gap: 12px; align-items: flex-start;
+}
+
+.pill{
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--white); padding: 6px 14px; border-radius: 999px;
+  font-size: 0.82rem; color: var(--ink-soft);
+  box-shadow: 0 3px 0 rgba(62,52,39,0.08);
+}
+.pill-gratis{ background: var(--mint); color: var(--exito); }
+.pill-premium{ background: var(--lavender); color: var(--on-pastel); }
+
+/* Colores por tema, usados en tarjetas y cabeceras */
+.t-peach{ --tema: var(--peach); }
+.t-sky{ --tema: var(--sky); }
+.t-mint{ --tema: var(--mint); }
+.t-lavender{ --tema: var(--lavender); }
+
+/* --------------------------------------------------------------------- pie */
+footer{
+  margin-top: 70px; background: var(--pie-fondo, #FFF2DC);
+  padding: 50px 24px 30px; border-top: 3px solid rgba(62,52,39,0.06);
+}
+.footer-grid{
+  max-width: 1180px; margin: 0 auto;
+  display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 30px;
+}
+@media (max-width: 900px){ .footer-grid{ grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px){ .footer-grid{ grid-template-columns: 1fr; text-align: center; } }
+footer h3{ font-size: 1.05rem; margin-bottom: 10px; }
+footer ul{ list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 2px; }
+footer a{
+  color: var(--ink-soft); font-weight: 700;
+  display: inline-flex; align-items: center; min-height: 44px;
+}
+footer a:hover{ color: var(--ink); text-decoration: underline; }
+.footer-brand{ display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+@media (max-width: 560px){ .footer-brand{ justify-content: center; } }
+.footer-note{ color: var(--ink-soft); font-size: 0.92rem; max-width: 38ch; }
+@media (max-width: 560px){ .footer-note{ margin-inline: auto; } }
+.footer-bottom{
+  max-width: 1180px; margin: 34px auto 0; padding-top: 20px;
+  border-top: 2px dashed rgba(62,52,39,0.15);
+  font-size: 0.85rem; color: var(--ink-soft); text-align: center;
+}
+
+[hidden]{ display: none !important; }
+
+/* ============================================================================
+   ANIMACIONES — tres momentos con intención, no movimiento por todas partes
+   1. La entrada del hero (una sola vez, al abrir la landing)
+   2. La aparición de una ficha o de una tarjeta al cambiar de filtro
+   3. El cambio de tema (arriba, en la transición de color)
+   Todo queda anulado por el bloque de prefers-reduced-motion de más arriba.
+   ========================================================================== */
+
+@keyframes ma-entrar{
+  from{ opacity: 0; transform: translateY(18px); }
+  to{ opacity: 1; transform: none; }
+}
+@keyframes ma-entrar-suave{
+  from{ opacity: 0; transform: translateY(10px); }
+  to{ opacity: 1; transform: none; }
+}
+
+/* 1. Hero: los elementos entran escalonados, de arriba abajo. */
+.anim-hero > *{
+  animation: ma-entrar .55s cubic-bezier(.22,.9,.3,1) backwards;
+}
+.anim-hero > *:nth-child(1){ animation-delay: .05s; }
+.anim-hero > *:nth-child(2){ animation-delay: .13s; }
+.anim-hero > *:nth-child(3){ animation-delay: .21s; }
+.anim-hero > *:nth-child(4){ animation-delay: .29s; }
+
+/* 2. Contenido que se repinta al filtrar: entra en vez de aparecer de golpe.
+      El retardo se corta a los 6 primeros: más allá no se percibe y solo
+      retrasaría la lectura. */
+.anim-lista > *{ animation: ma-entrar-suave .38s ease backwards; }
+.anim-lista > *:nth-child(1){ animation-delay: .02s; }
+.anim-lista > *:nth-child(2){ animation-delay: .06s; }
+.anim-lista > *:nth-child(3){ animation-delay: .10s; }
+.anim-lista > *:nth-child(4){ animation-delay: .14s; }
+.anim-lista > *:nth-child(5){ animation-delay: .18s; }
+.anim-lista > *:nth-child(n+6){ animation-delay: .22s; }
+
+/* ============================================================================
+   CARRUSEL
+   ========================================================================== */
+.carrusel{ position: relative; }
+.carrusel-pista{
+  display: flex; gap: 22px;
+  overflow-x: auto; scroll-snap-type: x mandatory;
+  scroll-padding: 0 4px; padding: 6px 4px 18px;
+  scrollbar-width: none; -webkit-overflow-scrolling: touch;
+}
+.carrusel-pista::-webkit-scrollbar{ display: none; }
+.carrusel-pista > *{
+  scroll-snap-align: start; flex: 0 0 auto;
+  width: min(320px, 82vw);
+}
+.carrusel-pista:focus-visible{ outline-offset: 6px; }
+
+.carrusel-flecha{
+  position: absolute; top: 42%; transform: translateY(-50%);
+  width: 52px; height: 52px; border: none; border-radius: 50%;
+  background: var(--white); color: var(--ink);
+  box-shadow: var(--shadow-bubble);
+  font-size: 1rem; z-index: 3;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .18s ease, opacity .18s ease;
+}
+.carrusel-flecha:hover:not(:disabled){ transform: translateY(-50%) scale(1.1); }
+.carrusel-flecha:disabled{ opacity: .3; cursor: not-allowed; }
+.carrusel-prev{ left: -10px; }
+.carrusel-next{ right: -10px; }
+@media (max-width: 900px){
+  /* En móvil se navega deslizando: las flechas estorbarían sobre el contenido */
+  .carrusel-flecha{ display: none; }
+}
+
+.carrusel-puntos{ display: flex; justify-content: center; gap: 10px; margin-top: 6px; }
+.carrusel-punto{
+  width: 12px; height: 12px; padding: 0; border: none; border-radius: 50%;
+  background: var(--borde); cursor: pointer;
+  transition: transform .2s ease, background-color .2s ease;
+  /* El objetivo táctil real es de 44 px aunque el punto se vea pequeño */
+  position: relative;
+}
+.carrusel-punto::after{
+  content: ''; position: absolute; inset: -16px;
+}
+.carrusel-punto.activo{ background: var(--naranja); transform: scale(1.35); }
+
+/* ============================================================================
+   TESTIMONIOS
+   ========================================================================== */
+.testimonios{ background: var(--panel-juego); padding: 66px 0 56px; }
+.testimonio{
+  background: var(--white); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-bubble); padding: 28px 26px;
+  display: flex; flex-direction: column; gap: 14px;
+  height: 100%;
+}
+.testimonio-estrellas{ color: var(--acento-calido); font-size: 1.05rem; letter-spacing: 2px; }
+.testimonio-texto{
+  margin: 0; flex-grow: 1; font-size: 1rem; color: var(--ink);
+  line-height: 1.65;
+}
+.testimonio-texto::before{ content: '“'; }
+.testimonio-texto::after{ content: '”'; }
+.testimonio-pie{ display: flex; align-items: center; gap: 12px; }
+.testimonio-avatar{
+  width: 52px; height: 52px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; background: var(--tema, var(--sky));
+}
+.testimonio-nombre{ font-family: 'Fredoka', sans-serif; font-size: 1rem; }
+.testimonio-rol{ font-size: 0.84rem; color: var(--ink-soft); }
+
+.aviso-simulado{
+  max-width: 780px; margin: 0 auto 30px;
+  background: var(--aviso-fondo); color: var(--aviso-texto);
+  border-radius: var(--radius-md); padding: 16px 22px;
+  font-size: 0.92rem; display: flex; gap: 12px; align-items: flex-start;
+}
+
+/* ============================================================================
+   ONBOARDING — presentación breve la primera vez
+   ========================================================================== */
+.onboarding[hidden]{ display: none !important; }
+.onboarding{
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(30,24,20,0.62);
+  backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+  animation: ma-entrar-suave .3s ease;
+}
+.onboarding-caja{
+  background: var(--cream); border-radius: 34px;
+  max-width: 560px; width: 100%; max-height: 92vh; overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+  display: flex; flex-direction: column;
+}
+.onboarding-pista{
+  display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.onboarding-pista::-webkit-scrollbar{ display: none; }
+.onboarding-slide{
+  flex: 0 0 100%; scroll-snap-align: center;
+  padding: 42px 34px 26px; text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+}
+.onboarding-emoji{ font-size: 3.4rem; }
+.onboarding-slide h2{ font-size: 1.45rem; }
+.onboarding-slide p{ color: var(--ink-soft); margin: 0; max-width: 40ch; }
+.onboarding-pie{
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 14px; padding: 16px 24px 22px; flex-wrap: wrap;
+}
+.onboarding-puntos{ display: flex; gap: 8px; }
+.onboarding-punto{
+  width: 10px; height: 10px; border-radius: 50%; border: none;
+  background: var(--borde); padding: 0;
+}
+.onboarding-punto.activo{ background: var(--naranja); transform: scale(1.3); }
+
+.carrusel-contador{
+  text-align: center; margin: 8px 0 0;
+  font-family: 'Fredoka', sans-serif; font-size: 0.9rem; color: var(--ink-soft);
+}
+.carrusel-contador[hidden]{ display: none; }

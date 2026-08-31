@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fichas Imprimibles — Mundo Aprendizaje</title>
+<meta name="description" content="Cuaderno imprimible para 3 a 7 años con fichas de lenguaje, historia e idiomas: abecedario, vocales, dinosaurios, Egipto, colores y animales en inglés.">
+<meta name="theme-color" content="#FFFBF3">
+<script>
+/* Tema antes de pintar: evita el fogonazo blanco al abrir en modo oscuro. */
+(()=>{try{const g=localStorage.getItem('ma-tema');
+document.documentElement.dataset.theme=g||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+}catch(e){document.documentElement.dataset.theme='light';}})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖨️</text></svg>">
+<link rel="stylesheet" href="assets/base.css">
+<style>
+  /* ============================================================
+     TOKENS — mismo sistema visual que index.html
+     ============================================================ */
+  :root{
+    --yellow: #FFE9A8; --yellow-deep: #FFD966;
+    --sky: #BEE7F7; --sky-deep: #8FD2EF;
+    --mint: #BCF0D6; --mint-deep: #8FE0B6;
+    --lavender: #DCCEF5; --lavender-deep: #C1A9EA;
+    --peach: #FFD4B8; --peach-deep: #FFB88C;
+    --cream: #FFFBF3; --ink: #3E3427; --ink-soft: #6B6151;
+    --white: #FFFFFF; --focus: #1F5FA8;
+    --trace-fill: #F1EBE0;   /* relleno claro de los trazos a repasar */
+    --trace-line: #BFB3A0;   /* contorno y líneas punteadas */
+    --radius-lg: 32px; --radius-md: 22px;
+    --shadow-bubble: 0 10px 0 rgba(62,52,39,0.08), 0 18px 30px rgba(62,52,39,0.10);
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin: 0; background: var(--cream); color: var(--ink);
+    font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 18px; line-height: 1.5;
+  }
+  h1, h2, h3{ font-family: 'Fredoka', sans-serif; font-weight: 600; margin: 0; color: var(--ink); }
+  a{ color: inherit; text-decoration: none; }
+  button{ font-family: inherit; cursor: pointer; }
+  :focus-visible{ outline: 4px solid var(--focus); outline-offset: 3px; border-radius: 10px; }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *, *::before, *::after{
+      animation-duration: .001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .001ms !important;
+    }
+  }
+
+  /* ============================================================
+     BARRA DE PANTALLA
+     ============================================================ */
+  .toolbar{
+    position: sticky; top: 0; z-index: 100;
+    background: color-mix(in srgb, var(--cream) 94%, transparent); backdrop-filter: blur(6px);
+    border-bottom: 3px solid rgba(62,52,39,0.06);
+  }
+  .toolbar-inner{
+    max-width: 1000px; margin: 0 auto; padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  }
+  .back-link{
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: 'Fredoka', sans-serif; font-size: 1.05rem;
+    padding: 12px 20px; border-radius: 999px; background: var(--white);
+    box-shadow: 0 5px 0 rgba(62,52,39,0.10); min-height: 48px;
+  }
+  .btn-print{
+    font-family: 'Fredoka', sans-serif; font-size: 1.05rem;
+    background: linear-gradient(160deg, var(--naranja-claro), var(--naranja)); color: var(--white);
+    border: none; padding: 14px 26px; border-radius: 999px; min-height: 52px;
+    box-shadow: 0 6px 0 var(--naranja-sombra);
+    display: inline-flex; align-items: center; gap: 10px;
+    transition: transform .15s ease;
+  }
+  .btn-print:hover{ transform: translateY(-3px); }
+  .btn-print:active{ transform: translateY(2px); box-shadow: 0 3px 0 var(--naranja-sombra); }
+
+  .intro{ max-width: 1000px; margin: 0 auto; padding: 40px 24px 0; text-align: center; }
+  .intro h1{ font-size: clamp(2rem, 4.4vw, 2.8rem); }
+  .intro p{ color: var(--ink-soft); max-width: 62ch; margin: 12px auto 0; }
+  .intro .tip{
+    background: var(--yellow); border-radius: var(--radius-md);
+    padding: 16px 24px; margin: 26px auto 0; max-width: 62ch;
+    font-size: 0.95rem; color: var(--on-pastel); text-align: left;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+
+  .jump-nav{
+    display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;
+    max-width: 1000px; margin: 26px auto 0; padding: 0 24px;
+  }
+  .jump-nav a{
+    font-family: 'Fredoka', sans-serif; font-size: 0.98rem;
+    background: var(--white); padding: 12px 22px; border-radius: 999px;
+    box-shadow: 0 5px 0 rgba(62,52,39,0.10); color: var(--ink-soft); min-height: 48px;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .jump-nav a:hover{ background: var(--sky); color: var(--ink); }
+
+  /* ============================================================
+     HOJAS
+     ============================================================ */
+  .sheets{ max-width: 1000px; margin: 0 auto; padding: 40px 24px 70px; }
+
+  .block-title{
+    display: flex; align-items: center; gap: 14px;
+    margin: 46px 6px 22px; font-size: 1.5rem;
+  }
+  .block-title::after{
+    content: ''; flex-grow: 1; height: 3px; border-radius: 3px;
+    background: rgba(62,52,39,0.10);
+  }
+  .block-title:first-child{ margin-top: 0; }
+
+  .ficha{
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-bubble);
+    padding: 34px 38px 30px;
+    margin-bottom: 30px;
+    display: flex; flex-direction: column;
+  }
+  @media (max-width: 640px){ .ficha{ padding: 24px 20px; border-radius: var(--radius-md); } }
+
+  .ficha-head{
+    background: var(--band, var(--peach));
+    border-radius: var(--radius-md);
+    padding: 20px 26px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 20px; flex-wrap: wrap;
+  }
+  .ficha-head-title{ display: flex; align-items: center; gap: 14px; }
+  .ficha-emoji{ font-size: 2.2rem; line-height: 1; }
+  .ficha-head h3{ font-size: 1.7rem; letter-spacing: .5px; }
+
+  .ficha-fields{ display: flex; gap: 18px; flex-wrap: wrap; }
+  .field{ display: flex; align-items: flex-end; gap: 8px; font-size: 0.95rem; color: var(--on-pastel); }
+  .field-line{ display: inline-block; width: 120px; border-bottom: 2px solid rgba(62,52,39,0.35); }
+
+  .instruction{
+    display: flex; gap: 12px; align-items: flex-start;
+    margin: 24px 2px 6px; font-size: 1.05rem; color: var(--ink);
+  }
+  .instruction .num{
+    font-family: 'Fredoka', sans-serif;
+    background: var(--ink); color: var(--white);
+    width: 30px; height: 30px; flex-shrink: 0;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 0.95rem;
+  }
+
+  .ficha-body{ flex-grow: 1; display: flex; flex-direction: column; justify-content: center; padding: 12px 0; }
+
+  .ficha-foot{
+    margin-top: 20px; padding-top: 14px;
+    border-top: 2px dashed rgba(62,52,39,0.18);
+    display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
+    font-size: 0.82rem; color: var(--ink-soft);
+  }
+  .btn-print-one{
+    font-family: 'Fredoka', sans-serif; font-size: 0.9rem;
+    background: var(--cream); border: none; color: var(--ink-soft);
+    padding: 10px 18px; border-radius: 999px; min-height: 44px;
+    box-shadow: 0 4px 0 rgba(62,52,39,0.10);
+  }
+  .btn-print-one:hover{ background: var(--yellow); color: var(--ink); }
+
+  .cheer{
+    margin-top: 16px; text-align: center;
+    font-family: 'Fredoka', sans-serif; font-size: 1.1rem; color: var(--acento-calido);
+  }
+
+  /* ---------- Abecedario ---------- */
+  .alphabet-grid{
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px;
+  }
+  @media (max-width: 520px){ .alphabet-grid{ grid-template-columns: repeat(4, 1fr); } }
+  .letter{
+    aspect-ratio: 1 / 1;
+    background: var(--cream); border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fredoka', sans-serif; font-weight: 700;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    color: var(--trace-fill);
+    -webkit-text-stroke: 2.5px var(--trace-line);
+  }
+
+  /* ---------- Ejercicios de unir con línea ---------- */
+  .match{
+    display: grid; grid-template-columns: 1fr 1fr; gap: 30px;
+    max-width: 620px; margin: 0 auto; width: 100%;
+  }
+  .match-col{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 16px; }
+  .match-col li{
+    background: var(--cream); border-radius: 18px; padding: 12px 18px;
+    display: flex; align-items: center; gap: 14px; min-height: 62px;
+  }
+  .match-col--right li{ flex-direction: row-reverse; text-align: right; }
+  .match-dot{
+    width: 16px; height: 16px; flex-shrink: 0;
+    border: 3px solid var(--trace-line); border-radius: 50%; background: var(--white);
+  }
+  .match-key{
+    font-family: 'Fredoka', sans-serif; font-size: 1.8rem; flex-grow: 1;
+    color: var(--ink);
+  }
+  .match-value{ font-size: 1.1rem; flex-grow: 1; display: flex; align-items: center; gap: 10px; }
+  .match-col--right .match-value{ justify-content: flex-end; }
+  .match-value .pic{ font-size: 1.9rem; }
+  .match-word{ font-family: 'Fredoka', sans-serif; font-size: 1.45rem; letter-spacing: 1px; }
+
+  /* ---------- Primeras palabras ---------- */
+  .words-list{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 22px; }
+  .word-row{ display: flex; align-items: center; gap: 20px; }
+  .word-pic{ font-size: 2.6rem; flex-shrink: 0; }
+  .word-trace{
+    font-family: 'Fredoka', sans-serif; font-weight: 700;
+    font-size: clamp(2rem, 6vw, 2.8rem); letter-spacing: 6px;
+    color: var(--trace-fill);
+    -webkit-text-stroke: 3px var(--trace-line);
+    flex-shrink: 0; min-width: 5.5em;
+  }
+  .word-line{ flex-grow: 1; border-bottom: 3px dotted var(--trace-line); height: 2.4rem; }
+
+  /* ---------- Zona de dibujo ---------- */
+  .draw-area{
+    border: 5px dashed var(--trace-line); border-radius: 28px;
+    background: var(--white);
+    min-height: 320px;
+    display: flex; align-items: flex-end; justify-content: center;
+    padding: 18px; position: relative;
+  }
+  .draw-caption{
+    font-family: 'Fredoka', sans-serif; color: var(--ink-soft); font-size: 1rem;
+  }
+  .draw-egg{ position: absolute; top: 18px; left: 22px; width: 96px; height: auto; }
+
+  /* ---------- Colores en inglés ---------- */
+  .colors-grid{ display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+  @media (max-width: 520px){ .colors-grid{ grid-template-columns: 1fr; } }
+  .color-cell{ text-align: center; }
+  .color-cell svg{ margin: 0 auto; width: 100%; max-width: 190px; height: auto; }
+  /* Sólido: hay que leer el nombre del color para saber con qué pintar. */
+  .color-word{
+    font-family: 'Fredoka', sans-serif; font-size: 1.5rem; letter-spacing: 3px; margin-top: 6px;
+    color: var(--ink);
+  }
+
+  /* ---------- Egipto ---------- */
+  .egypt{ display: flex; justify-content: center; }
+  .egypt svg{ width: 100%; max-width: 460px; height: auto; }
+
+  /* ============================================================
+     IMPRESIÓN — A4 vertical, una ficha por página
+     ============================================================ */
+  @media print{
+    @page{ size: A4 portrait; margin: 12mm; }
+
+    *{ -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+    html, body{ background: #fff; font-size: 12pt; }
+    .toolbar, .intro, .jump-nav, .block-title, .no-print{ display: none !important; }
+
+    .sheets{ max-width: none; margin: 0; padding: 0; }
+
+    .ficha{
+      box-shadow: none; border-radius: 0;
+      padding: 0; margin: 0;
+      min-height: 250mm;              /* llena la página útil A4 */
+      break-after: page;
+      break-inside: avoid;
+    }
+    .ficha:last-child{ break-after: auto; }
+
+    .ficha-head{ border-radius: 14px; padding: 6mm 8mm; }
+    .ficha-head h3{ font-size: 20pt; }
+    .ficha-emoji{ font-size: 20pt; }
+    .instruction{ font-size: 12pt; margin: 8mm 0 2mm; }
+    .ficha-foot{ font-size: 8pt; }
+
+    .letter{ font-size: 22pt; border-radius: 8px; }
+    .match-key{ font-size: 20pt; }
+    .match-word{ font-size: 16pt; }
+    .word-trace{ font-size: 26pt; }
+    .draw-area{ min-height: 120mm; }
+    .color-cell svg{ max-width: 55mm; }
+    .egypt svg{ max-width: 130mm; }
+
+    .letter, .match-col li, .word-row, .color-cell{ break-inside: avoid; }
+
+    /* "Imprimir solo esta ficha": el resto se oculta durante el diálogo */
+    body.printing-one .ficha:not(.print-target){ display: none !important; }
+    body.printing-one .ficha.print-target{ break-after: auto; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar no-print">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html"><span class="brand-badge" aria-hidden="true">&#129417;</span> Mundo Aprendizaje</a>
+    <nav aria-label="Navegaci&#243;n principal">
+      <ul class="topnav">
+        <li><a href="index.html#rincones">Rincones</a></li>
+        <li><a href="juegos.html">Juegos</a></li>
+        <li><a href="videos.html">V&#237;deos</a></li>
+        <li><a href="descargas.html" aria-current="page">Fichas</a></li>
+        <li><a href="tienda.html" class="nav-premium">Tienda</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="toolbar no-print">
+  <div class="toolbar-inner">
+    <a class="back-link" href="descargas.html">
+      <span aria-hidden="true">←</span> Volver a Descargas
+    </a>
+    <button class="btn-print" type="button" id="printBtn">
+      <span aria-hidden="true">🖨️</span> Imprimir cuaderno completo
+    </button>
+  </div>
+</div>
+
+<div class="intro no-print">
+  <h1>🖨️ Cuaderno de Fichas Imprimibles</h1>
+  <p>Siete fichas de Lenguaje, Historia e Idiomas listas para imprimir. Cada una ocupa una hoja A4; también puedes imprimir solo la que necesites con el botón del pie de cada ficha.</p>
+  <p class="tip">
+    <span aria-hidden="true">💡</span>
+    <span><strong>Antes de imprimir:</strong> activa «Gráficos de fondo» en el diálogo de impresión para que salgan los colores, y comprueba que el tamaño sea A4 vertical.</span>
+  </p>
+</div>
+
+<nav class="jump-nav no-print" aria-label="Ir a un bloque de fichas">
+  <a href="#bloque-lenguaje"><span aria-hidden="true">🔤</span> Lenguaje</a>
+  <a href="#bloque-historia"><span aria-hidden="true">🦕</span> Historia</a>
+  <a href="#bloque-idiomas"><span aria-hidden="true">🌍</span> Idiomas</a>
+</nav>
+
+<main class="sheets">
+
+  <!-- ============================================================
+       BLOQUE: LENGUAJE
+       ============================================================ -->
+  <h2 class="block-title no-print" id="bloque-lenguaje"><span aria-hidden="true">🔤</span> Lenguaje</h2>
+
+  <article class="ficha" id="ficha-abecedario" style="--band: var(--sky)">
+    <header class="ficha-head">
+      <div class="ficha-head-title">
+        <span class="ficha-emoji" aria-hidden="true">🔤</span>
+        <h3>El Abecedario</h3>
+      </div>
+      <div class="ficha-fields">
+        <span class="field">Nombre: <span class="field-line" aria-hidden="true"></span></span>
+        <span class="field">Fecha: <span class="field-line" aria-hidden="true"></span></span>
+      </div>
+    </header>
+
+    <p class="instruction">
+      <span class="num" aria-hidden="true">1</span>
+      Colorea las letras del abecedario con tus colores favoritos y dilas en voz alta.
+    </p>
+
+    <div class="ficha-body">
+      <div class="alphabet-grid">
+        <span class="letter">A</span><span class="letter">B</span><span class="letter">C</span><span class="letter">D</span><span class="letter">E</span>
+        <span class="letter">F</span><span class="letter">G</span><span class="letter">H</span><span class="letter">I</span><span class="letter">J</span>
+        <span class="letter">K</span><span class="letter">L</span><span class="letter">M</span><span class="letter">N</span><span class="letter">Ñ</span>
+        <span class="letter">O</span><span class="letter">P</span><span class="letter">Q</span><span class="letter">R</span><span class="letter">S</span>
+        <span class="letter">T</span><span class="letter">U</span><span class="letter">V</span><span class="letter">W</span><span class="letter">X</span>
+        <span class="letter">Y</span><span class="letter">Z</span>
+      </div>
+    </div>
+
+    <footer class="ficha-foot">
+      <span>Mundo Aprendizaje · Lenguaje — Ficha 1</span>
+      <button class="btn-print-one no-print" type="button">🖨️ Imprimir solo esta</button>
+    </footer>
+  </article>
+
+  <article class="ficha" id="ficha-vocales" style="--band: var(--sky)">
+    <header class="ficha-head">
+      <div class="ficha-head-title">
+        <span class="ficha-emoji" aria-hidden="true">🅰️</span>
+        <h3>Las Vocales</h3>
+      </div>
+      <div class="ficha-fields">
+        <span class="field">Nombre: <span class="field-line" aria-hidden="true"></span></span>
+        <span class="field">Fecha: <span class="field-line" aria-hidden="true"></span></span>
+      </div>
+    </header>
+
+    <p class="instruction">
+      <span class="num" aria-hidden="true">1</span>
+      Une con una línea cada vocal con el dibujo que empieza por esa letra.
+    </p>
+
+    <div class="ficha-body">
+      <div class="match">
+        <ul class="match-col match-col--left">
+          <li><span class="match-key">A</span><span class="match-dot" aria-hidden="true"></span></li>
+          <li><span class="match-key">E</span><span class="match-dot" aria-hidden="true"></span></li>
+          <li><span class="match-key">I</span><span class="match-dot" aria-hidden="true"></span></li>
+          <li><span class="match-key">O</span><span class="match-dot" aria-hidden="true"></span></li>
+          <li><span class="match-key">U</span><span class="match-dot" aria-hidden="true"></span></li>
+        </ul>
+        <ul class="match-col match-col--right">
+          <li><span class="match-value"><span class="pic" aria-hidden="true">🐘</span> Elefante</span><span class="match-dot" aria-hidden="true"></span></li>
+          <li><span class="match-value"><span class="pic" aria-hidden="true">🌳</span> Árbol</span><span class="match-dot" aria-hidden="true"></span></li>
+          <li><span class="match-value"><span class="pic" aria-hidden="true">🐻</span> Oso</span><span class="match-dot" aria-hidden="true"></span></li>
+          <li><span class="match-value"><span class="pic" aria-hidden="true">🍇</span> Uvas</span><span class="match-dot" aria-hidden="true"></span></li>
+          <li><span class="match-value"><span class="pic" aria-hidden="true">🏝️</span> Isla</span><span class="match-dot" aria-hidden="true"></span></li>
+        </ul>
+      </div>
+      <p class="cheer">✏️ ¡Fíjate bien en el primer sonido de cada palabra!</p>
+    </div>
+
+    <footer class="ficha-foot">
+      <span>Mundo Aprendizaje · Lenguaje — Ficha 2</span>
+      <button class="btn-print-one no-print" type="button">🖨️ Imprimir solo esta</button>
+    </footer>
+  </article>
+
+  <article class="ficha" id="ficha-palabras" style="--band: var(--sky)">
+    <header class="ficha-head">
+      <div class="ficha-head-title">
+        <span class="ficha-emoji" aria-hidden="true">📝</span>
+        <h3>Primeras Palabras</h3>
+      </div>
+      <div class="ficha-fields">
+        <span class="field">Nombre: <span class="field-line" aria-hidden="true"></span></span>
+        <span class="field">Fecha: <span class="field-line" aria-hidden="true"></span></span>
+      </div>
+    </header>
+
+    <p class="instruction">
+      <span class="num" aria-hidden="true">1</span>
+      Repasa las letras con tu lápiz e intenta escribirlas tú solo en la línea de puntos.
+    </p>
+
+    <div class="ficha-body">
+      <ul class="words-list">
+        <li class="word-row">
+          <span class="word-pic" aria-hidden="true">☀️</span>
+          <span class="word-trace">SOL</span>
+          <span class="word-line" role="img" aria-label="Línea para escribir la palabra sol"></span>
+        </li>
+        <li class="word-row">
+          <span class="word-pic" aria-hidden="true">🐱</span>
+          <span class="word-trace">GATO</span>
+          <span class="word-line" role="img" aria-label="Línea para escribir la palabra gato"></span>
+        </li>
+        <li class="word-row">
+          <span class="word-pic" aria-hidden="true">🏠</span>
+          <span class="word-trace">CASA</span>
+          <span class="word-line" role="img" aria-label="Línea para escribir la palabra casa"></span>
+        </li>
+        <li class="word-row">
+          <span class="word-pic" aria-hidden="true">🌻</span>
+          <span class="word-trace">FLOR</span>
+          <span class="word-line" role="img" aria-label="Línea para escribir la palabra flor"></span>
+        </li>
+      </ul>
+    </div>
+
+    <footer class="ficha-foot">
+      <span>Mundo Aprendizaje · Lenguaje — Ficha 3</span>
+      <button class="btn-print-one no-print" type="button">🖨️ Imprimir solo esta</button>
+    </footer>
+  </article>
+
+  <!-- ============================================================
+       BLOQUE: HISTORIA
+       ============================================================ -->
+  <h2 class="block-title no-print" id="bloque-historia"><span aria-hidden="true">🦕</span> Historia</h2>
+
+  <article class="ficha" id="ficha-dinosaurio" style="--band: var(--mint)">
+    <header class="ficha-head">
+      <div class="ficha-head-title">
+        <span class="ficha-emoji" aria-hidden="true">🦖</span>
+        <h3>Mundo Dinosaurio</h3>
+      </div>
+      <div class="ficha-fields">
+        <span class="field">Nombre: <span class="field-line" aria-hidden="true"></span></span>
+        <span class="field">Fecha: <span class="field-line" aria-hidden="true"></span></span>
+      </div>
+    </header>
+
+    <p class="instruction">
+      <span class="num" aria-hidden="true">1</span>
+      ¡Oh, no! Este huevo gigante se está rompiendo. ¿Qué dinosaurio va a nacer? ¡Dibújalo saliendo de su cascarón!
+    </p>
+
+    <div class="ficha-body">
+      <div class="draw-area">
+        <svg class="draw-egg" viewBox="0 0 120 150" role="img" aria-label="Huevo de dinosaurio agrietado">
+          <path d="M60 6 C88 6 112 46 112 88 C112 122 89 144 60 144 C31 144 8 122 8 88 C8 46 32 6 60 6 Z"
+                fill="var(--cream)" stroke="var(--trace-line)" stroke-width="4"/>
+          <polyline points="8,84 30,74 46,92 64,70 82,90 100,76 112,86"
+                    fill="none" stroke="var(--trace-line)" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+        <p class="draw-caption">Dibuja aquí dentro a tu dinosaurio bebé 🦕</p>
+      </div>
+    </div>
+
+    <footer class="ficha-foot">
+      <span>Mundo Aprendizaje · Historia — Ficha 1</span>
+      <button class="btn-print-one no-print" type="button">🖨️ Imprimir solo esta</button>
+    </footer>
+  </article>
+
+  <article class="ficha" id="ficha-egipto" style="--band: var(--mint)">
+    <header class="ficha-head">
+      <div class="ficha-head-title">
+        <span class="ficha-emoji" aria-hidden="true">🏜️</span>
+        <h3>Antiguo Egipto</h3>
+      </div>
+      <div class="ficha-fields">
+        <span class="field">Nombre: <span class="field-line" aria-hidden="true"></span></span>
+        <span class="field">Fecha: <span class="field-line" aria-hidden="true"></span></span>
+      </div>
+    </header>
+
+    <p class="instruction">
+      <span class="num" aria-hidden="true">1</span>
+      En el Antiguo Egipto construían pirámides muy altas. Repasa las líneas de puntos para terminarla y colorea el sol.
+    </p>
+
+    <div class="ficha-body">
+      <div class="egypt">
+        <svg viewBox="0 0 460 340" role="img" aria-label="Pirámide punteada para repasar, con un sol y un camello">
+          <!-- Sol para colorear -->
+          <circle cx="386" cy="62" r="34" fill="none" stroke="var(--trace-line)" stroke-width="4"/>
+          <g stroke="var(--trace-line)" stroke-width="4" stroke-linecap="round">
+            <line x1="386" y1="8"   x2="386" y2="20"/>
+            <line x1="386" y1="104" x2="386" y2="116"/>
+            <line x1="332" y1="62"  x2="344" y2="62"/>
+            <line x1="428" y1="62"  x2="440" y2="62"/>
+            <line x1="348" y1="24"  x2="356" y2="32"/>
+            <line x1="416" y1="92"  x2="424" y2="100"/>
+            <line x1="348" y1="100" x2="356" y2="92"/>
+            <line x1="416" y1="32"  x2="424" y2="24"/>
+          </g>
+
+          <!-- Pirámide: el lado izquierdo está dibujado, el resto se repasa -->
+          <line x1="160" y1="60" x2="40" y2="272" stroke="var(--trace-line)" stroke-width="5" stroke-linecap="round"/>
+          <line x1="160" y1="60" x2="280" y2="272"
+                stroke="var(--trace-line)" stroke-width="5" stroke-dasharray="8 12" stroke-linecap="round"/>
+          <line x1="40" y1="272" x2="280" y2="272"
+                stroke="var(--trace-line)" stroke-width="5" stroke-dasharray="8 12" stroke-linecap="round"/>
+          <line x1="160" y1="60" x2="160" y2="272"
+                stroke="var(--trace-line)" stroke-width="4" stroke-dasharray="6 12" stroke-linecap="round"/>
+          <!-- Hiladas de piedra -->
+          <g stroke="var(--trace-line)" stroke-width="3" stroke-dasharray="5 10" stroke-linecap="round">
+            <line x1="100" y1="166" x2="220" y2="166"/>
+            <line x1="70"  y1="219" x2="250" y2="219"/>
+          </g>
+
+          <!-- Suelo del desierto -->
+          <line x1="10" y1="300" x2="450" y2="300"
+                stroke="var(--trace-line)" stroke-width="4" stroke-dasharray="10 14" stroke-linecap="round"/>
+          <text x="360" y="292" font-size="42" text-anchor="middle">🐫</text>
+        </svg>
+      </div>
+      <p class="cheer">¡No olvides colorear todo de amarillo arena! ☀️</p>
+    </div>
+
+    <footer class="ficha-foot">
+      <span>Mundo Aprendizaje · Historia — Ficha 2</span>
+      <button class="btn-print-one no-print" type="button">🖨️ Imprimir solo esta</button>
+    </footer>
+  </article>
+
+  <!-- ============================================================
+       BLOQUE: IDIOMAS
+       ============================================================ -->
+  <h2 class="block-title no-print" id="bloque-idiomas"><span aria-hidden="true">🌍</span> Idiomas</h2>
+
+  <article class="ficha" id="ficha-colors" style="--band: var(--lavender)">
+    <header class="ficha-head">
+      <div class="ficha-head-title">
+        <span class="ficha-emoji" aria-hidden="true">🎨</span>
+        <h3>Colors</h3>
+      </div>
+      <div class="ficha-fields">
+        <span class="field">Nombre: <span class="field-line" aria-hidden="true"></span></span>
+        <span class="field">Fecha: <span class="field-line" aria-hidden="true"></span></span>
+      </div>
+    </header>
+
+    <p class="instruction">
+      <span class="num" aria-hidden="true">1</span>
+      Pinta cada mancha de pintura del color que indica su nombre en inglés. ¡Diviértete!
+    </p>
+
+    <div class="ficha-body">
+      <div class="colors-grid">
+        <div class="color-cell">
+          <svg viewBox="0 0 200 150" role="img" aria-label="Mancha de pintura para colorear de rojo">
+            <path d="M28 78 C22 44 52 18 88 24 C112 28 118 8 142 14 C172 22 184 52 172 80 C162 104 178 126 152 138 C120 152 86 138 62 130 C36 122 34 104 28 78 Z"
+                  fill="none" stroke="var(--trace-line)" stroke-width="5" stroke-linejoin="round"/>
+          </svg>
+          <p class="color-word">RED</p>
+        </div>
+        <div class="color-cell">
+          <svg viewBox="0 0 200 150" role="img" aria-label="Mancha de pintura para colorear de azul">
+            <path d="M34 66 C30 36 62 12 96 20 C124 26 136 6 160 18 C186 32 186 66 174 88 C164 108 172 132 144 140 C112 148 76 136 54 122 C34 110 38 90 34 66 Z"
+                  fill="none" stroke="var(--trace-line)" stroke-width="5" stroke-linejoin="round"/>
+          </svg>
+          <p class="color-word">BLUE</p>
+        </div>
+        <div class="color-cell">
+          <svg viewBox="0 0 200 150" role="img" aria-label="Mancha de pintura para colorear de amarillo">
+            <path d="M26 84 C18 52 46 20 82 22 C110 24 122 4 148 16 C178 30 182 62 170 86 C158 110 174 130 146 140 C114 150 80 140 56 128 C32 116 32 106 26 84 Z"
+                  fill="none" stroke="var(--trace-line)" stroke-width="5" stroke-linejoin="round"/>
+          </svg>
+          <p class="color-word">YELLOW</p>
+        </div>
+        <div class="color-cell">
+          <svg viewBox="0 0 200 150" role="img" aria-label="Mancha de pintura para colorear de verde">
+            <path d="M32 72 C24 42 54 14 90 22 C116 28 130 10 154 24 C180 40 178 72 166 92 C154 112 166 132 138 140 C106 148 72 134 50 120 C32 108 36 92 32 72 Z"
+                  fill="none" stroke="var(--trace-line)" stroke-width="5" stroke-linejoin="round"/>
+          </svg>
+          <p class="color-word">GREEN</p>
+        </div>
+      </div>
+    </div>
+
+    <footer class="ficha-foot">
+      <span>Mundo Aprendizaje · Idiomas — Ficha 1</span>
+      <button class="btn-print-one no-print" type="button">🖨️ Imprimir solo esta</button>
+    </footer>
+  </article>
+
+  <article class="ficha" id="ficha-animals" style="--band: var(--lavender)">
+    <header class="ficha-head">
+      <div class="ficha-head-title">
+        <span class="ficha-emoji" aria-hidden="true">🐾</span>
+        <h3>Animals</h3>
+      </div>
+      <div class="ficha-fields">
+        <span class="field">Nombre: <span class="field-line" aria-hidden="true"></span></span>
+        <span class="field">Fecha: <span class="field-line" aria-hidden="true"></span></span>
+      </div>
+    </header>
+
+    <p class="instruction">
+      <span class="num" aria-hidden="true">1</span>
+      Une con una línea cada animalito con su nombre correcto en inglés.
+    </p>
+
+    <div class="ficha-body">
+      <div class="match">
+        <ul class="match-col match-col--left">
+          <li><span class="match-key" aria-hidden="true">🐶</span><span class="match-dot" aria-hidden="true"></span></li>
+          <li><span class="match-key" aria-hidden="true">🐱</span><span class="match-dot" aria-hidden="true"></span></li>
+          <li><span class="match-key" aria-hidden="true">🐷</span><span class="match-dot" aria-hidden="true"></span></li>
+        </ul>
+        <ul class="match-col match-col--right">
+          <li><span class="match-word">CAT</span><span class="match-dot" aria-hidden="true"></span></li>
+          <li><span class="match-word">PIG</span><span class="match-dot" aria-hidden="true"></span></li>
+          <li><span class="match-word">DOG</span><span class="match-dot" aria-hidden="true"></span></li>
+        </ul>
+      </div>
+      <p class="cheer">🐾 Dilo en voz alta: dog, cat, pig.</p>
+    </div>
+
+    <footer class="ficha-foot">
+      <span>Mundo Aprendizaje · Idiomas — Ficha 2</span>
+      <button class="btn-print-one no-print" type="button">🖨️ Imprimir solo esta</button>
+    </footer>
+  </article>
+
+</main>
+
+<script>
+(() => {
+  'use strict';
+
+  const body = document.body;
+
+  document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+  /* "Imprimir solo esta ficha": marcamos la elegida y dejamos que la
+     media query de impresión oculte las demás; al cerrar el diálogo
+     restauramos el documento. */
+  const restore = () => {
+    body.classList.remove('printing-one');
+    document.querySelectorAll('.print-target').forEach(el => el.classList.remove('print-target'));
+  };
+
+  window.addEventListener('afterprint', restore);
+
+  document.querySelectorAll('.btn-print-one').forEach(btn => {
+    btn.addEventListener('click', () => {
+      restore();
+      btn.closest('.ficha').classList.add('print-target');
+      body.classList.add('printing-one');
+      window.print();
+      // Red de seguridad por si el navegador no dispara `afterprint`
+      setTimeout(restore, 2000);
+    });
+  });
+})();
+</script>
+<script src="assets/site.js"></script>
+</body>
+</html>

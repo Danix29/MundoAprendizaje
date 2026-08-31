@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fichas imprimibles — Mundo Aprendizaje</title>
+<meta name="description" content="Cuadernos de fichas imprimibles por tema y curso, de 2 a 7 años.">
+<meta name="theme-color" content="#FFFBF3">
+<script>
+/* Tema antes de pintar: evita el fogonazo blanco al abrir en modo oscuro. */
+(()=>{try{const g=localStorage.getItem('ma-tema');
+document.documentElement.dataset.theme=g||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+}catch(e){document.documentElement.dataset.theme='light';}})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖨️</text></svg>">
+<link rel="stylesheet" href="assets/base.css">
+<link rel="stylesheet" href="assets/fichas.css">
+<style>
+  .toolbar{
+    position: sticky; top: 0; z-index: 90;
+    background: color-mix(in srgb, var(--cream) 94%, transparent); backdrop-filter: blur(6px);
+    border-bottom: 3px solid rgba(62,52,39,0.06);
+  }
+  .toolbar-inner{
+    max-width: 1040px; margin: 0 auto; padding: 12px 24px;
+    display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+  }
+  .sheets{ max-width: 1040px; margin: 0 auto; padding: 30px 24px 70px; }
+  @media (max-width: 560px){ .sheets{ padding: 24px 16px 50px; } }
+
+  .cuaderno-head{
+    border-radius: var(--radius-lg); padding: 28px 30px; margin-bottom: 28px;
+    background: var(--tema, var(--peach)); box-shadow: var(--shadow-bubble);
+  }
+  .cuaderno-head h1{ font-size: clamp(1.6rem, 3.4vw, 2.2rem); }
+  .cuaderno-head p{ margin: 8px 0 0; color: var(--on-pastel); max-width: 56ch; }
+
+  /* Ficha de pago: se ve qué es y qué trae, sin enseñar los ejercicios. */
+  .ficha-bloqueada{
+    background: var(--white); border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-bubble); padding: 26px 30px; margin-bottom: 18px;
+    display: flex; align-items: center; gap: 22px; flex-wrap: wrap;
+  }
+  .ficha-bloqueada .candado{
+    width: 62px; height: 62px; flex-shrink: 0; border-radius: 20px;
+    background: var(--lavender); display: flex; align-items: center;
+    justify-content: center; font-size: 1.7rem;
+  }
+  .ficha-bloqueada .cuerpo{ flex-grow: 1; min-width: 220px; }
+  .ficha-bloqueada h2{ font-size: 1.18rem; }
+  .ficha-bloqueada p{ margin: 4px 0 0; color: var(--ink-soft); font-size: 0.92rem; }
+  .ficha-bloqueada .tipos{ margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .aviso-muestra{
+    background: var(--mint); border-radius: var(--radius-md);
+    padding: 16px 22px; margin-bottom: 26px; font-size: 0.95rem; color: var(--exito);
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .cta-pack{
+    background: var(--lavender); border-radius: var(--radius-lg);
+    padding: 30px; margin-top: 26px; text-align: center;
+  }
+  .cta-pack h2{ font-size: 1.4rem; }
+  .cta-pack p{ color: var(--on-pastel); margin: 8px auto 18px; max-width: 52ch; }
+  .estado{ text-align: center; padding: 60px 20px; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+<header class="topbar no-print">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html"><span class="brand-badge" aria-hidden="true">🦉</span> Mundo Aprendizaje</a>
+    <nav aria-label="Navegación principal">
+      <ul class="topnav">
+        <li><a href="index.html#rincones">Rincones</a></li>
+        <li><a href="juegos.html">Juegos</a></li>
+        <li><a href="videos.html">Vídeos</a></li>
+        <li><a href="descargas.html" aria-current="page">Fichas</a></li>
+        <li><a href="tienda.html" class="nav-premium">Tienda</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="toolbar no-print">
+  <div class="toolbar-inner">
+    <a class="btn btn-secondary" href="descargas.html"><span aria-hidden="true">←</span> Volver al catálogo</a>
+    <button class="btn btn-primary" type="button" id="btnImprimir"><span aria-hidden="true">🖨️</span> Imprimir lo visible</button>
+  </div>
+</div>
+
+<main class="sheets" id="contenido">
+  <div class="estado" id="estado">Cargando fichas…</div>
+  <div id="salida" class="anim-lista"></div>
+</main>
+
+<footer class="no-print">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">
+        <span class="brand-badge" aria-hidden="true">🦉</span>
+        <strong style="font-family:'Fredoka',sans-serif; font-size:1.1rem;">Mundo Aprendizaje</strong>
+      </div>
+      <p class="footer-note">Fichas y juegos para acompañar los primeros pasos lectores, matemáticos y creativos.</p>
+    </div>
+    <div><h3>Aprender</h3><ul>
+      <li><a href="index.html#rincones">Rincones</a></li>
+      <li><a href="juegos.html">Juegos</a></li>
+      <li><a href="videos.html">Vídeos</a></li>
+    </ul></div>
+    <div><h3>Fichas</h3><ul>
+      <li><a href="descargas.html">Catálogo completo</a></li>
+      <li><a href="descargas.html?gratis=1">Muestras gratuitas</a></li>
+      <li><a href="tienda.html">Packs premium</a></li>
+    </ul></div>
+    <div><h3>Legal</h3><ul>
+      <li><a href="tienda.html#legal">Condiciones de compra</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">Mundo Aprendizaje — hecho con cariño para los primeros años de descubrimiento.</div>
+</footer>
+
+<script src="data/catalogo.js"></script>
+<script src="assets/site.js"></script>
+<script src="assets/render-ficha.js"></script>
+<script>
+(() => {
+  'use strict';
+  const { el, icono, catalogo, filtrar } = window.MA;
+  const salida = document.getElementById('salida');
+  const estado = document.getElementById('estado');
+
+  /** Ruta: #/<tema>/<curso> o #/<tema>/<curso>/<orden> */
+  function ruta(){
+    const partes = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
+    const cat = catalogo();
+    const tema = cat.temas[partes[0]] ? partes[0] : 'matematicas';
+    const cursos = Object.keys(cat.cursos);
+    const curso = cursos.includes(partes[1]) ? partes[1] : cursos[0];
+    const orden = partes[2] ? Number(partes[2]) : null;
+    return { tema, curso, orden };
+  }
+
+  function tarjetaBloqueada(f){
+    const nombresTipo = {
+      contar:'contar', trazo:'trazo', operaciones:'operaciones', comparar:'comparar',
+      serie:'series', unir:'unir con flechas', problema:'problemas', formas:'formas',
+      reloj:'el reloj', descomponer:'descomposición', rodear:'rodear', emparejar:'emparejar',
+      vecinos:'anterior y posterior', tabla:'tabla de multiplicar', concepto:'conceptos',
+      colorear:'colorear', 'tantos-como':'correspondencia', monedas:'monedas',
+    };
+    return el('article', { className: 'ficha-bloqueada' },
+      el('div', { className: 'candado', attrs: { 'aria-hidden': 'true' } }, '🔒'),
+      el('div', { className: 'cuerpo' },
+        el('h2', { text: `${f.orden}. ${f.titulo}` }),
+        el('p', { text: f.objetivo }),
+        el('div', { className: 'tipos' },
+          (f.tipos || []).map(t => el('span', { className: 'pill', text: nombresTipo[t] || t })))),
+      el('a', { className: 'btn btn-secondary', attrs: { href: `tienda.html#/${f.tema}/${f.curso}` } },
+        'Incluida en el pack'));
+  }
+
+  async function pintar(){
+    const { tema, curso, orden } = ruta();
+    const cat = catalogo();
+    const infoTema = cat.temas[tema];
+    const infoCurso = cat.cursos[String(curso)];
+
+    document.title = `${infoTema.nombre} · ${infoCurso.etiqueta} — Mundo Aprendizaje`;
+    estado.hidden = false;
+    estado.textContent = 'Cargando fichas…';
+    salida.replaceChildren();
+
+    if(!cat.temasGenerados.includes(tema)){
+      estado.textContent = `Las fichas de ${infoTema.nombre} estarán disponibles próximamente.`;
+      return;
+    }
+
+    let fichas;
+    try{
+      fichas = await window.MA.cargarFichas(tema, curso);
+    }catch(e){
+      estado.textContent = 'No se han podido cargar las fichas. Si has abierto el archivo directamente, prueba con un servidor local.';
+      return;
+    }
+
+    const meta = filtrar({ tema, curso });
+    const porId = Object.fromEntries(meta.map(m => [m.id, m]));
+    const lista = orden ? fichas.filter(f => f.orden === orden) : fichas;
+
+    estado.hidden = true;
+
+    const cabecera = el('div', { className: `cuaderno-head t-${infoTema.color}` },
+      el('h1', {}, icono(infoTema.icono + ' '), `${infoTema.nombre} · ${infoCurso.etiqueta}`),
+      el('p', { text: `${infoCurso.etapa}. Veinte fichas de dificultad progresiva: la 1 es la más sencilla y la 20 la más completa.` }));
+    salida.append(cabecera);
+
+    const gratis = lista.filter(f => !f.bloqueado);
+    if(gratis.length){
+      salida.append(el('div', { className: 'aviso-muestra no-print' },
+        icono('🎁'),
+        el('span', {}, el('strong', { text: 'Muestra gratuita. ' }),
+          'Puedes imprimir esta ficha completa para ver el nivel exacto del curso antes de comprar nada.')));
+    }
+
+    lista.forEach(f => {
+      const m = porId[f.id] || f;
+      salida.append(f.bloqueado
+        ? tarjetaBloqueada({ ...m, tema, curso })
+        : window.MA_RENDER.renderFicha({ ...f, tema, curso }));
+    });
+
+    if(lista.some(f => f.bloqueado)){
+      salida.append(el('div', { className: 'cta-pack no-print' },
+        el('h2', { text: `Pack ${infoTema.nombre} · ${infoCurso.etiqueta}` }),
+        el('p', { text: `Las 20 fichas en PDF, listas para imprimir cuando quieras. Incluye la muestra que ya has visto.` }),
+        el('a', { className: 'btn btn-primary', attrs: { href: `tienda.html#/${tema}/${curso}` } },
+          icono('⬇️'), 'Ver el pack — 1,99 €')));
+    }
+  }
+
+  document.getElementById('btnImprimir').addEventListener('click', () => window.print());
+  window.addEventListener('hashchange', pintar);
+  pintar();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,460 @@
+/* ============================================================================
+   Mundo Aprendizaje — hoja de estilo de las fichas imprimibles
+   Requiere assets/base.css. Cada .ficha equivale a una página A4.
+   ========================================================================== */
+
+:root{
+  --trace-fill: #F1EBE0;   /* relleno claro de lo que hay que repasar */
+  --trace-line: #BFB3A0;   /* contorno y líneas punteadas */
+  --caja: #FDFCF9;         /* fondo de las casillas de respuesta */
+}
+
+/* En pantalla oscura, una rejilla de casillas blancas puras deslumbra.
+   Se hunden un punto respecto a la tarjeta y el punteado se aclara para
+   seguir marcándolas. Al imprimir vuelven a blanco (ver @media print). */
+[data-theme="dark"]{
+  --trace-fill: #4A4137;
+  --trace-line: #8B7F6D;
+  --caja: #3A322B;
+}
+
+/* Escala tipográfica por curso: cuanto más pequeño el alumno, más grande todo.
+   Lo controla el atributo data-curso que pone el renderizador. */
+.ficha[data-curso="2"]{ --escala: 1.35; --items-fila: 3; }
+.ficha[data-curso="3"]{ --escala: 1.25; --items-fila: 3; }
+.ficha[data-curso="4"]{ --escala: 1.15; --items-fila: 4; }
+.ficha[data-curso="5"]{ --escala: 1.05; --items-fila: 4; }
+.ficha[data-curso="6"]{ --escala: 1.00; --items-fila: 5; }
+.ficha[data-curso="7"]{ --escala: 0.95; --items-fila: 5; }
+
+.ficha{
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-bubble);
+  padding: 34px 38px 30px;
+  margin-bottom: 34px;
+  display: flex; flex-direction: column;
+  font-size: calc(1rem * var(--escala, 1));
+}
+@media (max-width: 640px){ .ficha{ padding: 24px 18px; border-radius: var(--radius-md); } }
+
+/* ------------------------------------------------------------- encabezado */
+.ficha-head{
+  background: var(--tema, var(--peach));
+  border-radius: var(--radius-md);
+  padding: 20px 26px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 20px; flex-wrap: wrap;
+}
+.ficha-head-title{ display: flex; align-items: center; gap: 14px; }
+.ficha-emoji{ font-size: 2.1rem; line-height: 1; }
+.ficha-head h2, .ficha-head h3{ font-size: calc(1.5rem * var(--escala, 1)); }
+.ficha-meta{ font-size: 0.8rem; color: var(--on-pastel); margin-top: 2px; }
+
+.ficha-fields{ display: flex; gap: 18px; flex-wrap: wrap; }
+.field{ display: flex; align-items: flex-end; gap: 8px; font-size: 0.9rem; color: var(--on-pastel); }
+.field-line{ display: inline-block; width: 110px; border-bottom: 2px solid rgba(62,52,39,0.35); }
+
+.ficha-objetivo{
+  font-size: 0.82rem; color: var(--ink-soft);
+  margin: 12px 2px 0; font-weight: 700;
+}
+
+/* --------------------------------------------------------------- bloques */
+.bloque{ margin-top: calc(22px * var(--escala, 1)); }
+.bloque-enunciado{
+  display: flex; gap: 12px; align-items: flex-start;
+  font-size: calc(1rem * var(--escala, 1)); margin-bottom: 14px;
+}
+.bloque-num{
+  font-family: 'Fredoka', sans-serif;
+  background: var(--ink); color: var(--white);
+  width: 28px; height: 28px; flex-shrink: 0;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem;
+}
+
+/* Caja de respuesta reutilizada por casi todos los ejercicios */
+.caja{
+  display: inline-block; flex-shrink: 0;
+  width: calc(46px * var(--escala, 1)); height: calc(46px * var(--escala, 1));
+  border: 3px dashed var(--trace-line); border-radius: 12px;
+  background: var(--caja);
+}
+.caja-ancha{ width: calc(90px * var(--escala, 1)); }
+.caja-grande{ width: calc(70px * var(--escala, 1)); height: calc(70px * var(--escala, 1)); }
+
+.fila{
+  display: flex; align-items: center; gap: 16px;
+  background: var(--cream); border-radius: 16px;
+  padding: 12px 18px; margin-bottom: 10px;
+}
+.emoji-serie{ font-size: calc(1.7rem * var(--escala, 1)); letter-spacing: 5px; flex-grow: 1; }
+
+/* --- contar / colorear / tantos-como --- */
+.contar-fila .caja{ margin-left: auto; }
+
+/* --- trazo --- */
+.trazo-fila{
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  border-bottom: 3px dotted var(--trace-line);
+  padding-bottom: 8px; margin-bottom: 14px;
+}
+.glifo{
+  font-family: 'Fredoka', sans-serif; font-weight: 700;
+  font-size: calc(2.6rem * var(--escala, 1)); line-height: 1;
+  color: var(--trace-fill);
+  -webkit-text-stroke: 3px var(--trace-line);
+  min-width: 1.3em; text-align: center;
+}
+.glifo.fantasma{ opacity: .5; }
+
+/* --- operaciones --- */
+.ops-grid{ display: grid; gap: 14px; }
+.ops-grid.horizontal{ grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+.ops-grid.vertical{ grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+
+.op-h{
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: calc(1.5rem * var(--escala, 1));
+  background: var(--cream); border-radius: 14px; padding: 10px 14px;
+}
+.op-v{
+  background: var(--cream); border-radius: 14px; padding: 12px 14px;
+  font-family: 'Fredoka', sans-serif; font-size: calc(1.4rem * var(--escala, 1));
+  text-align: right;
+}
+.op-v .linea{ border-bottom: 3px solid var(--ink); margin: 6px 0 8px; }
+.op-v .signo{ float: left; }
+.op-v .hueco{ height: calc(38px * var(--escala, 1)); border: 3px dashed var(--trace-line); border-radius: 10px; background: var(--caja); }
+
+/* --- comparar --- */
+.comparar-grid{ display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+.comparar-item{
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  background: var(--cream); border-radius: 14px; padding: 12px;
+  font-family: 'Fredoka', sans-serif; font-size: calc(1.5rem * var(--escala, 1));
+}
+
+/* --- serie --- */
+.serie-fila{ display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.serie-valor{
+  font-family: 'Fredoka', sans-serif; font-size: calc(1.4rem * var(--escala, 1));
+  background: var(--cream); border-radius: 12px;
+  min-width: calc(52px * var(--escala, 1)); height: calc(48px * var(--escala, 1));
+  display: flex; align-items: center; justify-content: center;
+}
+.serie-flecha{ color: var(--trace-line); }
+
+/* --- unir --- */
+.unir{ display: grid; grid-template-columns: 1fr 1fr; gap: 26px; max-width: 640px; margin: 0 auto; }
+.unir ul{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.unir li{
+  background: var(--cream); border-radius: 16px; padding: 10px 16px;
+  display: flex; align-items: center; gap: 12px; min-height: 56px;
+  font-size: calc(1.05rem * var(--escala, 1));
+}
+.unir .col-der li{ flex-direction: row-reverse; text-align: right; }
+.punto{
+  width: 14px; height: 14px; flex-shrink: 0;
+  border: 3px solid var(--trace-line); border-radius: 50%; background: var(--white);
+}
+.unir .contenido{ flex-grow: 1; }
+
+/* --- problema --- */
+.problema{
+  background: var(--cream); border-radius: 16px; padding: 16px 20px; margin-bottom: 14px;
+}
+.problema-texto{ font-size: calc(1.02rem * var(--escala, 1)); margin: 0 0 12px; }
+.problema-pie{ display: flex; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 0.88rem; color: var(--ink-soft); }
+.problema-operacion{
+  flex-grow: 1; min-height: calc(52px * var(--escala, 1));
+  border: 3px dashed var(--trace-line); border-radius: 12px; background: var(--caja);
+}
+
+/* --- formas --- */
+.formas-grid{ display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 16px; }
+.forma-celda{ background: var(--cream); border-radius: 16px; padding: 12px; text-align: center; }
+.forma-celda svg{ margin: 0 auto; width: 100%; max-width: 130px; height: auto; }
+.forma-nombre{ font-family: 'Fredoka', sans-serif; font-size: calc(1.05rem * var(--escala, 1)); margin-top: 6px; }
+
+/* --- reloj --- */
+.relojes{ display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 16px; }
+.reloj-celda{ background: var(--cream); border-radius: 16px; padding: 12px; text-align: center; }
+.reloj-celda svg{ margin: 0 auto 8px; width: 100%; max-width: 110px; height: auto; }
+.reloj-celda .caja{ width: 100%; height: 40px; }
+
+/* --- descomponer --- */
+.descomp-grid{ display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+.descomp{
+  background: var(--cream); border-radius: 16px; padding: 14px;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  font-family: 'Fredoka', sans-serif; font-size: calc(1.3rem * var(--escala, 1));
+}
+
+/* --- rodear / emparejar --- */
+.rodear-fila, .emparejar-fila{
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  background: var(--cream); border-radius: 16px; padding: 12px 18px; margin-bottom: 10px;
+}
+.rodear-op{
+  font-family: 'Fredoka', sans-serif; font-size: calc(1.6rem * var(--escala, 1));
+  min-width: calc(64px * var(--escala, 1)); text-align: center;
+}
+.emparejar-modelo{
+  font-size: calc(2rem * var(--escala, 1));
+  border: 3px solid var(--trace-line); border-radius: 14px;
+  padding: 4px 12px; background: var(--white);
+}
+.emparejar-op{ font-size: calc(2rem * var(--escala, 1)); }
+
+/* --- vecinos --- */
+.vecinos-grid{ display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+.vecino{
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  background: var(--cream); border-radius: 14px; padding: 12px;
+  font-family: 'Fredoka', sans-serif; font-size: calc(1.35rem * var(--escala, 1));
+}
+.vecino .num{ min-width: calc(50px * var(--escala, 1)); text-align: center; }
+
+/* --- tabla de multiplicar --- */
+.tabla-mult{ display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-width: 560px; }
+@media (max-width: 520px){ .tabla-mult{ grid-template-columns: 1fr; } }
+.tabla-fila{
+  display: flex; align-items: center; gap: 10px;
+  background: var(--cream); border-radius: 12px; padding: 8px 14px;
+  font-family: 'Fredoka', sans-serif; font-size: calc(1.25rem * var(--escala, 1));
+}
+.tabla-fila .caja{ width: calc(58px * var(--escala, 1)); height: calc(38px * var(--escala, 1)); margin-left: auto; }
+.tabla-fila .resuelto{ margin-left: auto; color: var(--ink-soft); }
+
+/* --- concepto --- */
+.concepto-grid{ display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 16px; }
+.concepto-celda{
+  background: var(--cream); border-radius: 16px; padding: 18px 12px; text-align: center;
+}
+.concepto-emoji{ font-size: calc(3rem * var(--escala, 1)); }
+.concepto-etiqueta{ font-size: 0.85rem; color: var(--ink-soft); margin-top: 6px; }
+
+/* --- monedas --- */
+.monedas-grid{ display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
+.monedas-fila{
+  display: flex; align-items: center; gap: 12px;
+  background: var(--cream); border-radius: 16px; padding: 14px;
+  font-size: calc(1.3rem * var(--escala, 1));
+}
+.monedas-fila .caja{ margin-left: auto; }
+
+/* ================= Lenguaje, Historia e Idiomas ================= */
+
+/* Pauta de escritura reutilizada por varios ejercicios */
+.pauta{
+  flex-grow: 1; min-width: 90px;
+  height: calc(2.2rem * var(--escala, 1));
+  border-bottom: 3px dotted var(--trace-line);
+}
+
+/* --- sílabas --- */
+.silabas-fila{ gap: 14px; }
+.silabas-pic{ font-size: calc(1.9rem * var(--escala, 1)); }
+.silabas-palabra{
+  font-family: 'Fredoka', sans-serif; font-size: calc(1.25rem * var(--escala, 1));
+  letter-spacing: 2px; min-width: 6em;
+}
+.silabas-cajas{ display: flex; gap: 6px; flex-grow: 1; }
+.caja-silaba{ width: calc(52px * var(--escala, 1)); height: calc(36px * var(--escala, 1)); }
+
+/* --- escritura --- */
+.escritura-fila{
+  display: flex; align-items: center; gap: 16px;
+  border-bottom: 3px dotted var(--trace-line);
+  padding-bottom: 10px; margin-bottom: 16px;
+}
+.escritura-pic{ font-size: calc(2.2rem * var(--escala, 1)); flex-shrink: 0; }
+.escritura-modelo{
+  font-size: calc(1.9rem * var(--escala, 1)); letter-spacing: 4px;
+  min-width: auto; flex-shrink: 0;
+}
+
+/* --- completar --- */
+.completar-grid{ display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+.completar-item{
+  background: var(--cream); border-radius: 16px; padding: 14px;
+  display: flex; align-items: center; gap: 12px;
+}
+.completar-pic{ font-size: calc(1.9rem * var(--escala, 1)); }
+.completar-palabra{
+  font-family: 'Fredoka', sans-serif; font-size: calc(1.4rem * var(--escala, 1));
+  letter-spacing: 3px; display: flex; align-items: center; gap: 3px;
+}
+.caja-letra{ width: calc(38px * var(--escala, 1)); height: calc(38px * var(--escala, 1)); }
+
+/* --- clasificar --- */
+.clasificar-banco{
+  display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+  background: var(--cream); border-radius: 16px; padding: 14px; margin-bottom: 16px;
+}
+.clasificar-pieza{
+  background: var(--white); border: 2px solid var(--trace-line);
+  border-radius: 999px; padding: 8px 16px;
+  font-size: calc(0.98rem * var(--escala, 1));
+}
+.clasificar-cols{ display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+.clasificar-col h4{
+  font-family: 'Fredoka', sans-serif; font-size: calc(1rem * var(--escala, 1));
+  text-align: center; margin-bottom: 8px;
+}
+.clasificar-hueco{
+  border: 3px dashed var(--trace-line); border-radius: 16px;
+  background: var(--caja); min-height: calc(120px * var(--escala, 1));
+}
+
+/* --- lectura --- */
+.lectura-texto{
+  background: var(--cream); border-left: 6px solid var(--tema, var(--sky));
+  border-radius: 0 16px 16px 0; margin: 0 0 18px;
+  padding: 16px 20px; font-size: calc(1.02rem * var(--escala, 1));
+  line-height: 1.75;
+}
+.lectura-preguntas{ margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 14px; }
+.lectura-pregunta{ margin: 0 0 4px; font-size: calc(0.98rem * var(--escala, 1)); }
+.lectura-preguntas .pauta{ display: block; width: 100%; }
+
+/* --- verdadero / falso --- */
+.vf-lista{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.vf-fila{
+  display: flex; align-items: center; gap: 16px;
+  background: var(--cream); border-radius: 16px; padding: 12px 18px;
+}
+.vf-texto{ flex-grow: 1; font-size: calc(0.98rem * var(--escala, 1)); }
+.vf-opciones{ display: flex; gap: 8px; flex-shrink: 0; }
+.vf-op{
+  width: calc(40px * var(--escala, 1)); height: calc(40px * var(--escala, 1));
+  border: 3px solid var(--trace-line); border-radius: 50%; background: var(--caja);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Fredoka', sans-serif; color: var(--ink-soft);
+}
+
+/* --- ordenar --- */
+.ordenar-lista{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.ordenar-fila{
+  display: flex; align-items: center; gap: 14px;
+  background: var(--cream); border-radius: 16px; padding: 12px 18px;
+}
+.caja-orden{ width: calc(46px * var(--escala, 1)); height: calc(46px * var(--escala, 1)); }
+.ordenar-texto{ font-size: calc(1rem * var(--escala, 1)); }
+
+/* --- zona de dibujo --- */
+.zona-dibujo{
+  border: 5px dashed var(--trace-line); border-radius: 26px;
+  background: var(--caja);
+  display: flex; align-items: flex-end; justify-content: center; padding: 16px;
+}
+.zona-grande{ min-height: 340px; }
+.zona-mediano{ min-height: 220px; }
+.zona-pie{ font-family: 'Fredoka', sans-serif; color: var(--ink-soft); font-size: 0.98rem; }
+
+/* --- vocabulario en inglés --- */
+.vocab-grid{ display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; }
+.vocab-celda{
+  background: var(--cream); border-radius: 18px; padding: 16px 12px;
+  text-align: center; display: flex; flex-direction: column; gap: 6px; align-items: center;
+}
+.vocab-pic{ font-size: calc(2.6rem * var(--escala, 1)); }
+.vocab-en{ font-size: calc(1.35rem * var(--escala, 1)); letter-spacing: 2px; min-width: auto; }
+.vocab-es{ font-size: 0.82rem; color: var(--ink-soft); }
+
+/* --- frase --- */
+.frase-fila{
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  background: var(--cream); border-radius: 16px; padding: 14px 18px; margin-bottom: 10px;
+  font-size: calc(1.05rem * var(--escala, 1));
+}
+
+/* ------------------------------------------------------------------- pie */
+.ficha-foot{
+  margin-top: auto; padding-top: 14px;
+  border-top: 2px dashed rgba(62,52,39,0.18);
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 12px; flex-wrap: wrap; font-size: 0.78rem; color: var(--ink-soft);
+}
+.btn-print-one{
+  font-family: 'Fredoka', sans-serif; font-size: 0.85rem;
+  background: var(--cream); border: none; color: var(--ink-soft);
+  padding: 10px 16px; border-radius: 999px; min-height: 44px;
+  box-shadow: 0 4px 0 rgba(62,52,39,0.10);
+}
+.btn-print-one:hover{ background: var(--yellow); color: var(--ink); }
+
+/* ==========================================================================
+   IMPRESIÓN — A4 vertical, una ficha por página
+   ========================================================================== */
+@media print{
+  @page{ size: A4 portrait; margin: 12mm; }
+
+  /* ------------------------------------------------------------------
+     El modo oscuro NUNCA llega al papel. Imprimir fondos carbón gastaría
+     un cartucho por cuaderno y dejaría las fichas ilegibles a lápiz.
+     Se reponen los valores claros con más especificidad que
+     [data-theme="dark"], así gana pase lo que pase en pantalla.
+     ------------------------------------------------------------------ */
+  :root, :root[data-theme="dark"]{
+    color-scheme: light;
+    --yellow: #FFE9A8;  --yellow-deep: #FFD966;
+    --sky: #BEE7F7;     --sky-deep: #8FD2EF;
+    --mint: #BCF0D6;    --mint-deep: #8FE0B6;
+    --lavender: #DCCEF5;--lavender-deep: #C1A9EA;
+    --peach: #FFD4B8;   --peach-deep: #FFB88C;
+    --cream: #FFFFFF;
+    --white: #FFFFFF;
+    --ink: #2B241B;
+    --ink-soft: #5A5142;
+    --on-pastel: #3A3124;
+    --borde: rgba(62,52,39,0.20);
+    --trace-fill: #F1EBE0;
+    --trace-line: #A79B88;
+    --caja: #FFFFFF;
+    --acento-calido: #8A5C00;
+    --acento-verde: #11623F;
+  }
+
+  /* Los fondos pastel son parte del material, no decoración */
+  *{ -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+  html, body{ background: #fff !important; color: var(--ink) !important; font-size: 11pt; }
+  .ficha{ background: #fff !important; }
+  .topbar, .page-head, .toolbar, .no-print, footer, .filtros, .paginacion{ display: none !important; }
+
+  .sheets, .wrap{ max-width: none; margin: 0; padding: 0; }
+
+  .ficha{
+    box-shadow: none; border-radius: 0;
+    padding: 0; margin: 0;
+    min-height: 250mm;
+    break-after: page;
+    break-inside: avoid;
+  }
+  .ficha:last-child{ break-after: auto; }
+
+  .ficha-head{ border-radius: 12px; padding: 5mm 7mm; }
+  .ficha-objetivo{ display: none; }
+
+  .fila, .trazo-fila, .op-h, .op-v, .comparar-item, .serie-fila, .unir li,
+  .problema, .forma-celda, .reloj-celda, .descomp, .rodear-fila,
+  .emparejar-fila, .vecino, .tabla-fila, .concepto-celda, .monedas-fila,
+  .escritura-fila, .completar-item, .vf-fila, .ordenar-fila, .vocab-celda,
+  .frase-fila, .clasificar-col, .lectura-preguntas li{
+    break-inside: avoid;
+  }
+
+  .lectura-texto{ font-size: 11pt; }
+  .zona-grande{ min-height: 110mm; }
+  .zona-mediano{ min-height: 70mm; }
+  .clasificar-hueco{ min-height: 40mm; }
+  .vocab-celda svg, .vocab-pic{ font-size: 20pt; }
+
+  /* "Imprimir solo esta": el resto se oculta mientras dura el diálogo */
+  body.printing-one .ficha:not(.print-target){ display: none !important; }
+  body.printing-one .ficha.print-target{ break-after: auto; }
+}

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catálogo de fichas — Mundo Aprendizaje</title>
+<meta name="description" content="Catálogo de fichas educativas imprimibles por tema y curso, de 2 a 7 años. Con muestras gratuitas.">
+<meta name="theme-color" content="#FFFBF3">
+<script>
+/* Tema antes de pintar: evita el fogonazo blanco al abrir en modo oscuro. */
+(()=>{try{const g=localStorage.getItem('ma-tema');
+document.documentElement.dataset.theme=g||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+}catch(e){document.documentElement.dataset.theme='light';}})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦉</text></svg>">
+<link rel="stylesheet" href="assets/base.css">
+<style>
+  .filtros{
+    display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;
+    max-width: 1180px; margin: 0 auto 14px; padding: 0 24px;
+  }
+  .filtros-etiqueta{ width: 100%; text-align: center; font-size: 0.85rem; color: var(--ink-soft); }
+  .chip{
+    font-family: 'Fredoka', sans-serif; font-size: 0.98rem;
+    background: var(--white); border: none; padding: 12px 22px;
+    border-radius: 999px; box-shadow: 0 5px 0 rgba(62,52,39,0.08);
+    color: var(--ink-soft); min-height: 48px;
+  }
+  .chip[aria-pressed="true"]{ background: var(--yellow-deep); color: var(--on-activo); }
+  .chip-proximamente{ opacity: .5; }
+
+  .resumen-busqueda{
+    text-align: center; color: var(--ink-soft); font-size: 0.95rem;
+    margin: 24px auto 6px; max-width: 60ch;
+  }
+
+  .cuadernos{
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 22px; max-width: 1180px; margin: 26px auto 0; padding: 0 24px;
+  }
+  .cuaderno{
+    background: var(--white); border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-bubble); padding: 24px;
+    display: flex; flex-direction: column; gap: 12px;
+    border-top: 8px solid var(--tema, var(--peach));
+  }
+  .cuaderno .cabecera{ display: flex; align-items: center; gap: 12px; }
+  .cuaderno .icono{
+    width: 52px; height: 52px; border-radius: 16px; flex-shrink: 0;
+    background: var(--tema, var(--peach));
+    display: flex; align-items: center; justify-content: center; font-size: 1.6rem;
+  }
+  .cuaderno h3{ font-size: 1.14rem; }
+  .cuaderno .etapa{ font-size: 0.84rem; color: var(--ink-soft); }
+  .cuaderno .meta{ display: flex; gap: 8px; flex-wrap: wrap; }
+  .cuaderno ol{
+    margin: 4px 0 0; padding-left: 20px; color: var(--ink-soft);
+    font-size: 0.88rem; display: flex; flex-direction: column; gap: 2px;
+  }
+  .cuaderno .acciones{ display: flex; flex-direction: column; gap: 8px; margin-top: auto; }
+
+  .paginacion{
+    display: flex; justify-content: center; align-items: center; gap: 14px;
+    margin: 40px auto 0; flex-wrap: wrap;
+  }
+  .paginacion .pagina{ color: var(--ink-soft); font-size: 0.95rem; }
+
+  .vacio{ text-align: center; padding: 50px 20px; color: var(--ink-soft); }
+
+  .banner-legacy{
+    max-width: 1180px; margin: 34px auto 0; padding: 0 24px;
+  }
+  .banner-legacy .caja{
+    background: var(--mint); border-radius: var(--radius-lg); padding: 24px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 20px; flex-wrap: wrap;
+  }
+  .banner-legacy p{ margin: 6px 0 0; color: var(--on-pastel); font-size: 0.94rem; max-width: 52ch; }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html"><span class="brand-badge" aria-hidden="true">🦉</span> Mundo Aprendizaje</a>
+    <nav aria-label="Navegación principal">
+      <ul class="topnav">
+        <li><a href="index.html#rincones">Rincones</a></li>
+        <li><a href="juegos.html">Juegos</a></li>
+        <li><a href="videos.html">Vídeos</a></li>
+        <li><a href="descargas.html" aria-current="page">Fichas</a></li>
+        <li><a href="tienda.html" class="nav-premium">Tienda</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="contenido">
+  <div class="page-head">
+    <h1>Catálogo de fichas</h1>
+    <p>Cuadernos de 20 fichas con dificultad progresiva, organizados por tema y por curso. Cada curso tiene una ficha de muestra gratuita para que veas el nivel antes de comprar.</p>
+  </div>
+
+  <section class="section" style="padding-top: 34px">
+    <div class="filtros" id="filtroTema" role="group" aria-label="Filtrar por tema">
+      <span class="filtros-etiqueta">Tema</span>
+    </div>
+    <div class="filtros" id="filtroCurso" role="group" aria-label="Filtrar por curso">
+      <span class="filtros-etiqueta">Curso</span>
+    </div>
+    <div class="filtros" id="filtroAcceso" role="group" aria-label="Filtrar por acceso">
+      <span class="filtros-etiqueta">Mostrar</span>
+    </div>
+
+    <p class="resumen-busqueda" id="resumen" role="status"></p>
+    <div class="cuadernos anim-lista" id="grid"></div>
+    <p class="vacio" id="vacio" hidden></p>
+
+    <nav class="paginacion" id="paginacion" aria-label="Paginación del catálogo"></nav>
+  </section>
+
+  <div class="banner-legacy">
+    <div class="caja">
+      <div>
+        <h2 style="font-size:1.25rem">📚 Los cuadernos originales</h2>
+        <p>Las diez fichas con las que empezó el proyecto siguen aquí, completas y gratuitas: matemáticas, lenguaje, historia e idiomas.</p>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap">
+        <a class="btn btn-secondary" href="fichas_matematicas.html">Matemáticas</a>
+        <a class="btn btn-secondary" href="fichas_imprimibles.html">Cuaderno general</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">
+        <span class="brand-badge" aria-hidden="true">🦉</span>
+        <strong style="font-family:'Fredoka',sans-serif; font-size:1.1rem;">Mundo Aprendizaje</strong>
+      </div>
+      <p class="footer-note">Fichas y juegos para acompañar los primeros pasos lectores, matemáticos y creativos.</p>
+    </div>
+    <div><h3>Aprender</h3><ul>
+      <li><a href="index.html#rincones">Rincones</a></li>
+      <li><a href="juegos.html">Juegos</a></li>
+      <li><a href="videos.html">Vídeos</a></li>
+    </ul></div>
+    <div><h3>Fichas</h3><ul>
+      <li><a href="descargas.html">Catálogo completo</a></li>
+      <li><a href="descargas.html?gratis=1">Muestras gratuitas</a></li>
+      <li><a href="tienda.html">Packs premium</a></li>
+    </ul></div>
+    <div><h3>Legal</h3><ul>
+      <li><a href="tienda.html#legal">Condiciones de compra</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">Mundo Aprendizaje — hecho con cariño para los primeros años de descubrimiento.</div>
+</footer>
+
+<script src="data/catalogo.js"></script>
+<script src="assets/site.js"></script>
+<script>
+(() => {
+  'use strict';
+  const { el, icono, catalogo, filtrar } = window.MA;
+  const cat = catalogo();
+
+  const grid = document.getElementById('grid');
+  const vacio = document.getElementById('vacio');
+  const resumen = document.getElementById('resumen');
+  const paginacion = document.getElementById('paginacion');
+
+  // El catálogo se agrupa en cuadernos (tema + curso) y se pagina: con 4 temas
+  // y 6 cursos hay 24 cuadernos y 480 fichas, demasiado para volcarlo entero.
+  const POR_PAGINA = 9;
+  let temaActivo = 'todos', cursoActivo = 'todos', acceso = 'todos', pagina = 1;
+
+  // Entradas desde el resto del sitio: ?tema=matematicas, ?curso=5, ?gratis=1
+  const params = new URLSearchParams(location.search);
+  if(params.get('gratis') === '1') acceso = 'gratis';
+  if(cat.temas[params.get('tema')]) temaActivo = params.get('tema');
+  if(cat.cursos[params.get('curso')]) cursoActivo = params.get('curso');
+
+  /** Agrupa el índice en cuadernos de 20 fichas. */
+  function cuadernos(){
+    const mapa = new Map();
+    filtrar({}).forEach(f => {
+      const clave = `${f.tema}-${f.curso}`;
+      if(!mapa.has(clave)) mapa.set(clave, { tema: f.tema, curso: f.curso, fichas: [] });
+      mapa.get(clave).fichas.push(f);
+    });
+    return [...mapa.values()].sort((a, b) =>
+      a.tema.localeCompare(b.tema) || a.curso - b.curso);
+  }
+
+  function visibles(){
+    return cuadernos().filter(c =>
+      (temaActivo === 'todos' || c.tema === temaActivo) &&
+      (cursoActivo === 'todos' || String(c.curso) === cursoActivo) &&
+      (acceso !== 'gratis' || c.fichas.some(f => f.gratis)));
+  }
+
+  function tarjeta(c){
+    const tema = cat.temas[c.tema];
+    const curso = cat.cursos[String(c.curso)];
+    const gratis = c.fichas.filter(f => f.gratis);
+    const lista = acceso === 'gratis' ? gratis : c.fichas;
+
+    const art = el('article', { className: 'cuaderno' });
+    art.style.setProperty('--tema', `var(--${tema.color})`);
+
+    art.append(
+      el('div', { className: 'cabecera' },
+        el('span', { className: 'icono', text: tema.icono, attrs: { 'aria-hidden': 'true' } }),
+        el('div', {},
+          el('h3', { text: `${tema.nombre} · ${curso.etiqueta}` }),
+          el('div', { className: 'etapa', text: curso.etapa }))),
+      el('div', { className: 'meta' },
+        el('span', { className: 'pill', text: `${c.fichas.length} fichas` }),
+        el('span', { className: 'pill pill-gratis', text: `${gratis.length} gratis` }),
+        el('span', { className: 'pill pill-premium', text: `${c.fichas.length - gratis.length} en el pack` })),
+      el('ol', {}, lista.slice(0, 4).map(f =>
+        el('li', { text: f.titulo + (f.gratis ? ' — gratis' : '') }))),
+    );
+    if(lista.length > 4){
+      art.append(el('p', { className: 'etapa', text: `…y ${lista.length - 4} fichas más, hasta la 20.` }));
+    }
+
+    art.append(el('div', { className: 'acciones' },
+      el('a', { className: 'btn btn-primary', attrs: { href: `fichas.html#/${c.tema}/${c.curso}` } },
+        icono('👀'), 'Ver y probar gratis'),
+      el('a', { className: 'btn btn-secondary', attrs: { href: `tienda.html#/${c.tema}/${c.curso}` } },
+        icono('⬇️'), 'Pack completo — 1,99 €')));
+    return art;
+  }
+
+  function pintar(){
+    const lista = visibles();
+    const totalPag = Math.max(1, Math.ceil(lista.length / POR_PAGINA));
+    pagina = Math.min(pagina, totalPag);
+    const trozo = lista.slice((pagina - 1) * POR_PAGINA, pagina * POR_PAGINA);
+
+    grid.replaceChildren(...trozo.map(tarjeta));
+    vacio.hidden = lista.length > 0;
+    if(!lista.length) vacio.textContent = 'No hay cuadernos para esta combinación todavía.';
+
+    const nFichas = lista.reduce((n, c) => n + c.fichas.length, 0);
+    resumen.textContent = lista.length
+      ? `${lista.length} cuadernos · ${nFichas} fichas` + (totalPag > 1 ? ` · página ${pagina} de ${totalPag}` : '')
+      : '';
+
+    // Paginación
+    paginacion.replaceChildren();
+    if(totalPag > 1){
+      const anterior = el('button', { className: 'btn btn-secondary', text: '← Anterior',
+                                      attrs: { type: 'button', disabled: pagina === 1 || null } });
+      const siguiente = el('button', { className: 'btn btn-secondary', text: 'Siguiente →',
+                                       attrs: { type: 'button', disabled: pagina === totalPag || null } });
+      anterior.addEventListener('click', () => { pagina--; pintar(); grid.scrollIntoView({ block: 'start' }); });
+      siguiente.addEventListener('click', () => { pagina++; pintar(); grid.scrollIntoView({ block: 'start' }); });
+      paginacion.append(anterior,
+        el('span', { className: 'pagina', text: `Página ${pagina} de ${totalPag}` }), siguiente);
+    }
+
+    sincronizar();
+  }
+
+  function sincronizar(){
+    document.querySelectorAll('#filtroTema .chip').forEach(b =>
+      b.setAttribute('aria-pressed', String(b.dataset.valor === temaActivo)));
+    document.querySelectorAll('#filtroCurso .chip').forEach(b =>
+      b.setAttribute('aria-pressed', String(b.dataset.valor === cursoActivo)));
+    document.querySelectorAll('#filtroAcceso .chip').forEach(b =>
+      b.setAttribute('aria-pressed', String(b.dataset.valor === acceso)));
+  }
+
+  function montarFiltro(contenedor, opciones, aplicar){
+    opciones.forEach(o => {
+      const b = el('button', { className: 'chip' + (o.proximamente ? ' chip-proximamente' : ''),
+                               text: o.etiqueta,
+                               attrs: { type: 'button', 'aria-pressed': 'false',
+                                        title: o.proximamente ? 'Aún en preparación' : null } });
+      b.dataset.valor = o.valor;
+      b.addEventListener('click', () => { aplicar(o.valor); pagina = 1; pintar(); });
+      contenedor.append(b);
+    });
+  }
+
+  montarFiltro(document.getElementById('filtroTema'),
+    [{ valor: 'todos', etiqueta: 'Todos' }].concat(
+      Object.entries(cat.temas).map(([k, t]) => ({
+        valor: k, etiqueta: `${t.icono} ${t.nombre}`,
+        proximamente: !cat.temasGenerados.includes(k) }))),
+    v => temaActivo = v);
+
+  montarFiltro(document.getElementById('filtroCurso'),
+    [{ valor: 'todos', etiqueta: 'Todos' }].concat(
+      Object.entries(cat.cursos).map(([k, c]) => ({ valor: k, etiqueta: c.etiqueta }))),
+    v => cursoActivo = v);
+
+  montarFiltro(document.getElementById('filtroAcceso'), [
+    { valor: 'todos', etiqueta: 'Todo el catálogo' },
+    { valor: 'gratis', etiqueta: '🎁 Solo muestras gratis' },
+  ], v => acceso = v);
+
+  pintar();
+})();
+</script>
+</body>
+</html>

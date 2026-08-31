@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vídeos explicativos — Mundo Aprendizaje</title>
+<meta name="description" content="Vídeos cortos por tema y curso para acompañar las fichas en casa y en el aula.">
+<meta name="theme-color" content="#FFFBF3">
+<script>
+/* Tema antes de pintar: evita el fogonazo blanco al abrir en modo oscuro. */
+(()=>{try{const g=localStorage.getItem('ma-tema');
+document.documentElement.dataset.theme=g||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+}catch(e){document.documentElement.dataset.theme='light';}})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+<link rel="stylesheet" href="assets/base.css">
+<style>
+  .filtros{
+    display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;
+    max-width: 1180px; margin: 0 auto 18px; padding: 0 24px;
+  }
+  .filtro-btn{
+    font-family: 'Fredoka', sans-serif; font-size: 0.98rem;
+    background: var(--white); border: none; padding: 12px 22px;
+    border-radius: 999px; box-shadow: 0 5px 0 rgba(62,52,39,0.08);
+    color: var(--ink-soft); min-height: 48px;
+  }
+  .filtro-btn[aria-pressed="true"]{ background: var(--yellow-deep); color: var(--on-activo); }
+  .filtros-etiqueta{
+    width: 100%; text-align: center; font-size: 0.85rem;
+    color: var(--ink-soft); margin-bottom: 2px;
+  }
+
+  .videos-grid{
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px; max-width: 1180px; margin: 34px auto 0; padding: 0 24px;
+  }
+  .video-card{
+    background: var(--white); border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-bubble); overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .video-thumb{
+    position: relative; aspect-ratio: 16 / 9;
+    background: var(--tema, var(--sky));
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 6px;
+  }
+  .video-thumb .icono-tema{ font-size: 2.8rem; }
+  .video-thumb .proximamente{
+    background: var(--white); color: var(--ink);
+    font-family: 'Fredoka', sans-serif; font-size: 0.86rem;
+    padding: 6px 16px; border-radius: 999px;
+  }
+  .video-thumb iframe, .video-thumb video{
+    position: absolute; inset: 0; width: 100%; height: 100%; border: 0;
+  }
+  .video-cuerpo{ padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 8px; flex-grow: 1; }
+  .video-cuerpo h3{ font-size: 1.1rem; }
+  .video-cuerpo p{ color: var(--ink-soft); font-size: 0.92rem; margin: 0; flex-grow: 1; }
+  .video-meta{ display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+
+  .estado{ text-align: center; padding: 40px 20px; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html"><span class="brand-badge" aria-hidden="true">🦉</span> Mundo Aprendizaje</a>
+    <nav aria-label="Navegación principal">
+      <ul class="topnav">
+        <li><a href="index.html#rincones">Rincones</a></li>
+        <li><a href="juegos.html">Juegos</a></li>
+        <li><a href="videos.html" aria-current="page">Vídeos</a></li>
+        <li><a href="descargas.html">Fichas</a></li>
+        <li><a href="tienda.html" class="nav-premium">Tienda</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="contenido">
+  <div class="page-head">
+    <h1>🎬 Vídeos explicativos</h1>
+    <p>Vídeos cortos que explican cómo acompañar cada bloque de fichas en casa o en el aula. Estamos grabándolos: aquí verás el catálogo completo y cada uno se activará en cuanto esté listo.</p>
+  </div>
+
+  <section class="section" style="padding-top:40px">
+    <div class="filtros" id="filtroTema" role="group" aria-label="Filtrar vídeos por tema">
+      <span class="filtros-etiqueta">Tema</span>
+    </div>
+    <div class="filtros" id="filtroCurso" role="group" aria-label="Filtrar vídeos por curso">
+      <span class="filtros-etiqueta">Curso</span>
+    </div>
+
+    <p class="estado" id="estado" hidden></p>
+    <div class="videos-grid anim-lista" id="grid"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">
+        <span class="brand-badge" aria-hidden="true">🦉</span>
+        <strong style="font-family:'Fredoka',sans-serif; font-size:1.1rem;">Mundo Aprendizaje</strong>
+      </div>
+      <p class="footer-note">Fichas y juegos para acompañar los primeros pasos lectores, matemáticos y creativos.</p>
+    </div>
+    <div><h3>Aprender</h3><ul>
+      <li><a href="index.html#rincones">Rincones</a></li>
+      <li><a href="juegos.html">Juegos</a></li>
+      <li><a href="videos.html">Vídeos</a></li>
+    </ul></div>
+    <div><h3>Fichas</h3><ul>
+      <li><a href="descargas.html">Catálogo completo</a></li>
+      <li><a href="descargas.html?gratis=1">Muestras gratuitas</a></li>
+      <li><a href="tienda.html">Packs premium</a></li>
+    </ul></div>
+    <div><h3>Legal</h3><ul>
+      <li><a href="tienda.html#legal">Condiciones de compra</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">Mundo Aprendizaje — hecho con cariño para los primeros años de descubrimiento.</div>
+</footer>
+
+<script src="data/catalogo.js"></script>
+<script src="data/videos.js"></script>
+<script src="assets/site.js"></script>
+<script>
+(() => {
+  'use strict';
+  const { el, icono, catalogo, etiquetaCurso } = window.MA;
+  const cat = catalogo();
+  const grid = document.getElementById('grid');
+  const estado = document.getElementById('estado');
+
+  let temaActivo = 'todos';
+  let cursoActivo = 'todos';
+
+  /**
+   * Miniatura del vídeo.
+   *
+   * Enchufar un vídeo real es solo rellenar `url` y `duracion` en
+   * data/videos.js: si hay URL se monta el reproductor, y si no se queda el
+   * placeholder. El diseño no cambia en ningún caso.
+   */
+  function miniatura(v, tema){
+    const thumb = el('div', { className: 'video-thumb' });
+    thumb.style.setProperty('--tema', `var(--${tema.color})`);
+
+    if(v.url){
+      const esArchivo = /\.(mp4|webm|ogg)$/i.test(v.url);
+      if(esArchivo){
+        const video = el('video', { attrs: { controls: true, preload: 'none', src: v.url } });
+        thumb.append(video);
+      }else{
+        thumb.append(el('iframe', { attrs: {
+          src: v.url, title: v.titulo, loading: 'lazy',
+          allow: 'accelerometer; clipboard-write; encrypted-media; picture-in-picture',
+          allowfullscreen: true,
+        } }));
+      }
+    }else{
+      thumb.append(
+        el('span', { className: 'icono-tema', text: tema.icono, attrs: { 'aria-hidden': 'true' } }),
+        el('span', { className: 'proximamente', text: 'Próximamente' }));
+    }
+    return thumb;
+  }
+
+  function tarjeta(v){
+    const tema = cat.temas[v.tema];
+    return el('article', { className: 'video-card' },
+      miniatura(v, tema),
+      el('div', { className: 'video-cuerpo' },
+        el('h3', { text: v.titulo }),
+        el('p', { text: v.descripcion }),
+        el('div', { className: 'video-meta' },
+          el('span', { className: 'pill', text: `${tema.icono} ${tema.nombre}` }),
+          el('span', { className: 'pill', text: etiquetaCurso(v.curso) }),
+          v.duracion
+            ? el('span', { className: 'pill', text: `⏱ ${v.duracion}` })
+            : el('span', { className: 'pill', text: 'Sin fecha aún' }))));
+  }
+
+  function pintar(){
+    const lista = window.MA_VIDEOS.filter(v =>
+      (temaActivo === 'todos' || v.tema === temaActivo) &&
+      (cursoActivo === 'todos' || String(v.curso) === cursoActivo));
+
+    grid.replaceChildren(...lista.map(tarjeta));
+    estado.hidden = lista.length > 0;
+    if(!lista.length) estado.textContent = 'No hay vídeos para esta combinación todavía.';
+
+    document.querySelectorAll('#filtroTema .filtro-btn').forEach(b =>
+      b.setAttribute('aria-pressed', String(b.dataset.valor === temaActivo)));
+    document.querySelectorAll('#filtroCurso .filtro-btn').forEach(b =>
+      b.setAttribute('aria-pressed', String(b.dataset.valor === cursoActivo)));
+  }
+
+  function montarFiltro(contenedor, opciones, onElegir){
+    opciones.forEach(({ valor, etiqueta }) => {
+      const btn = el('button', { className: 'filtro-btn', text: etiqueta,
+                                 attrs: { type: 'button', 'aria-pressed': 'false' } });
+      btn.dataset.valor = valor;
+      btn.addEventListener('click', () => { onElegir(valor); pintar(); });
+      contenedor.append(btn);
+    });
+  }
+
+  montarFiltro(document.getElementById('filtroTema'),
+    [{ valor: 'todos', etiqueta: 'Todos' }].concat(
+      Object.entries(cat.temas).map(([k, t]) => ({ valor: k, etiqueta: `${t.icono} ${t.nombre}` }))),
+    v => temaActivo = v);
+
+  montarFiltro(document.getElementById('filtroCurso'),
+    [{ valor: 'todos', etiqueta: 'Todos' }].concat(
+      Object.entries(cat.cursos).map(([k, c]) => ({ valor: k, etiqueta: c.etiqueta }))),
+    v => cursoActivo = v);
+
+  pintar();
+})();
+</script>
+</body>
+</html>

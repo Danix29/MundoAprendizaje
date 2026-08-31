@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fichas de Matemáticas — Mundo Aprendizaje</title>
+<meta name="description" content="Cuaderno imprimible de matemáticas para 3 a 7 años: contar, trazar números del 1 al 10 y formas geométricas.">
+<meta name="theme-color" content="#FFFBF3">
+<script>
+/* Tema antes de pintar: evita el fogonazo blanco al abrir en modo oscuro. */
+(()=>{try{const g=localStorage.getItem('ma-tema');
+document.documentElement.dataset.theme=g||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+}catch(e){document.documentElement.dataset.theme='light';}})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔢</text></svg>">
+<link rel="stylesheet" href="assets/base.css">
+<style>
+  /* ============================================================
+     TOKENS — mismo sistema visual que index.html
+     ============================================================ */
+  :root{
+    --yellow: #FFE9A8; --yellow-deep: #FFD966;
+    --sky: #BEE7F7; --sky-deep: #8FD2EF;
+    --mint: #BCF0D6; --mint-deep: #8FE0B6;
+    --lavender: #DCCEF5; --lavender-deep: #C1A9EA;
+    --peach: #FFD4B8; --peach-deep: #FFB88C;
+    --cream: #FFFBF3; --ink: #3E3427; --ink-soft: #6B6151;
+    --white: #FFFFFF; --focus: #1F5FA8;
+    --trace-fill: #F1EBE0;   /* relleno claro de los trazos a repasar */
+    --trace-line: #BFB3A0;   /* contorno y líneas punteadas */
+    --radius-lg: 32px; --radius-md: 22px;
+    --shadow-bubble: 0 10px 0 rgba(62,52,39,0.08), 0 18px 30px rgba(62,52,39,0.10);
+  }
+
+  *{ box-sizing: border-box; }
+  body{
+    margin: 0; background: var(--cream); color: var(--ink);
+    font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 18px; line-height: 1.5;
+  }
+  h1, h2, h3{ font-family: 'Fredoka', sans-serif; font-weight: 600; margin: 0; color: var(--ink); }
+  a{ color: inherit; text-decoration: none; }
+  button{ font-family: inherit; cursor: pointer; }
+  :focus-visible{ outline: 4px solid var(--focus); outline-offset: 3px; border-radius: 10px; }
+
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{
+      animation-duration: .001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .001ms !important;
+    }
+  }
+
+  /* ============================================================
+     BARRA DE PANTALLA — desaparece por completo al imprimir
+     ============================================================ */
+  .toolbar{
+    position: sticky; top: 0; z-index: 100;
+    background: color-mix(in srgb, var(--cream) 94%, transparent); backdrop-filter: blur(6px);
+    border-bottom: 3px solid rgba(62,52,39,0.06);
+  }
+  .toolbar-inner{
+    max-width: 1000px; margin: 0 auto; padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  }
+  .back-link{
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: 'Fredoka', sans-serif; font-size: 1.05rem;
+    padding: 12px 20px; border-radius: 999px; background: var(--white);
+    box-shadow: 0 5px 0 rgba(62,52,39,0.10); min-height: 48px;
+  }
+  .btn-print{
+    font-family: 'Fredoka', sans-serif; font-size: 1.05rem;
+    background: linear-gradient(160deg, var(--naranja-claro), var(--naranja)); color: var(--white);
+    border: none; padding: 14px 26px; border-radius: 999px; min-height: 52px;
+    box-shadow: 0 6px 0 var(--naranja-sombra);
+    display: inline-flex; align-items: center; gap: 10px;
+    transition: transform .15s ease;
+  }
+  .btn-print:hover{ transform: translateY(-3px); }
+  .btn-print:active{ transform: translateY(2px); box-shadow: 0 3px 0 var(--naranja-sombra); }
+
+  .intro{
+    max-width: 1000px; margin: 0 auto; padding: 40px 24px 0; text-align: center;
+  }
+  .intro h1{ font-size: clamp(2rem, 4.4vw, 2.8rem); }
+  .intro p{ color: var(--ink-soft); max-width: 60ch; margin: 12px auto 0; }
+  .intro .tip{
+    background: var(--yellow); border-radius: var(--radius-md);
+    padding: 16px 24px; margin: 26px auto 0; max-width: 62ch;
+    font-size: 0.95rem; color: var(--on-pastel); text-align: left;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+
+  /* ============================================================
+     HOJAS — cada .ficha es una página A4
+     ============================================================ */
+  .sheets{ max-width: 1000px; margin: 0 auto; padding: 40px 24px 70px; }
+
+  .ficha{
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-bubble);
+    padding: 34px 38px 30px;
+    margin-bottom: 44px;
+    display: flex; flex-direction: column;
+    /* Proporción A4 en pantalla para que lo que se ve sea lo que se imprime */
+    min-height: 0;
+  }
+  @media (max-width: 640px){ .ficha{ padding: 24px 20px; border-radius: var(--radius-md); } }
+
+  .ficha-head{
+    background: var(--band, var(--peach));
+    border-radius: var(--radius-md);
+    padding: 20px 26px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 20px; flex-wrap: wrap;
+  }
+  .ficha-head-title{ display: flex; align-items: center; gap: 14px; }
+  .ficha-emoji{ font-size: 2.2rem; line-height: 1; }
+  .ficha-head h2{ font-size: 1.7rem; letter-spacing: .5px; }
+
+  .ficha-fields{ display: flex; gap: 18px; flex-wrap: wrap; }
+  .field{ display: flex; align-items: flex-end; gap: 8px; font-size: 0.95rem; color: var(--on-pastel); }
+  .field-line{
+    display: inline-block; width: 120px;
+    border-bottom: 2px solid rgba(62,52,39,0.35);
+  }
+
+  .instruction{
+    display: flex; gap: 12px; align-items: flex-start;
+    margin: 24px 2px 6px; font-size: 1.05rem; color: var(--ink);
+  }
+  .instruction .num{
+    font-family: 'Fredoka', sans-serif;
+    background: var(--ink); color: var(--white);
+    width: 30px; height: 30px; flex-shrink: 0;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 0.95rem;
+  }
+
+  .ficha-body{ flex-grow: 1; display: flex; flex-direction: column; justify-content: center; padding: 10px 0; }
+
+  .ficha-foot{
+    margin-top: 20px; padding-top: 14px;
+    border-top: 2px dashed rgba(62,52,39,0.18);
+    display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    font-size: 0.82rem; color: var(--ink-soft);
+  }
+
+  /* ---------- Ficha 1: contar ---------- */
+  .count-list{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 22px; }
+  .count-row{
+    display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    background: var(--cream); border-radius: var(--radius-md); padding: 18px 24px;
+  }
+  .count-fruits{ font-size: clamp(2rem, 6vw, 2.9rem); letter-spacing: 6px; line-height: 1.2; }
+  .count-box{
+    width: 84px; height: 84px; flex-shrink: 0;
+    border: 4px dashed var(--trace-line); border-radius: 20px;
+    background: var(--white);
+  }
+
+  /* ---------- Ficha 2: trazos numéricos ---------- */
+  .trace-rows{ display: flex; flex-direction: column; gap: 20px; }
+  .trace-row{
+    display: flex; align-items: center; gap: 18px;
+    border-bottom: 3px dotted var(--trace-line); padding-bottom: 10px;
+  }
+  .trace-number{
+    font-family: 'Fredoka', sans-serif; font-weight: 700;
+    font-size: clamp(2.6rem, 8vw, 4rem); line-height: 1;
+    color: var(--trace-fill);
+    -webkit-text-stroke: 3px var(--trace-line);
+    flex-shrink: 0; min-width: 1.4em; text-align: center;
+  }
+  /* Repeticiones más tenues: la primera guía, las demás se repasan */
+  .trace-number.ghost{ opacity: .55; }
+
+  /* ---------- Ficha 3: formas geométricas ---------- */
+  .shapes-grid{
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
+  }
+  @media (max-width: 520px){ .shapes-grid{ grid-template-columns: 1fr; } }
+  .shape-cell{
+    background: var(--cream); border-radius: var(--radius-md);
+    padding: 16px; text-align: center;
+  }
+  .shape-cell svg{ margin: 0 auto; width: 100%; max-width: 180px; height: auto; }
+  /* Sólido y legible: esta ficha pide leer el nombre, no repasarlo. */
+  .shape-name{
+    font-family: 'Fredoka', sans-serif; font-size: 1.25rem; margin-top: 8px;
+    color: var(--ink);
+  }
+
+  .cheer{
+    margin-top: 18px; text-align: center;
+    font-family: 'Fredoka', sans-serif; font-size: 1.15rem; color: var(--acento-calido);
+  }
+
+  /* ============================================================
+     IMPRESIÓN — A4 vertical, una ficha por página
+     ============================================================ */
+  @media print{
+    @page{ size: A4 portrait; margin: 12mm; }
+
+    /* Los fondos pastel son parte del material, no decoración */
+    *{ -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+    html, body{ background: #fff; font-size: 12pt; }
+    .toolbar, .intro, .no-print{ display: none !important; }
+
+    .sheets{ max-width: none; margin: 0; padding: 0; }
+
+    .ficha{
+      box-shadow: none; border-radius: 0;
+      padding: 0; margin: 0;
+      min-height: 250mm;              /* llena la página útil A4 */
+      break-after: page;
+      break-inside: avoid;
+    }
+    .ficha:last-child{ break-after: auto; }
+
+    .ficha-head{ border-radius: 14px; padding: 6mm 8mm; }
+    .ficha-head h2{ font-size: 20pt; }
+    .ficha-emoji{ font-size: 20pt; }
+    .instruction{ font-size: 12pt; margin: 8mm 0 2mm; }
+
+    .count-row{ padding: 5mm 8mm; }
+    .count-fruits{ font-size: 26pt; }
+    .count-box{ width: 24mm; height: 24mm; }
+
+    .trace-number{ font-size: 34pt; }
+    .shape-cell svg{ max-width: 55mm; }
+
+    .ficha-foot{ font-size: 8pt; }
+
+    /* Nada debe partirse a mitad de página */
+    .count-row, .trace-row, .shape-cell{ break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar no-print">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html"><span class="brand-badge" aria-hidden="true">&#129417;</span> Mundo Aprendizaje</a>
+    <nav aria-label="Navegaci&#243;n principal">
+      <ul class="topnav">
+        <li><a href="index.html#rincones">Rincones</a></li>
+        <li><a href="juegos.html">Juegos</a></li>
+        <li><a href="videos.html">V&#237;deos</a></li>
+        <li><a href="descargas.html" aria-current="page">Fichas</a></li>
+        <li><a href="tienda.html" class="nav-premium">Tienda</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="toolbar no-print">
+  <div class="toolbar-inner">
+    <a class="back-link" href="descargas.html?tema=matematicas">
+      <span aria-hidden="true">←</span> Volver a Descargas
+    </a>
+    <button class="btn-print" type="button" id="printBtn">
+      <span aria-hidden="true">🖨️</span> Imprimir cuaderno
+    </button>
+  </div>
+</div>
+
+<div class="intro no-print">
+  <h1>🔢 Cuaderno de Matemáticas</h1>
+  <p>Tres fichas para contar, trazar los números del 1 al 10 y reconocer las formas geométricas. Cada ficha ocupa una hoja A4.</p>
+  <p class="tip">
+    <span aria-hidden="true">💡</span>
+    <span><strong>Antes de imprimir:</strong> activa «Gráficos de fondo» en el diálogo de impresión para que salgan los colores, y comprueba que el tamaño sea A4 vertical.</span>
+  </p>
+</div>
+
+<main class="sheets">
+
+  <!-- ================= FICHA 1 ================= -->
+  <article class="ficha" id="ficha-contar" style="--band: var(--peach)">
+    <header class="ficha-head">
+      <div class="ficha-head-title">
+        <span class="ficha-emoji" aria-hidden="true">🔢</span>
+        <h2>¡A Contar!</h2>
+      </div>
+      <div class="ficha-fields">
+        <span class="field">Nombre: <span class="field-line" aria-hidden="true"></span></span>
+        <span class="field">Fecha: <span class="field-line" aria-hidden="true"></span></span>
+      </div>
+    </header>
+
+    <p class="instruction">
+      <span class="num" aria-hidden="true">1</span>
+      Cuenta las frutas de cada fila y escribe el número en el recuadro.
+    </p>
+
+    <div class="ficha-body">
+      <ol class="count-list">
+        <li class="count-row">
+          <span class="count-fruits" role="img" aria-label="Tres manzanas">🍎🍎🍎</span>
+          <span class="count-box" role="img" aria-label="Recuadro para escribir el número"></span>
+        </li>
+        <li class="count-row">
+          <span class="count-fruits" role="img" aria-label="Cinco plátanos">🍌🍌🍌🍌🍌</span>
+          <span class="count-box" role="img" aria-label="Recuadro para escribir el número"></span>
+        </li>
+        <li class="count-row">
+          <span class="count-fruits" role="img" aria-label="Cuatro fresas">🍓🍓🍓🍓</span>
+          <span class="count-box" role="img" aria-label="Recuadro para escribir el número"></span>
+        </li>
+      </ol>
+    </div>
+
+    <footer class="ficha-foot">
+      <span>Mundo Aprendizaje · Matemáticas</span>
+      <span>Ficha 1 de 3</span>
+    </footer>
+  </article>
+
+  <!-- ================= FICHA 2 ================= -->
+  <article class="ficha" id="ficha-trazos" style="--band: var(--sky)">
+    <header class="ficha-head">
+      <div class="ficha-head-title">
+        <span class="ficha-emoji" aria-hidden="true">✍️</span>
+        <h2>Trazos Numéricos</h2>
+      </div>
+      <div class="ficha-fields">
+        <span class="field">Nombre: <span class="field-line" aria-hidden="true"></span></span>
+        <span class="field">Fecha: <span class="field-line" aria-hidden="true"></span></span>
+      </div>
+    </header>
+
+    <p class="instruction">
+      <span class="num" aria-hidden="true">1</span>
+      Repasa los números con tu lápiz o tu cera favorita, y sigue tú solo hasta el final de la línea.
+    </p>
+
+    <div class="ficha-body">
+      <div class="trace-rows">
+        <div class="trace-row">
+          <span class="trace-number">1</span><span class="trace-number ghost" aria-hidden="true">1</span><span class="trace-number ghost" aria-hidden="true">1</span>
+          <span class="trace-number">2</span><span class="trace-number ghost" aria-hidden="true">2</span><span class="trace-number ghost" aria-hidden="true">2</span>
+        </div>
+        <div class="trace-row">
+          <span class="trace-number">3</span><span class="trace-number ghost" aria-hidden="true">3</span><span class="trace-number ghost" aria-hidden="true">3</span>
+          <span class="trace-number">4</span><span class="trace-number ghost" aria-hidden="true">4</span><span class="trace-number ghost" aria-hidden="true">4</span>
+        </div>
+        <div class="trace-row">
+          <span class="trace-number">5</span><span class="trace-number ghost" aria-hidden="true">5</span><span class="trace-number ghost" aria-hidden="true">5</span>
+          <span class="trace-number">6</span><span class="trace-number ghost" aria-hidden="true">6</span><span class="trace-number ghost" aria-hidden="true">6</span>
+        </div>
+        <div class="trace-row">
+          <span class="trace-number">7</span><span class="trace-number ghost" aria-hidden="true">7</span><span class="trace-number ghost" aria-hidden="true">7</span>
+          <span class="trace-number">8</span><span class="trace-number ghost" aria-hidden="true">8</span><span class="trace-number ghost" aria-hidden="true">8</span>
+        </div>
+        <div class="trace-row">
+          <span class="trace-number">9</span><span class="trace-number ghost" aria-hidden="true">9</span><span class="trace-number ghost" aria-hidden="true">9</span>
+          <span class="trace-number">10</span><span class="trace-number ghost" aria-hidden="true">10</span>
+        </div>
+      </div>
+      <p class="cheer">🌟 🌟 🌟 ¡Lo estás haciendo genial!</p>
+    </div>
+
+    <footer class="ficha-foot">
+      <span>Mundo Aprendizaje · Matemáticas</span>
+      <span>Ficha 2 de 3</span>
+    </footer>
+  </article>
+
+  <!-- ================= FICHA 3 ================= -->
+  <article class="ficha" id="ficha-formas" style="--band: var(--mint)">
+    <header class="ficha-head">
+      <div class="ficha-head-title">
+        <span class="ficha-emoji" aria-hidden="true">🔵</span>
+        <h2>Formas Geométricas</h2>
+      </div>
+      <div class="ficha-fields">
+        <span class="field">Nombre: <span class="field-line" aria-hidden="true"></span></span>
+        <span class="field">Fecha: <span class="field-line" aria-hidden="true"></span></span>
+      </div>
+    </header>
+
+    <p class="instruction">
+      <span class="num" aria-hidden="true">1</span>
+      Repasa las líneas de puntos para dibujar cada forma y lee su nombre en voz alta.
+    </p>
+
+    <div class="ficha-body">
+      <div class="shapes-grid">
+        <div class="shape-cell">
+          <svg viewBox="0 0 160 160" role="img" aria-label="Círculo punteado para repasar">
+            <circle cx="80" cy="80" r="62" fill="none" stroke="var(--trace-line)" stroke-width="5" stroke-dasharray="7 11" stroke-linecap="round"/>
+          </svg>
+          <p class="shape-name">Círculo</p>
+        </div>
+        <div class="shape-cell">
+          <svg viewBox="0 0 160 160" role="img" aria-label="Cuadrado punteado para repasar">
+            <rect x="20" y="20" width="120" height="120" rx="10" fill="none" stroke="var(--trace-line)" stroke-width="5" stroke-dasharray="7 11" stroke-linecap="round"/>
+          </svg>
+          <p class="shape-name">Cuadrado</p>
+        </div>
+        <div class="shape-cell">
+          <svg viewBox="0 0 160 160" role="img" aria-label="Triángulo punteado para repasar">
+            <polygon points="80,22 142,138 18,138" fill="none" stroke="var(--trace-line)" stroke-width="5" stroke-dasharray="7 11" stroke-linejoin="round" stroke-linecap="round"/>
+          </svg>
+          <p class="shape-name">Triángulo</p>
+        </div>
+        <div class="shape-cell">
+          <svg viewBox="0 0 160 160" role="img" aria-label="Rectángulo punteado para repasar">
+            <rect x="12" y="45" width="136" height="70" rx="8" fill="none" stroke="var(--trace-line)" stroke-width="5" stroke-dasharray="7 11" stroke-linecap="round"/>
+          </svg>
+          <p class="shape-name">Rectángulo</p>
+        </div>
+      </div>
+    </div>
+
+    <footer class="ficha-foot">
+      <span>Mundo Aprendizaje · Matemáticas</span>
+      <span>Ficha 3 de 3</span>
+    </footer>
+  </article>
+
+</main>
+
+<script>
+  document.getElementById('printBtn').addEventListener('click', () => window.print());
+</script>
+<script src="assets/site.js"></script>
+</body>
+</html>

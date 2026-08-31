@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Packs de fichas — Mundo Aprendizaje</title>
+<meta name="description" content="Packs de fichas imprimibles por tema y curso, de 2 a 7 años. Descarga inmediata en PDF por 1,99 €.">
+<meta name="theme-color" content="#FFFBF3">
+<script>
+/* Tema antes de pintar: evita el fogonazo blanco al abrir en modo oscuro. */
+(()=>{try{const g=localStorage.getItem('ma-tema');
+document.documentElement.dataset.theme=g||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+}catch(e){document.documentElement.dataset.theme='light';}})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛍️</text></svg>">
+<link rel="stylesheet" href="assets/base.css">
+<style>
+  .hero-tienda{
+    background: linear-gradient(180deg, var(--tienda-hero), var(--cream) 78%);
+    padding: 56px 24px 10px;
+  }
+  .hero-tienda .page-head{ padding-top: 0; }
+
+  .como-va{
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
+    max-width: 1000px; margin: 40px auto 0; padding: 0 24px;
+  }
+  @media (max-width: 820px){ .como-va{ grid-template-columns: 1fr; } }
+  .paso{
+    background: var(--white); border-radius: var(--radius-lg);
+    padding: 26px 24px; box-shadow: var(--shadow-bubble); text-align: center;
+  }
+  .paso-num{
+    width: 44px; height: 44px; margin: 0 auto 12px; border-radius: 50%;
+    background: var(--lavender); color: var(--on-pastel);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fredoka', sans-serif; font-size: 1.2rem;
+  }
+  .paso h3{ font-size: 1.1rem; }
+  .paso p{ color: var(--ink-soft); font-size: 0.94rem; margin: 8px 0 0; }
+
+  .filtros{
+    display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;
+    max-width: 1180px; margin: 0 auto 30px; padding: 0 24px;
+  }
+  .filtro-btn{
+    font-family: 'Fredoka', sans-serif; font-size: 1rem;
+    background: var(--white); border: none; padding: 13px 24px;
+    border-radius: 999px; box-shadow: 0 5px 0 rgba(62,52,39,0.08);
+    color: var(--ink-soft); min-height: 50px;
+  }
+  .filtro-btn[aria-pressed="true"]{ background: var(--yellow-deep); color: var(--on-activo); }
+
+  .packs-grid{
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 22px; max-width: 1180px; margin: 0 auto; padding: 0 24px;
+  }
+  .pack{
+    background: var(--white); border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-bubble); padding: 26px 24px;
+    display: flex; flex-direction: column; gap: 12px;
+    border-top: 8px solid var(--tema, var(--lavender));
+  }
+  .pack h3{ font-size: 1.22rem; }
+  .pack .resumen{ color: var(--ink-soft); font-size: 0.94rem; margin: 0; flex-grow: 1; }
+  .pack .cabecera{ display: flex; align-items: center; gap: 12px; }
+  .pack .icono{
+    width: 52px; height: 52px; border-radius: 16px; flex-shrink: 0;
+    background: var(--tema, var(--lavender));
+    display: flex; align-items: center; justify-content: center; font-size: 1.6rem;
+  }
+  .pack .precio{
+    font-family: 'Fredoka', sans-serif; font-size: 1.7rem; color: var(--ink);
+  }
+  .pack .precio small{ font-size: 0.82rem; color: var(--ink-soft); font-family: 'Nunito', sans-serif; }
+  .pack .meta{ display: flex; gap: 8px; flex-wrap: wrap; }
+  .pack-destacado{ outline: 4px solid var(--lavender-deep); outline-offset: -4px; }
+
+  /* Botón sin ID de producto: no engaña con una compra que no existe. */
+  .btn-comprar[disabled]{
+    background: var(--boton-inerte); color: var(--ink-soft); box-shadow: none;
+    cursor: not-allowed; transform: none;
+  }
+  .aviso-config{
+    max-width: 1180px; margin: 0 auto 30px; padding: 18px 24px;
+    background: var(--aviso-fondo); border-radius: var(--radius-md);
+    color: var(--aviso-texto); font-size: 0.94rem;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .aviso-config code{
+    background: rgba(0,0,0,0.07); padding: 2px 7px; border-radius: 6px;
+    font-size: 0.88em;
+  }
+
+  .legal{
+    max-width: 820px; margin: 70px auto 0; padding: 0 24px;
+  }
+  .legal-caja{
+    background: var(--white); border-radius: var(--radius-lg);
+    padding: 30px 34px; box-shadow: var(--shadow-bubble);
+  }
+  .legal h2{ font-size: 1.4rem; margin-bottom: 14px; }
+  .legal h3{ font-size: 1.02rem; margin: 20px 0 6px; }
+  .legal p, .legal li{ font-size: 0.93rem; color: var(--ink-soft); font-weight: 700; }
+  .legal ul{ padding-left: 20px; }
+  /* Más específico que `.legal p`, que si no le impondría --ink-soft y en
+     modo oscuro bajaba el contraste de este aviso por debajo de AA. */
+  .legal .legal-borrador{
+    background: var(--yellow); border-radius: var(--radius-md);
+    padding: 16px 20px; margin-bottom: 22px; color: var(--on-pastel); font-size: 0.92rem;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html"><span class="brand-badge" aria-hidden="true">🦉</span> Mundo Aprendizaje</a>
+    <nav aria-label="Navegación principal">
+      <ul class="topnav">
+        <li><a href="index.html#rincones">Rincones</a></li>
+        <li><a href="juegos.html">Juegos</a></li>
+        <li><a href="videos.html">Vídeos</a></li>
+        <li><a href="descargas.html">Fichas</a></li>
+        <li><a href="tienda.html" class="nav-premium" aria-current="page">Tienda</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="contenido">
+
+  <section class="hero-tienda">
+    <div class="page-head">
+      <h1>Packs de fichas para imprimir</h1>
+      <p>Cuadernos completos en PDF, organizados por tema y por curso, con dificultad progresiva de la ficha 1 a la 20. Se descargan al momento y se imprimen las veces que haga falta.</p>
+    </div>
+    <div class="como-va">
+      <div class="paso">
+        <div class="paso-num" aria-hidden="true">1</div>
+        <h3>Elige el pack</h3>
+        <p>Por tema y curso, el curso entero, o todo el material de una vez.</p>
+      </div>
+      <div class="paso">
+        <div class="paso-num" aria-hidden="true">2</div>
+        <h3>Paga 1,99 €</h3>
+        <p>Con tarjeta o PayPal, en una pasarela segura. No hace falta crear cuenta.</p>
+      </div>
+      <div class="paso">
+        <div class="paso-num" aria-hidden="true">3</div>
+        <h3>Descarga el PDF</h3>
+        <p>Enlace inmediato en pantalla y copia por email, para volver a descargarlo cuando quieras.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2>Elige tu pack</h2>
+      <p>¿Aún no lo tienes claro? Cada curso tiene una <a href="descargas.html?gratis=1" style="text-decoration:underline">ficha de muestra gratuita</a> para que veas el nivel exacto antes de comprar.</p>
+    </div>
+
+    <div id="avisoConfig"></div>
+
+    <div class="filtros" id="filtros" role="group" aria-label="Filtrar packs por tipo"></div>
+    <div class="packs-grid anim-lista" id="packsGrid"></div>
+  </section>
+
+  <!-- ==================================================================
+       AVISO LEGAL — BORRADOR. Debe revisarlo un profesional.
+       ================================================================== -->
+  <section class="legal" id="legal">
+    <div class="legal-caja">
+      <p class="legal-borrador">
+        <span aria-hidden="true">⚠️</span>
+        <span><strong>Texto pendiente de revisión legal.</strong> Este apartado es un borrador
+        de trabajo, no un texto validado. Antes de publicar la tienda debe revisarlo un
+        profesional (asesoría o abogado) y adaptarlo a tus datos fiscales reales y a la
+        normativa vigente de consumo y protección de datos.</span>
+      </p>
+
+      <h2>Condiciones de compra</h2>
+
+      <h3>Qué se compra</h3>
+      <p>Un producto digital: uno o varios archivos PDF con fichas educativas imprimibles. No se
+      envía ningún material físico. La compra permite imprimir las fichas cuantas veces se quiera
+      para uso personal, familiar o de aula, pero no revenderlas ni redistribuirlas.</p>
+
+      <h3>Entrega</h3>
+      <p>La descarga se habilita inmediatamente después del pago, en la propia pantalla de
+      confirmación, y además se envía un enlace de descarga al correo indicado en la compra.</p>
+
+      <h3>Derecho de desistimiento</h3>
+      <p>Se trata de contenido digital suministrado de forma inmediata. Al iniciar la descarga, la
+      persona compradora reconoce que pierde el derecho de desistimiento de catorce días, conforme a
+      lo previsto en la normativa de consumo aplicable a los contenidos digitales. Esto no afecta a
+      los derechos que la ley reconozca en caso de producto defectuoso o de archivo que no se pueda
+      descargar: en ese supuesto, escríbenos y lo resolvemos o te devolvemos el importe.</p>
+
+      <h3>Impuestos</h3>
+      <p>Los precios se muestran con los impuestos incluidos. El IVA aplicable se calcula según el
+      país de residencia de la persona compradora y lo gestiona y liquida la plataforma de pago,
+      que actúa como revendedora de los productos digitales.</p>
+
+      <h3>Contacto</h3>
+      <p>PENDIENTE: añadir el correo de contacto, el nombre o razón social, el NIF y el domicilio
+      fiscal exigidos por la normativa de comercio electrónico.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">
+        <span class="brand-badge" aria-hidden="true">🦉</span>
+        <strong style="font-family:'Fredoka',sans-serif; font-size:1.1rem;">Mundo Aprendizaje</strong>
+      </div>
+      <p class="footer-note">Fichas y juegos para acompañar los primeros pasos lectores, matemáticos y creativos.</p>
+    </div>
+    <div><h3>Aprender</h3><ul>
+      <li><a href="index.html#rincones">Rincones</a></li>
+      <li><a href="juegos.html">Juegos</a></li>
+      <li><a href="videos.html">Vídeos</a></li>
+    </ul></div>
+    <div><h3>Fichas</h3><ul>
+      <li><a href="descargas.html">Catálogo completo</a></li>
+      <li><a href="descargas.html?gratis=1">Muestras gratuitas</a></li>
+      <li><a href="tienda.html">Packs premium</a></li>
+    </ul></div>
+    <div><h3>Legal</h3><ul>
+      <li><a href="#legal">Condiciones de compra</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">Mundo Aprendizaje — hecho con cariño para los primeros años de descubrimiento.</div>
+</footer>
+
+<script src="data/catalogo.js"></script>
+<script src="data/packs.js"></script>
+<script src="assets/site.js"></script>
+<script>
+(() => {
+  'use strict';
+  const { el, icono, catalogo, precio } = window.MA;
+  const cat = catalogo();
+  const datos = window.MA_PACKS;
+
+  const grid = document.getElementById('packsGrid');
+  const filtros = document.getElementById('filtros');
+
+  // ===================================================================
+  // PENDIENTE: sustituir por el usuario y los IDs reales de Payhip.
+  // Cuando la cuenta exista:
+  //   1. Poner el usuario en data/packs.js -> payhipUsuario
+  //   2. Poner el ID de cada producto en su campo payhipId
+  //   3. Descomentar el <script> de payhip.js del final de este archivo
+  // Mientras haya "PENDIENTE", los botones salen desactivados a propósito:
+  // es preferible un botón inerte a un enlace de compra que no funciona.
+  // ===================================================================
+  const configurado = id => id && !String(id).startsWith('PENDIENTE');
+  const urlPayhip = p => `https://payhip.com/b/${p.payhipId}`;
+
+  const TIPOS = [
+    { clave: 'tema-curso', etiqueta: '🎯 Por tema y curso' },
+    { clave: 'curso',      etiqueta: '📚 Curso completo' },
+    { clave: 'completo',   etiqueta: '🌟 Todo el material' },
+  ];
+  let tipoActivo = 'tema-curso';
+
+  function avisoDeConfiguracion(){
+    const sinConfigurar = datos.packs.filter(p => !configurado(p.payhipId)).length;
+    if(!sinConfigurar) return;
+    document.getElementById('avisoConfig').append(
+      el('p', { className: 'aviso-config' },
+        icono('🔧'),
+        el('span', {}, el('strong', { text: 'PENDIENTE: conectar la pasarela de pago. ' }),
+          `${sinConfigurar} packs no tienen todavía un ID de producto real. Crea la cuenta de Payhip, `,
+          'da de alta los productos y sustituye ',
+          el('code', { text: 'payhipUsuario' }), ' y ', el('code', { text: 'payhipId' }),
+          ' en ', el('code', { text: 'data/packs.js' }), '. Hasta entonces los botones de compra están desactivados.')));
+  }
+
+  function tarjeta(p){
+    const tema = p.tema ? cat.temas[p.tema] : null;
+    const art = el('article', { className: 'pack' + (p.tipo === 'completo' ? ' pack-destacado' : '') });
+    if(tema) art.style.setProperty('--tema', `var(--${tema.color})`);
+
+    art.append(
+      el('div', { className: 'cabecera' },
+        el('span', { className: 'icono', text: tema ? tema.icono : (p.tipo === 'curso' ? '📚' : '🌟'),
+                     attrs: { 'aria-hidden': 'true' } }),
+        el('div', {}, el('h3', { text: p.titulo }),
+          el('div', { className: 'precio' }, precio(p.precio),
+            el('small', { text: ` · ${p.nFichas} fichas` })))),
+      el('p', { className: 'resumen', text: p.resumen }),
+      el('div', { className: 'meta' },
+        el('span', { className: 'pill', text: 'PDF descargable' }),
+        el('span', { className: 'pill', text: 'A4 imprimible' }),
+        p.disponible
+          ? el('span', { className: 'pill pill-gratis', text: 'Disponible' })
+          : el('span', { className: 'pill', text: 'Próximamente' })));
+
+    if(!p.disponible){
+      art.append(el('button', { className: 'btn btn-secondary', attrs: { type: 'button', disabled: true },
+                                text: 'Aún en preparación' }));
+    }else if(configurado(p.payhipId)){
+      const a = el('a', { className: 'btn btn-primary payhip-buy-button',
+                          attrs: { href: urlPayhip(p), 'data-theme': 'none', 'data-product': p.payhipId } },
+                   icono('⬇️'), `Comprar por ${precio(p.precio)}`);
+      art.append(a);
+    }else{
+      art.append(el('button', {
+        className: 'btn btn-primary btn-comprar',
+        attrs: { type: 'button', disabled: true,
+                 title: 'PENDIENTE: falta el ID de producto de Payhip' },
+        text: 'PENDIENTE: conectar pago' }));
+    }
+
+    if(p.tema && p.curso){
+      art.append(el('a', { className: 'btn btn-ghost',
+                           attrs: { href: `fichas.html#/${p.tema}/${p.curso}` } },
+                    icono('👀'), 'Ver la muestra gratis'));
+    }
+    return art;
+  }
+
+  function pintar(){
+    grid.replaceChildren(...datos.packs.filter(p => p.tipo === tipoActivo).map(tarjeta));
+    Array.from(filtros.children).forEach(b =>
+      b.setAttribute('aria-pressed', String(b.dataset.tipo === tipoActivo)));
+  }
+
+  TIPOS.forEach(t => {
+    const btn = el('button', { className: 'filtro-btn', text: t.etiqueta,
+                               attrs: { type: 'button', 'aria-pressed': 'false' } });
+    btn.dataset.tipo = t.clave;
+    btn.addEventListener('click', () => { tipoActivo = t.clave; pintar(); });
+    filtros.append(btn);
+  });
+
+  // Enlace profundo desde las fichas: tienda.html#/matematicas/5
+  const partes = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
+  if(partes.length) tipoActivo = 'tema-curso';
+
+  avisoDeConfiguracion();
+  pintar();
+
+  if(partes.length >= 2){
+    const objetivo = document.getElementById(`pack-${partes[0]}-${partes[1]}`);
+    const packs = datos.packs.filter(p => p.tipo === 'tema-curso');
+    const idx = packs.findIndex(p => p.tema === partes[0] && String(p.curso) === partes[1]);
+    if(idx >= 0) grid.children[idx].scrollIntoView({ block: 'center' });
+  }
+})();
+</script>
+<!-- PENDIENTE: descomentar cuando existan los IDs reales de producto.
+<script src="https://payhip.com/payhip.js"></script>
+-->
+</body>
+</html>
