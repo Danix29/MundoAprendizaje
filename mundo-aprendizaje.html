@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Mundo Aprendizaje — ¡Jugar y aprender juntos!</title>
+<meta name="description" content="Página educativa para niños y niñas de 3 a 7 años: letras, números, animales y cuentos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --yellow: #FFE9A8;
+    --yellow-deep: #FFD966;
+    --sky: #BEE7F7;
+    --sky-deep: #8FD2EF;
+    --mint: #BCF0D6;
+    --mint-deep: #8FE0B6;
+    --lavender: #DCCEF5;
+    --lavender-deep: #C1A9EA;
+    --peach: #FFD4B8;
+    --peach-deep: #FFB88C;
+    --cream: #FFFBF3;
+    --ink: #3E3427;
+    --ink-soft: #6B6151;
+    --white: #FFFFFF;
+    --radius-lg: 32px;
+    --radius-md: 22px;
+    --shadow-bubble: 0 10px 0 rgba(62,52,39,0.08), 0 18px 30px rgba(62,52,39,0.10);
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+  h1, h2, h3, .display{
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    margin: 0;
+    color: var(--ink);
+  }
+  img, svg{ display:block; max-width:100%; }
+  a{ color: inherit; }
+  button{ font-family: inherit; cursor: pointer; }
+
+  .skip-link{
+    position:absolute; left:-999px; top:0; background:var(--ink); color:var(--white);
+    padding: 10px 16px; border-radius: 0 0 12px 0; z-index: 200;
+  }
+  .skip-link:focus{ left:0; }
+
+  :focus-visible{
+    outline: 4px solid #4A90D9;
+    outline-offset: 3px;
+    border-radius: 10px;
+  }
+
+  .wrap{
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ---------- NAV ---------- */
+  .topbar{
+    position: sticky; top:0; z-index: 100;
+    background: rgba(255,251,243,0.9);
+    backdrop-filter: blur(6px);
+    border-bottom: 3px solid rgba(62,52,39,0.06);
+  }
+  .topbar-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 14px 24px;
+    max-width: 1180px; margin:0 auto;
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Fredoka', sans-serif; font-size: 1.3rem; color: var(--ink);
+    text-decoration:none;
+  }
+  .brand-badge{
+    width:44px; height:44px; border-radius: 16px;
+    background: linear-gradient(160deg, var(--yellow), var(--peach));
+    display:flex; align-items:center; justify-content:center;
+    font-size: 1.4rem;
+    box-shadow: var(--shadow-bubble);
+  }
+  .topnav{ display:flex; gap: 8px; list-style:none; margin:0; padding:0; }
+  .topnav a{
+    text-decoration:none; font-size: 0.95rem; padding: 10px 16px;
+    border-radius: 999px; color: var(--ink-soft);
+  }
+  .topnav a:hover{ background: var(--sky); color: var(--ink); }
+  @media (max-width: 720px){ .topnav{ display:none; } }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position: relative;
+    padding: 72px 24px 60px;
+    overflow:hidden;
+  }
+  .hero-inner{
+    max-width: 1180px; margin: 0 auto;
+    display:grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items:center;
+  }
+  @media (max-width: 900px){ .hero-inner{ grid-template-columns: 1fr; text-align:center; } }
+
+  .eyebrow-pill{
+    display:inline-flex; align-items:center; gap:8px;
+    background: var(--white); padding: 8px 18px; border-radius: 999px;
+    box-shadow: var(--shadow-bubble); font-size: 0.95rem; color: var(--ink-soft);
+    margin-bottom: 18px;
+  }
+  .hero h1{
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    line-height: 1.08;
+  }
+  .hero h1 .accent-yellow{ color: #C98A00; }
+  .hero h1 .accent-mint{ color: #1E9A6C; }
+  .hero p.lede{
+    font-family:'Nunito',sans-serif; font-weight:700; color: var(--ink-soft);
+    font-size: 1.15rem; margin-top: 18px; max-width: 46ch;
+  }
+  @media (max-width:900px){ .hero p.lede{ margin-inline:auto; } }
+
+  .cta-row{ display:flex; gap:16px; margin-top: 30px; flex-wrap:wrap; }
+  @media (max-width:900px){ .cta-row{ justify-content:center; } }
+
+  .btn-jugar{
+    font-family:'Fredoka', sans-serif; font-size: 1.15rem;
+    background: linear-gradient(160deg, #FF9F6B, #FF7A45);
+    color: var(--white); border:none;
+    padding: 18px 34px; border-radius: 999px;
+    box-shadow: 0 8px 0 #D95F2B, 0 16px 24px rgba(217,95,43,0.28);
+    display:inline-flex; align-items:center; gap:10px;
+    transition: transform .15s ease;
+  }
+  .btn-jugar:hover{ transform: translateY(-3px); }
+  .btn-jugar:active{ transform: translateY(3px); box-shadow: 0 4px 0 #D95F2B, 0 8px 14px rgba(217,95,43,0.28); }
+
+  .btn-ghost{
+    font-family:'Fredoka', sans-serif; font-size: 1.1rem;
+    background: var(--white); color: var(--ink);
+    border: none; padding: 17px 30px; border-radius: 999px;
+    box-shadow: var(--shadow-bubble);
+    transition: transform .15s ease;
+  }
+  .btn-ghost:hover{ transform: translateY(-3px); }
+
+  .hero-art{
+    position: relative; height: 360px;
+  }
+  .blob{
+    position:absolute; border-radius: 50%;
+    animation: float 6s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce){ .blob, .bounce-in, .wiggle-hover, .pulse{ animation: none !important; } }
+  .blob-1{ width:210px; height:210px; background: var(--sky); top:10px; left:40px; animation-delay: 0s;}
+  .blob-2{ width:150px; height:150px; background: var(--mint); bottom:20px; left:0; animation-delay: 1.2s;}
+  .blob-3{ width:170px; height:170px; background: var(--lavender); bottom:40px; right:20px; animation-delay: .6s;}
+  .blob-emoji{
+    position:absolute; font-size: 3.2rem;
+    filter: drop-shadow(0 6px 6px rgba(0,0,0,0.08));
+    animation: float 5s ease-in-out infinite;
+  }
+  .e1{ top: 0; right: 60px; animation-delay: .2s; }
+  .e2{ top: 130px; left: 70px; animation-delay: 1s; font-size: 2.6rem;}
+  .e3{ bottom: 10px; right: 90px; animation-delay: .5s; font-size: 2.8rem;}
+  .e4{ bottom: 90px; left: 140px; animation-delay: 1.6s; font-size: 2.2rem;}
+
+  @keyframes float{
+    0%, 100%{ transform: translateY(0) rotate(0deg); }
+    50%{ transform: translateY(-16px) rotate(4deg); }
+  }
+
+  /* ---------- SECTION HEADERS ---------- */
+  .section{ padding: 64px 24px; }
+  .section-head{ max-width: 640px; margin: 0 auto 40px; text-align:center; }
+  .section-head h2{ font-size: clamp(1.8rem, 3.4vw, 2.4rem); }
+  .section-head p{ color: var(--ink-soft); font-family:'Nunito'; margin-top:10px; }
+
+  /* ---------- MODULE CARDS ---------- */
+  .modules-grid{
+    display:grid; grid-template-columns: repeat(4, 1fr); gap: 26px;
+    max-width: 1180px; margin: 0 auto;
+  }
+  @media (max-width: 980px){ .modules-grid{ grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px){ .modules-grid{ grid-template-columns: 1fr; } }
+
+  .module-card{
+    border-radius: var(--radius-lg);
+    padding: 30px 24px 26px;
+    box-shadow: var(--shadow-bubble);
+    text-align:center;
+    display:flex; flex-direction:column; align-items:center; gap: 12px;
+    transition: transform .2s ease;
+    border: none;
+  }
+  .module-card:hover{ transform: translateY(-6px) rotate(-1deg); }
+  .module-card:nth-child(1){ background: var(--peach); }
+  .module-card:nth-child(2){ background: var(--sky); }
+  .module-card:nth-child(3){ background: var(--mint); }
+  .module-card:nth-child(4){ background: var(--lavender); }
+
+  .module-icon{
+    width: 84px; height:84px; border-radius: 26px;
+    background: rgba(255,255,255,0.65);
+    display:flex; align-items:center; justify-content:center;
+    font-size: 2.6rem;
+  }
+  .module-card h3{ font-size: 1.3rem; }
+  .module-card p{ font-family:'Nunito'; font-size: 0.98rem; color: #4B4030; margin:0; }
+  .module-go{
+    margin-top: 6px;
+    font-family:'Fredoka'; font-size: 0.95rem;
+    background: var(--white); border:none; padding: 10px 22px;
+    border-radius: 999px; box-shadow: 0 5px 0 rgba(62,52,39,0.12);
+  }
+  .module-go:active{ transform: translateY(3px); box-shadow:none; }
+
+  /* ---------- GAME SECTION ---------- */
+  .game-section{
+    background: linear-gradient(180deg, #FFF6E4, var(--cream) 70%);
+    border-radius: 46px;
+    max-width: 1180px; margin: 0 24px; padding: 50px 30px 56px;
+  }
+  @media (min-width: 1230px){ .game-section{ margin: 0 auto; } }
+
+  .stage{
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-bubble);
+    padding: 26px;
+    max-width: 720px; margin: 0 auto 34px;
+    display:flex; align-items:center; gap: 20px;
+    min-height: 110px;
+  }
+  .stage-emoji{ font-size: 3.6rem; }
+  .stage-text .stage-name{ font-family:'Fredoka'; font-size: 1.4rem; }
+  .stage-text .stage-hint{ font-family:'Nunito'; color: var(--ink-soft); font-size: 0.95rem; }
+
+  .tabs{
+    display:flex; justify-content:center; gap: 12px; margin-bottom: 26px; flex-wrap:wrap;
+  }
+  .tab-btn{
+    font-family:'Fredoka'; font-size: 1rem;
+    background: var(--white); border: none; padding: 12px 24px; border-radius: 999px;
+    box-shadow: 0 4px 0 rgba(62,52,39,0.10);
+    color: var(--ink-soft);
+  }
+  .tab-btn[aria-selected="true"]{
+    background: var(--yellow-deep); color: var(--ink);
+  }
+
+  .board{
+    display:grid; grid-template-columns: repeat(6, 1fr); gap: 16px;
+    max-width: 900px; margin: 0 auto;
+  }
+  @media (max-width: 760px){ .board{ grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 420px){ .board{ grid-template-columns: repeat(2, 1fr); } }
+
+  .board-tile{
+    aspect-ratio: 1 / 1;
+    border-radius: var(--radius-md);
+    border: none;
+    font-size: 2.6rem;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: var(--shadow-bubble);
+    transition: transform .12s ease;
+  }
+  .board-tile:hover{ transform: scale(1.06); }
+  .board-tile.bounce{ animation: bounceTap .5s ease; }
+  @keyframes bounceTap{
+    0%{ transform: scale(1); }
+    35%{ transform: scale(1.22) rotate(-6deg); }
+    65%{ transform: scale(0.94) rotate(4deg); }
+    100%{ transform: scale(1); }
+  }
+  .board-tile:nth-child(6n+1){ background: var(--peach); }
+  .board-tile:nth-child(6n+2){ background: var(--sky); }
+  .board-tile:nth-child(6n+3){ background: var(--mint); }
+  .board-tile:nth-child(6n+4){ background: var(--lavender); }
+  .board-tile:nth-child(6n+5){ background: var(--yellow); }
+  .board-tile:nth-child(6n+6){ background: var(--peach); }
+
+  .stars-row{ display:flex; gap: 6px; }
+  .star-pop{ display:inline-block; animation: pop .35s ease backwards; }
+  @keyframes pop{
+    0%{ transform: scale(0); opacity:0; }
+    70%{ transform: scale(1.25); opacity:1; }
+    100%{ transform: scale(1); }
+  }
+
+  [hidden]{ display:none !important; }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    margin-top: 70px;
+    background: #FFF2DC;
+    padding: 50px 24px 30px;
+    border-top: 3px solid rgba(62,52,39,0.06);
+  }
+  .footer-grid{
+    max-width: 1180px; margin: 0 auto;
+    display:grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 36px;
+  }
+  @media (max-width: 780px){ .footer-grid{ grid-template-columns: 1fr; text-align:center; } }
+  footer h3{ font-size: 1.1rem; margin-bottom: 12px; }
+  footer ul{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px; }
+  footer a{ text-decoration:none; color: var(--ink-soft); font-family:'Nunito'; font-weight:700; }
+  footer a:hover{ color: var(--ink); text-decoration: underline; }
+  .footer-brand{ display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .footer-note{ font-family:'Nunito'; color: var(--ink-soft); font-size: 0.92rem; max-width: 38ch; }
+  @media (max-width:780px){ .footer-note{ margin-inline:auto; } }
+  .footer-bottom{
+    max-width:1180px; margin: 34px auto 0; padding-top: 20px;
+    border-top: 2px dashed rgba(62,52,39,0.15);
+    font-family:'Nunito'; font-size: 0.85rem; color: var(--ink-soft); text-align:center;
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#top">
+      <span class="brand-badge" aria-hidden="true">🦉</span>
+      Mundo Aprendizaje
+    </a>
+    <ul class="topnav">
+      <li><a href="#modulos">Aprender</a></li>
+      <li><a href="#juego">Jugar</a></li>
+      <li><a href="#familias">Familias y Docentes</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="contenido">
+
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="hero-inner">
+      <div>
+        <span class="eyebrow-pill">🌟 Para peques de 3 a 7 años</span>
+        <h1>Aprender es una <span class="accent-yellow">aventura</span> llena de <span class="accent-mint">sonrisas</span></h1>
+        <p class="lede">Letras, números, animales y cuentos en un rincón pensado para que cada peque descubra, toque y aprenda jugando.</p>
+        <div class="cta-row">
+          <a class="btn-jugar" href="#juego">
+            <span aria-hidden="true">🎈</span> ¡A Jugar y Aprender!
+          </a>
+          <a class="btn-ghost" href="#modulos">Ver los rincones</a>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <span class="blob-emoji e1">🐘</span>
+        <span class="blob-emoji e2">📚</span>
+        <span class="blob-emoji e3">🔢</span>
+        <span class="blob-emoji e4">🌈</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODULES -->
+  <section class="section" id="modulos">
+    <div class="section-head">
+      <h2>Cuatro rincones para descubrir</h2>
+      <p>Cada tarjeta es una puerta a un mundo distinto. ¡Elige la que más te guste!</p>
+    </div>
+    <div class="modules-grid">
+      <article class="module-card">
+        <div class="module-icon" aria-hidden="true">🔤</div>
+        <h3>Letras y Palabras</h3>
+        <p>Descubre las letras y forma tus primeras palabras.</p>
+        <button class="module-go" type="button">Entrar</button>
+      </article>
+      <article class="module-card">
+        <div class="module-icon" aria-hidden="true">🔢</div>
+        <h3>Números y Formas</h3>
+        <p>Cuenta, compara y juega con formas divertidas.</p>
+        <button class="module-go" type="button">Entrar</button>
+      </article>
+      <article class="module-card">
+        <div class="module-icon" aria-hidden="true">🌿</div>
+        <h3>Naturaleza y Animales</h3>
+        <p>Conoce animales y descubre la naturaleza.</p>
+        <button class="module-go" type="button">Entrar</button>
+      </article>
+      <article class="module-card">
+        <div class="module-icon" aria-hidden="true">🎨</div>
+        <h3>Cuentos y Creatividad</h3>
+        <p>Escucha cuentos y deja volar tu imaginación.</p>
+        <button class="module-go" type="button">Entrar</button>
+      </article>
+    </div>
+  </section>
+
+  <!-- GAME -->
+  <section class="section" id="juego">
+    <div class="game-section">
+      <div class="section-head">
+        <h2>Toca y Descubre</h2>
+        <p>Pulsa un animal o un número: ¡se moverá y te dirá su nombre!</p>
+      </div>
+
+      <div class="stage" aria-live="polite">
+        <span class="stage-emoji" id="stageEmoji">👋</span>
+        <div class="stage-text">
+          <div class="stage-name" id="stageName">¡Elige algo para empezar!</div>
+          <div class="stage-hint" id="stageHint">Toca cualquier casilla del tablero.</div>
+        </div>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Elegir actividad">
+        <button class="tab-btn" id="tabAnimals" role="tab" aria-selected="true" aria-controls="boardAnimals">🐾 Animales</button>
+        <button class="tab-btn" id="tabNumbers" role="tab" aria-selected="false" aria-controls="boardNumbers">🔢 Números</button>
+      </div>
+
+      <div class="board" id="boardAnimals" role="tabpanel" aria-labelledby="tabAnimals"></div>
+      <div class="board" id="boardNumbers" role="tabpanel" aria-labelledby="tabNumbers" hidden></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer id="familias">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">
+        <span class="brand-badge" aria-hidden="true">🦉</span>
+        <strong style="font-family:'Fredoka'; font-size:1.1rem;">Mundo Aprendizaje</strong>
+      </div>
+      <p class="footer-note">Un rincón pensado junto a maestras de Infantil para acompañar los primeros pasos lectores, matemáticos y creativos.</p>
+    </div>
+    <div>
+      <h3>Para familias</h3>
+      <ul>
+        <li><a href="#">Fichas para imprimir en casa</a></li>
+        <li><a href="#">Consejos de lectura en familia</a></li>
+        <li><a href="#">Preguntas frecuentes</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Para docentes</h3>
+      <ul>
+        <li><a href="#">Guía didáctica (PDF)</a></li>
+        <li><a href="#">Programación por rincones</a></li>
+        <li><a href="#">Contacto del equipo pedagógico</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">Mundo Aprendizaje — hecho con cariño para los primeros años de descubrimiento.</div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var ANIMALS = [
+    { emoji:"🐶", name:"Perro",     sound:"Perro. ¡Guau, guau!" },
+    { emoji:"🐱", name:"Gato",      sound:"Gato. ¡Miau, miau!" },
+    { emoji:"🐮", name:"Vaca",      sound:"Vaca. ¡Muu!" },
+    { emoji:"🦁", name:"León",      sound:"León. ¡Grrr!" },
+    { emoji:"🐘", name:"Elefante",  sound:"Elefante." },
+    { emoji:"🐥", name:"Pollito",   sound:"Pollito. ¡Pío, pío!" },
+    { emoji:"🐸", name:"Rana",      sound:"Rana. ¡Croac, croac!" },
+    { emoji:"🐴", name:"Caballo",   sound:"Caballo." },
+    { emoji:"🐷", name:"Cerdito",   sound:"Cerdito. ¡Oink, oink!" },
+    { emoji:"🦆", name:"Pato",      sound:"Pato. ¡Cuac, cuac!" },
+    { emoji:"🐰", name:"Conejo",    sound:"Conejo." },
+    { emoji:"🐢", name:"Tortuga",   sound:"Tortuga." }
+  ];
+
+  var NUMBERS = [1,2,3,4,5,6,7,8,9,10,11,12];
+  var NUM_WORDS = ["cero","uno","dos","tres","cuatro","cinco","seis","siete","ocho","nueve","diez","once","doce"];
+
+  var stageEmoji = document.getElementById("stageEmoji");
+  var stageName  = document.getElementById("stageName");
+  var stageHint  = document.getElementById("stageHint");
+  var boardAnimals = document.getElementById("boardAnimals");
+  var boardNumbers = document.getElementById("boardNumbers");
+
+  function speak(text){
+    if(!("speechSynthesis" in window)) return;
+    try{
+      window.speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(text);
+      u.lang = "es-ES";
+      u.rate = 0.95;
+      u.pitch = 1.15;
+      window.speechSynthesis.speak(u);
+    }catch(e){ /* silencioso si el navegador no lo soporta */ }
+  }
+
+  function bounceTile(tile){
+    tile.classList.remove("bounce");
+    void tile.offsetWidth; // reinicia la animación
+    tile.classList.add("bounce");
+  }
+
+  // --- Tablero de animales ---
+  ANIMALS.forEach(function(animal){
+    var btn = document.createElement("button");
+    btn.className = "board-tile";
+    btn.type = "button";
+    btn.textContent = animal.emoji;
+    btn.setAttribute("aria-label", animal.name);
+    btn.addEventListener("click", function(){
+      bounceTile(btn);
+      stageEmoji.textContent = animal.emoji;
+      stageName.textContent = animal.name;
+      stageHint.textContent = "¡Muy bien! Sigue explorando el tablero.";
+      speak(animal.sound);
+    });
+    boardAnimals.appendChild(btn);
+  });
+
+  // --- Tablero de números ---
+  NUMBERS.forEach(function(n){
+    var btn = document.createElement("button");
+    btn.className = "board-tile";
+    btn.type = "button";
+    btn.textContent = n;
+    btn.setAttribute("aria-label", "Número " + n);
+    btn.addEventListener("click", function(){
+      bounceTile(btn);
+      var starsToShow = Math.min(n, 12);
+      var starsHTML = "";
+      for(var i=0;i<starsToShow;i++){
+        starsHTML += '<span class="star-pop" style="animation-delay:' + (i*0.05) + 's">⭐</span>';
+      }
+      stageEmoji.innerHTML = '<span class="stars-row">' + starsHTML + '</span>';
+      stageName.textContent = "Número " + n;
+      stageHint.textContent = "¡Cuenta las estrellitas conmigo!";
+      speak("Número " + NUM_WORDS[n]);
+    });
+    boardNumbers.appendChild(btn);
+  });
+
+  // --- Pestañas ---
+  var tabAnimals = document.getElementById("tabAnimals");
+  var tabNumbers = document.getElementById("tabNumbers");
+
+  function showAnimals(){
+    boardAnimals.hidden = false;
+    boardNumbers.hidden = true;
+    tabAnimals.setAttribute("aria-selected","true");
+    tabNumbers.setAttribute("aria-selected","false");
+  }
+  function showNumbers(){
+    boardAnimals.hidden = true;
+    boardNumbers.hidden = false;
+    tabAnimals.setAttribute("aria-selected","false");
+    tabNumbers.setAttribute("aria-selected","true");
+  }
+  tabAnimals.addEventListener("click", showAnimals);
+  tabNumbers.addEventListener("click", showNumbers);
+
+  // --- Rincones: pequeño feedback visual al pulsar "Entrar" ---
+  document.querySelectorAll(".module-go").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var card = btn.closest(".module-card");
+      card.animate(
+        [{ transform:"scale(1)" }, { transform:"scale(1.04)" }, { transform:"scale(1)" }],
+        { duration: 320, easing: "ease-out" }
+      );
+      document.getElementById("juego").scrollIntoView({ behavior:"smooth" });
+    });
+  });
+})();
+</script>
+</body>
+</html>
