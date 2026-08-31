@@ -423,7 +423,10 @@ document.documentElement.dataset.theme=g||(matchMedia('(prefers-color-scheme: da
   const pistaT = document.getElementById('pistaTestimonios');
   if(t.simulados){
     const aviso = document.getElementById('avisoTestimonios');
-    aviso.hidden = True;
+    // `false` a propósito: este bloque solo se ejecuta cuando los testimonios
+    // son simulados, y existe precisamente para MOSTRAR el aviso de que no son
+    // reseñas reales. Ojo: en JavaScript es `false`, no `False` ni `True`.
+    aviso.hidden = false;
     aviso.append(icono('⚠️'), el('span', {}, el('strong', { text: 'Aviso: ' }), t.aviso));
   }
   pistaT.append(...t.items.map(x => {
