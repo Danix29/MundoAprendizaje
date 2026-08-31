@@ -423,7 +423,7 @@ document.documentElement.dataset.theme=g||(matchMedia('(prefers-color-scheme: da
   const pistaT = document.getElementById('pistaTestimonios');
   if(t.simulados){
     const aviso = document.getElementById('avisoTestimonios');
-    aviso.hidden = false;
+    aviso.hidden = True;
     aviso.append(icono('⚠️'), el('span', {}, el('strong', { text: 'Aviso: ' }), t.aviso));
   }
   pistaT.append(...t.items.map(x => {
