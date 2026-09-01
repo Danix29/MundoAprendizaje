@@ -254,15 +254,12 @@ document.documentElement.dataset.theme=g||(matchMedia('(prefers-color-scheme: da
   const grid = document.getElementById('packsGrid');
   const filtros = document.getElementById('filtros');
 
-  // ===================================================================
-  // PENDIENTE: sustituir por el usuario y los IDs reales de Payhip.
-  // Cuando la cuenta exista:
-  //   1. Poner el usuario en data/packs.js -> payhipUsuario
-  //   2. Poner el ID de cada producto en su campo payhipId
-  //   3. Descomentar el <script> de payhip.js del final de este archivo
-  // Mientras haya "PENDIENTE", los botones salen desactivados a propósito:
-  // es preferible un botón inerte a un enlace de compra que no funciona.
-  // ===================================================================
+  // Los IDs de producto de Payhip viven en tools/extras.py y se vuelcan a
+  // data/packs.js al regenerar. No se editan aquí ni en packs.js: extras.py
+  // sobrescribe ese archivo y se perderían.
+  //
+  // Si algún pack se quedara sin ID, su botón se desactiva solo: es
+  // preferible un botón inerte a un enlace de compra que no funciona.
   const configurado = id => id && !String(id).startsWith('PENDIENTE');
   const urlPayhip = p => `https://payhip.com/b/${p.payhipId}`;
 
@@ -279,11 +276,11 @@ document.documentElement.dataset.theme=g||(matchMedia('(prefers-color-scheme: da
     document.getElementById('avisoConfig').append(
       el('p', { className: 'aviso-config' },
         icono('🔧'),
-        el('span', {}, el('strong', { text: 'PENDIENTE: conectar la pasarela de pago. ' }),
-          `${sinConfigurar} packs no tienen todavía un ID de producto real. Crea la cuenta de Payhip, `,
-          'da de alta los productos y sustituye ',
-          el('code', { text: 'payhipUsuario' }), ' y ', el('code', { text: 'payhipId' }),
-          ' en ', el('code', { text: 'data/packs.js' }), '. Hasta entonces los botones de compra están desactivados.')));
+        el('span', {}, el('strong', { text: 'Falta conectar algún producto. ' }),
+          `${sinConfigurar} packs no tienen un ID de Payhip. Añádelo en `,
+          el('code', { text: 'PAYHIP_TEMA_CURSO' }), ' de ', el('code', { text: 'tools/extras.py' }),
+          ' y vuelve a ejecutar ', el('code', { text: 'python tools/extras.py' }),
+          '. Mientras tanto, su botón de compra sale desactivado.')));
   }
 
   function tarjeta(p){
@@ -318,8 +315,8 @@ document.documentElement.dataset.theme=g||(matchMedia('(prefers-color-scheme: da
       art.append(el('button', {
         className: 'btn btn-primary btn-comprar',
         attrs: { type: 'button', disabled: true,
-                 title: 'PENDIENTE: falta el ID de producto de Payhip' },
-        text: 'PENDIENTE: conectar pago' }));
+                 title: 'Falta el ID de producto de Payhip' },
+        text: 'Producto sin conectar' }));
     }
 
     if(p.tema && p.curso){
@@ -359,8 +356,8 @@ document.documentElement.dataset.theme=g||(matchMedia('(prefers-color-scheme: da
   }
 })();
 </script>
-<!-- PENDIENTE: descomentar cuando existan los IDs reales de producto.
+<!-- Script oficial de Payhip: convierte los enlaces .payhip-buy-button en
+     un checkout superpuesto, sin sacar a nadie de la página. -->
 <script src="https://payhip.com/payhip.js"></script>
--->
 </body>
 </html>

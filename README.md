@@ -13,7 +13,7 @@ Tres cosas sin resolver. Ninguna impide desarrollar, pero **las tres bloquean la
 | Bloqueo | Dónde | Qué hay que hacer |
 | --- | --- | --- |
 | **Testimonios inventados** | `data/testimonios.js` | Las seis reseñas son ficticias, escritas para poder diseñar la sección. Publicarlas como opiniones reales sería publicidad engañosa. Sustitúyelas por testimonios reales con permiso por escrito, o borra la sección de `index.html`. Mientras `simulados: true`, la web muestra un aviso visible. |
-| **Pasarela de pago sin conectar** | `data/packs.js` | Faltan el usuario y los IDs de producto de Payhip. Mientras valgan `PENDIENTE-…`, los botones de compra salen desactivados a propósito: es preferible un botón inerte a un enlace de compra roto. Al rellenarlos, descomenta el `<script>` de Payhip al final de `tienda.html`. |
+| **El IVA se suma al precio anunciado** | Ajustes de Payhip | La web anuncia 1,99 € pero el checkout cobra **2,41 €** (1,99 + 0,42 de IVA). En la UE el precio al consumidor debe mostrarse con impuestos incluidos. Hay que cambiar en Payhip que el precio ya incluye impuestos, o subir el precio mostrado en la web. |
 | **Aviso legal sin revisar** | `tienda.html#legal` | «Condiciones de compra» es un borrador de trabajo, no un texto validado. Debe revisarlo un profesional, y hay que añadir los datos fiscales de contacto (nombre o razón social, NIF, domicilio, correo). |
 
 ---
